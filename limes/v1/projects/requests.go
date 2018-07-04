@@ -69,7 +69,7 @@ type UpdateOptsBuilder interface {
 }
 
 type UpdateOpts struct {
-	Services api.ServiceQuotas
+	Services api.ServiceQuotas `json:"services"`
 }
 
 func (opts UpdateOpts) ToProjectUpdateMap() (map[string]interface{}, error) {
