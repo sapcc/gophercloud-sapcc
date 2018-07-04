@@ -3,7 +3,7 @@ package projects
 import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
-	"github.com/sapcc/limes/pkg/reports"
+	"github.com/sapcc/limes/pkg/api"
 )
 
 type ListOptsBuilder interface {
@@ -69,7 +69,7 @@ type UpdateOptsBuilder interface {
 }
 
 type UpdateOpts struct {
-	Services reports.ProjectServices
+	Services api.ServiceQuotas
 }
 
 func (opts UpdateOpts) ToProjectUpdateMap() (map[string]interface{}, error) {

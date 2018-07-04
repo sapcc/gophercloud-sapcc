@@ -34,5 +34,6 @@
   name = "github.com/gophercloud/gophercloud"
 
 [[constraint]]
-  branch = "master"
+  branch = "unmarshalling"
   name = "github.com/sapcc/limes"
+  source = "https://github.com/bugroger/limes.git"

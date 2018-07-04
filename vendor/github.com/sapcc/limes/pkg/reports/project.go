@@ -77,6 +77,7 @@ func (s ProjectServices) MarshalJSON() ([]byte, error) {
 	return json.Marshal(list)
 }
 
+//UnmarshalJSON implements the json.Unmarshaler interface
 func (s *ProjectServices) UnmarshalJSON(b []byte) error {
 	tmp := make([]*ProjectService, 0)
 	err := json.Unmarshal(b, &tmp)
@@ -110,6 +111,7 @@ func (r ProjectResources) MarshalJSON() ([]byte, error) {
 	return json.Marshal(list)
 }
 
+//UnmarshalJSON implements the json.Unmarshaler interface
 func (r *ProjectResources) UnmarshalJSON(b []byte) error {
 	tmp := make([]*ProjectResource, 0)
 	err := json.Unmarshal(b, &tmp)

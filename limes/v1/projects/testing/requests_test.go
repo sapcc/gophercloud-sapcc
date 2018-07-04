@@ -8,6 +8,7 @@ import (
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
 
 	"github.com/sapcc/gophercloud-limes/limes/v1/projects"
+	"github.com/sapcc/limes/pkg/api"
 	"github.com/sapcc/limes/pkg/limes"
 	"github.com/sapcc/limes/pkg/reports"
 	"github.com/sapcc/limes/pkg/util"
@@ -372,18 +373,9 @@ func TestUpdateProject(t *testing.T) {
 	HandlePutProjectSuccessfully(t)
 
 	opts := projects.UpdateOpts{
-		Services: reports.ProjectServices{
-			"shared": &reports.ProjectService{
-				Resources: reports.ProjectResources{
-					"capacity": &reports.ProjectResource{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "capacity",
-							Unit: limes.UnitBytes,
-						},
-						Quota: 42,
-						Usage: 23,
-					},
-				},
+		Services: api.ServiceQuotas{
+			"compute": api.ResourceQuotas{
+				"cores": limes.ValueWithUnit{42, limes.UnitNone},
 			},
 		},
 	}
