@@ -37,3 +37,15 @@ func (r GetResult) Extract() (*reports.Project, error) {
 	err := r.ExtractInto(&s)
 	return s.Project, err
 }
+
+type UpdateResult struct {
+	gophercloud.Result
+}
+
+func (r UpdateResult) Extract() (*reports.Project, error) {
+	var s struct {
+		Project *reports.Project `json:"project"`
+	}
+	err := r.ExtractInto(&s)
+	return s.Project, err
+}

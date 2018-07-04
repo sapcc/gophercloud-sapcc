@@ -3,6 +3,7 @@ package projects
 import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/sapcc/limes/pkg/reports"
 )
 
 type ListOptsBuilder interface {
@@ -60,5 +61,29 @@ func Get(c *gophercloud.ServiceClient, domainID string, projectID string, opts G
 		url += query
 	}
 	_, r.Err = c.Get(url, &r.Body, nil)
+	return
+}
+
+type UpdateOptsBuilder interface {
+	ToProjectUpdateMap() (map[string]interface{}, error)
+}
+
+type UpdateOpts struct {
+	Services reports.ProjectServices
+}
+
+func (opts UpdateOpts) ToProjectUpdateMap() (map[string]interface{}, error) {
+	return gophercloud.BuildRequestBody(opts, "project")
+}
+
+func Update(c *gophercloud.ServiceClient, domainID string, projectID string, opts UpdateOptsBuilder) (r UpdateResult) {
+	b, err := opts.ToProjectUpdateMap()
+	if err != nil {
+		r.Err = err
+		return
+	}
+	_, r.Err = c.Put(putURL(c, domainID, projectID), b, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{200, 202},
+	})
 	return
 }

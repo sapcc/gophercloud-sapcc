@@ -289,3 +289,43 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 		`)
 	})
 }
+
+func HandlePutProjectSuccessfully(t *testing.T) {
+	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "PUT")
+		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprintf(w, `
+			{
+				"project": {
+					"id": "uuid-for-berlin",
+					"name": "berlin",
+					"parent_id": "uuid-for-germany",
+					"services": [
+						{
+							"type": "shared",
+							"area": "shared",
+							"resources": [
+								{
+									"name": "capacity",
+									"unit": "B",
+									"quota": 42,
+									"usage": 23
+								},
+								{
+									"name": "things",
+									"quota": 10,
+									"usage": 2
+								}
+							],
+							"scraped_at": 22
+						}
+					]
+				}
+			}
+		`)
+	})
+}

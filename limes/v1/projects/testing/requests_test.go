@@ -365,3 +365,63 @@ func TestGetProjectDetailed(t *testing.T) {
 	}
 	th.CheckDeepEquals(t, expected, actual)
 }
+
+func TestUpdateProject(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandlePutProjectSuccessfully(t)
+
+	opts := projects.UpdateOpts{
+		Services: reports.ProjectServices{
+			"shared": &reports.ProjectService{
+				Resources: reports.ProjectResources{
+					"capacity": &reports.ProjectResource{
+						ResourceInfo: limes.ResourceInfo{
+							Name: "capacity",
+							Unit: limes.UnitBytes,
+						},
+						Quota: 42,
+						Usage: 23,
+					},
+				},
+			},
+		},
+	}
+
+	actual, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts).Extract()
+	th.AssertNoErr(t, err)
+
+	expected := &reports.Project{
+		UUID:       "uuid-for-berlin",
+		Name:       "berlin",
+		ParentUUID: "uuid-for-germany",
+		Services: reports.ProjectServices{
+			"shared": &reports.ProjectService{
+				ServiceInfo: limes.ServiceInfo{
+					Type:        "shared",
+					Area:        "shared",
+					ProductName: "",
+				},
+				Resources: reports.ProjectResources{
+					"capacity": &reports.ProjectResource{
+						ResourceInfo: limes.ResourceInfo{
+							Name: "capacity",
+							Unit: limes.UnitBytes,
+						},
+						Quota: 42,
+						Usage: 23,
+					},
+					"things": &reports.ProjectResource{
+						ResourceInfo: limes.ResourceInfo{
+							Name: "things",
+						},
+						Quota: 10,
+						Usage: 2,
+					},
+				},
+				ScrapedAt: 22,
+			},
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
+}
