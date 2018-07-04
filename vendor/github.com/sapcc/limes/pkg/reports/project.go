@@ -77,6 +77,20 @@ func (s ProjectServices) MarshalJSON() ([]byte, error) {
 	return json.Marshal(list)
 }
 
+func (s *ProjectServices) UnmarshalJSON(b []byte) error {
+	tmp := make([]*ProjectService, 0)
+	err := json.Unmarshal(b, &tmp)
+	if err != nil {
+		return err
+	}
+	t := make(ProjectServices)
+	for _, ps := range tmp {
+		t[ps.Type] = ps
+	}
+	*s = ProjectServices(t)
+	return nil
+}
+
 //ProjectResources provides fast lookup of resources using a map, but serializes
 //to JSON as a list.
 type ProjectResources map[string]*ProjectResource
@@ -94,6 +108,20 @@ func (r ProjectResources) MarshalJSON() ([]byte, error) {
 		list[idx] = r[name]
 	}
 	return json.Marshal(list)
+}
+
+func (r *ProjectResources) UnmarshalJSON(b []byte) error {
+	tmp := make([]*ProjectResource, 0)
+	err := json.Unmarshal(b, &tmp)
+	if err != nil {
+		return err
+	}
+	t := make(ProjectResources)
+	for _, pr := range tmp {
+		t[pr.Name] = pr
+	}
+	*r = ProjectResources(t)
+	return nil
 }
 
 var projectReportQuery = `
