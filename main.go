@@ -10,8 +10,8 @@ import (
 	"github.com/gophercloud/gophercloud/pagination"
 	"github.com/gophercloud/utils/openstack/clientconfig"
 
-	"github.com/sapcc/gophercloud-limes/limes"
-	"github.com/sapcc/gophercloud-limes/limes/v1/projects"
+	"github.com/sapcc/gophercloud-limes/resources"
+	"github.com/sapcc/gophercloud-limes/resources/v1/projects"
 )
 
 func main() {
@@ -51,7 +51,7 @@ func NewIdentity(provider *gophercloud.ProviderClient) *gophercloud.ServiceClien
 }
 
 func NewLimes(provider *gophercloud.ProviderClient) *gophercloud.ServiceClient {
-	limesClient, err := limes.NewLimesV1(provider, gophercloud.EndpointOpts{})
+	limesClient, err := resources.NewLimesV1(provider, gophercloud.EndpointOpts{})
 	if err != nil {
 		log.Fatalf("could not initialize Limes client: %v", err)
 	}

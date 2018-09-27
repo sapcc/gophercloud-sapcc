@@ -38,10 +38,12 @@ func (r GetResult) Extract() (*reports.Project, error) {
 	return s.Project, err
 }
 
+// UpdateResult represents the result of a put operation.
 type UpdateResult struct {
 	gophercloud.Result
 }
 
+// Extract is a function that extracts a service from a UpdateResult.
 func (r UpdateResult) Extract() (*reports.Project, error) {
 	var s struct {
 		Project *reports.Project `json:"project"`
