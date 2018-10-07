@@ -2,49 +2,27 @@ package projects
 
 import (
 	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
 	"github.com/sapcc/limes/pkg/reports"
 )
 
-type ProjectPage struct {
-	pagination.SinglePageBase
+// CommonResult is the result of a Get/List/Update operation. Call its appropriate
+// Extract method to interpret it as a Project or a slice of Projects.
+type CommonResult struct {
+	gophercloud.Result
 }
 
-func (r ProjectPage) IsEmpty() (bool, error) {
-	addresses, err := ExtractProjects(r)
-	return len(addresses) == 0, err
-}
-
-func ExtractProjects(r pagination.Page) ([]reports.Project, error) {
+// ExtractProjects interprets a CommonResult as a slice of Projects.
+func (r CommonResult) ExtractProjects() ([]reports.Project, error) {
 	var s struct {
 		Projects []reports.Project `json:"projects"`
 	}
 
-	err := (r.(ProjectPage)).ExtractInto(&s)
+	err := r.ExtractInto(&s)
 	return s.Projects, err
 }
 
-// GetResult represents the result of a get operation.
-type GetResult struct {
-	gophercloud.Result
-}
-
-// Extract is a function that extracts a service from a GetResult.
-func (r GetResult) Extract() (*reports.Project, error) {
-	var s struct {
-		Project *reports.Project `json:"project"`
-	}
-	err := r.ExtractInto(&s)
-	return s.Project, err
-}
-
-// UpdateResult represents the result of a put operation.
-type UpdateResult struct {
-	gophercloud.Result
-}
-
-// Extract is a function that extracts a service from a UpdateResult.
-func (r UpdateResult) Extract() (*reports.Project, error) {
+// Extract interprets a CommonResult as a Project.
+func (r CommonResult) Extract() (*reports.Project, error) {
 	var s struct {
 		Project *reports.Project `json:"project"`
 	}

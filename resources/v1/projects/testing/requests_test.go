@@ -3,7 +3,6 @@ package testing
 import (
 	"testing"
 
-	"github.com/gophercloud/gophercloud/pagination"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
 
@@ -19,138 +18,129 @@ func TestListProjects(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	pager := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{})
-
-	count := 0
-	err := pager.EachPage(func(page pagination.Page) (bool, error) {
-		actual, err := projects.ExtractProjects(page)
-		if err != nil {
-			return false, err
-		}
-		count += len(actual)
-		backendQuota := int64(100)
-		expected := []reports.Project{
-			{
-				UUID:       "uuid-for-berlin",
-				Name:       "berlin",
-				ParentUUID: "uuid-for-germany",
-				Services: reports.ProjectServices{
-					"shared": &reports.ProjectService{
-						ServiceInfo: limes.ServiceInfo{
-							Type:        "shared",
-							Area:        "shared",
-							ProductName: "",
-						},
-						Resources: reports.ProjectResources{
-							"capacity": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "capacity",
-									Unit: limes.UnitBytes,
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-							"things": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "things",
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-						},
-						ScrapedAt: 22,
-					},
-					"unshared": &reports.ProjectService{
-						ServiceInfo: limes.ServiceInfo{
-							Type:        "unshared",
-							Area:        "unshared",
-							ProductName: "",
-						},
-						Resources: reports.ProjectResources{
-							"capacity": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "capacity",
-									Unit: limes.UnitBytes,
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-							"things": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "things",
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-						},
-						ScrapedAt: 11,
-					},
-				},
-			},
-			{
-				UUID:       "uuid-for-dresden",
-				Name:       "dresden",
-				ParentUUID: "uuid-for-berlin",
-				Services: reports.ProjectServices{
-					"shared": &reports.ProjectService{
-						ServiceInfo: limes.ServiceInfo{
-							Type:        "shared",
-							Area:        "shared",
-							ProductName: "",
-						},
-						Resources: reports.ProjectResources{
-							"capacity": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "capacity",
-									Unit: limes.UnitBytes,
-								},
-								Quota:        10,
-								Usage:        2,
-								BackendQuota: &backendQuota,
-							},
-							"things": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "things",
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-						},
-						ScrapedAt: 44,
-					},
-					"unshared": &reports.ProjectService{
-						ServiceInfo: limes.ServiceInfo{
-							Type:        "unshared",
-							Area:        "unshared",
-							ProductName: "",
-						},
-						Resources: reports.ProjectResources{
-							"capacity": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "capacity",
-									Unit: limes.UnitBytes,
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-							"things": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "things",
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-						},
-						ScrapedAt: 33,
-					},
-				},
-			},
-		}
-		th.CheckDeepEquals(t, expected, actual)
-		return true, nil
-	})
+	result := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{})
+	actual, err := result.ExtractProjects()
 	th.AssertNoErr(t, err)
-	th.AssertEquals(t, 2, count)
+
+	backendQuota := int64(100)
+	expected := []reports.Project{
+		{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+			Services: reports.ProjectServices{
+				"shared": &reports.ProjectService{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
+					},
+					Resources: reports.ProjectResources{
+						"capacity": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "capacity",
+								Unit: limes.UnitBytes,
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+						"things": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+					},
+					ScrapedAt: 22,
+				},
+				"unshared": &reports.ProjectService{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "unshared",
+						Area:        "unshared",
+						ProductName: "",
+					},
+					Resources: reports.ProjectResources{
+						"capacity": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "capacity",
+								Unit: limes.UnitBytes,
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+						"things": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+					},
+					ScrapedAt: 11,
+				},
+			},
+		},
+		{
+			UUID:       "uuid-for-dresden",
+			Name:       "dresden",
+			ParentUUID: "uuid-for-berlin",
+			Services: reports.ProjectServices{
+				"shared": &reports.ProjectService{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
+					},
+					Resources: reports.ProjectResources{
+						"capacity": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "capacity",
+								Unit: limes.UnitBytes,
+							},
+							Quota:        10,
+							Usage:        2,
+							BackendQuota: &backendQuota,
+						},
+						"things": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+					},
+					ScrapedAt: 44,
+				},
+				"unshared": &reports.ProjectService{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "unshared",
+						Area:        "unshared",
+						ProductName: "",
+					},
+					Resources: reports.ProjectResources{
+						"capacity": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "capacity",
+								Unit: limes.UnitBytes,
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+						"things": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+					},
+					ScrapedAt: 33,
+				},
+			},
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
 }
 
 func TestListProjectsDetailed(t *testing.T) {
@@ -158,55 +148,46 @@ func TestListProjectsDetailed(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	pager := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Detail: true})
+	result := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Detail: true})
+	actual, err := result.ExtractProjects()
+	th.AssertNoErr(t, err)
 
-	count := 0
-	err := pager.EachPage(func(page pagination.Page) (bool, error) {
-		actual, err := projects.ExtractProjects(page)
-		if err != nil {
-			return false, err
-		}
-		count += len(actual)
-		expected := []reports.Project{
-			{
-				UUID:       "uuid-for-berlin",
-				Name:       "berlin",
-				ParentUUID: "uuid-for-germany",
-				Services: reports.ProjectServices{
-					"shared": &reports.ProjectService{
-						ServiceInfo: limes.ServiceInfo{
-							Type:        "shared",
-							Area:        "shared",
-							ProductName: "",
-						},
-						Resources: reports.ProjectResources{
-							"capacity": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "capacity",
-									Unit: limes.UnitBytes,
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-							"things": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "things",
-								},
-								Quota:        10,
-								Usage:        2,
-								Subresources: util.JSONString(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
-							},
-						},
-						ScrapedAt: 22,
+	expected := []reports.Project{
+		{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+			Services: reports.ProjectServices{
+				"shared": &reports.ProjectService{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
 					},
+					Resources: reports.ProjectResources{
+						"capacity": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "capacity",
+								Unit: limes.UnitBytes,
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+						"things": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota:        10,
+							Usage:        2,
+							Subresources: util.JSONString(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
+						},
+					},
+					ScrapedAt: 22,
 				},
 			},
-		}
-		th.CheckDeepEquals(t, expected, actual)
-		return true, nil
-	})
-	th.AssertNoErr(t, err)
-	th.AssertEquals(t, 1, count)
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
 }
 
 func TestListProjectsFiltered(t *testing.T) {
@@ -214,70 +195,61 @@ func TestListProjectsFiltered(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	pager := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Service: "shared", Resource: "things"})
-
-	count := 0
-	err := pager.EachPage(func(page pagination.Page) (bool, error) {
-		actual, err := projects.ExtractProjects(page)
-		if err != nil {
-			return false, err
-		}
-		count += len(actual)
-		expected := []reports.Project{
-			{
-				UUID:       "uuid-for-berlin",
-				Name:       "berlin",
-				ParentUUID: "uuid-for-germany",
-				Services: reports.ProjectServices{
-					"shared": &reports.ProjectService{
-						ServiceInfo: limes.ServiceInfo{
-							Type:        "shared",
-							Area:        "shared",
-							ProductName: "",
-						},
-						Resources: reports.ProjectResources{
-							"things": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "things",
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-						},
-						ScrapedAt: 22,
-					},
-				},
-			},
-			{
-				UUID:       "uuid-for-dresden",
-				Name:       "dresden",
-				ParentUUID: "uuid-for-berlin",
-				Services: reports.ProjectServices{
-					"shared": &reports.ProjectService{
-						ServiceInfo: limes.ServiceInfo{
-							Type:        "shared",
-							Area:        "shared",
-							ProductName: "",
-						},
-						Resources: reports.ProjectResources{
-							"things": &reports.ProjectResource{
-								ResourceInfo: limes.ResourceInfo{
-									Name: "things",
-								},
-								Quota: 10,
-								Usage: 2,
-							},
-						},
-						ScrapedAt: 44,
-					},
-				},
-			},
-		}
-		th.CheckDeepEquals(t, expected, actual)
-		return true, nil
-	})
+	result := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Service: "shared", Resource: "things"})
+	actual, err := result.ExtractProjects()
 	th.AssertNoErr(t, err)
-	th.AssertEquals(t, 2, count)
+
+	expected := []reports.Project{
+		{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+			Services: reports.ProjectServices{
+				"shared": &reports.ProjectService{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
+					},
+					Resources: reports.ProjectResources{
+						"things": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+					},
+					ScrapedAt: 22,
+				},
+			},
+		},
+		{
+			UUID:       "uuid-for-dresden",
+			Name:       "dresden",
+			ParentUUID: "uuid-for-berlin",
+			Services: reports.ProjectServices{
+				"shared": &reports.ProjectService{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
+					},
+					Resources: reports.ProjectResources{
+						"things": &reports.ProjectResource{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota: 10,
+							Usage: 2,
+						},
+					},
+					ScrapedAt: 44,
+				},
+			},
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
 }
 
 func TestGetProject(t *testing.T) {
@@ -367,10 +339,48 @@ func TestGetProjectDetailed(t *testing.T) {
 	th.CheckDeepEquals(t, expected, actual)
 }
 
+func TestGetProjectFiltered(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandleGetProjectSuccessfully(t)
+
+	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
+		Service:  "shared",
+		Resource: "things",
+	}).Extract()
+	th.AssertNoErr(t, err)
+
+	expected := &reports.Project{
+		UUID:       "uuid-for-berlin",
+		Name:       "berlin",
+		ParentUUID: "uuid-for-germany",
+		Services: reports.ProjectServices{
+			"shared": &reports.ProjectService{
+				ServiceInfo: limes.ServiceInfo{
+					Type:        "shared",
+					Area:        "shared",
+					ProductName: "",
+				},
+				Resources: reports.ProjectResources{
+					"things": &reports.ProjectResource{
+						ResourceInfo: limes.ResourceInfo{
+							Name: "things",
+						},
+						Quota: 10,
+						Usage: 2,
+					},
+				},
+				ScrapedAt: 22,
+			},
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
+}
+
 func TestUpdateProject(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	HandlePutProjectSuccessfully(t)
+	HandleUpdateProjectSuccessfully(t)
 
 	opts := projects.UpdateOpts{
 		Services: api.ServiceQuotas{
@@ -416,4 +426,14 @@ func TestUpdateProject(t *testing.T) {
 		},
 	}
 	th.CheckDeepEquals(t, expected, actual)
+}
+
+func TestSyncProject(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandleSyncProjectSuccessfully(t)
+
+	// if sync succeeds then nothing (no error) is returned.
+	err := projects.Sync(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden")
+	th.AssertNoErr(t, err)
 }
