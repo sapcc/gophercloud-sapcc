@@ -240,59 +240,6 @@ var domainFilteredJSON = `
 	}
 `
 
-var updatedDomainJSON = `
-	{
-		"domain": {
-			"id": "uuid-for-karachi",
-			"name": "karachi",
-			"services": [
-				{
-					"type": "shared",
-					"area": "shared",
-					"resources": [
-						{
-							"name": "capacity",
-							"unit": "B",
-							"quota": 10,
-							"projects_quota": 5,
-							"usage": 2
-						},
-						{
-							"name": "things",
-							"quota": 99,
-							"projects_quota": 5,
-							"usage": 2
-						}
-					],
-					"max_scraped_at": 22,
-					"min_scraped_at": 22
-				},
-				{
-					"type": "unshared",
-					"area": "unshared",
-					"resources": [
-						{
-							"name": "capacity",
-							"unit": "B",
-							"quota": 55,
-							"projects_quota": 25,
-							"usage": 10
-						},
-						{
-							"name": "things",
-							"quota": 55,
-							"projects_quota": 25,
-							"usage": 10
-						}
-					],
-					"max_scraped_at": 11,
-					"min_scraped_at": 11
-				}
-			]
-		}
-	}
-`
-
 // HandleListDomainsSuccessfully creates an HTTP handler at `/v1/domains` on the
 // test handler mux that responds with a list of (two) domains.
 func HandleListDomainsSuccessfully(t *testing.T) {
@@ -338,9 +285,6 @@ func HandleUpdateDomainSuccessfully(t *testing.T) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprintf(w, updatedDomainJSON)
+		w.WriteHeader(http.StatusAccepted)
 	})
 }

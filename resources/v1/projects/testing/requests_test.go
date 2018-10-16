@@ -5,7 +5,6 @@ import (
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
-
 	"github.com/sapcc/gophercloud-limes/resources/v1/projects"
 	"github.com/sapcc/limes/pkg/api"
 	"github.com/sapcc/limes/pkg/limes"
@@ -390,42 +389,9 @@ func TestUpdateProject(t *testing.T) {
 		},
 	}
 
-	actual, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts).Extract()
+	// if update succeeds then a 202 (no error) is returned.
+	_, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts)
 	th.AssertNoErr(t, err)
-
-	expected := &reports.Project{
-		UUID:       "uuid-for-berlin",
-		Name:       "berlin",
-		ParentUUID: "uuid-for-germany",
-		Services: reports.ProjectServices{
-			"shared": &reports.ProjectService{
-				ServiceInfo: limes.ServiceInfo{
-					Type:        "shared",
-					Area:        "shared",
-					ProductName: "",
-				},
-				Resources: reports.ProjectResources{
-					"capacity": &reports.ProjectResource{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "capacity",
-							Unit: limes.UnitBytes,
-						},
-						Quota: 42,
-						Usage: 23,
-					},
-					"things": &reports.ProjectResource{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "things",
-						},
-						Quota: 10,
-						Usage: 2,
-					},
-				},
-				ScrapedAt: 22,
-			},
-		},
-	}
-	th.CheckDeepEquals(t, expected, actual)
 }
 
 func TestSyncProject(t *testing.T) {
@@ -433,7 +399,7 @@ func TestSyncProject(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleSyncProjectSuccessfully(t)
 
-	// if sync succeeds then nothing (no error) is returned.
+	// if sync succeeds then a 202 (no error) is returned.
 	err := projects.Sync(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden")
 	th.AssertNoErr(t, err)
 }

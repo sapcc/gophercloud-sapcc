@@ -231,34 +231,6 @@ var clusterFilteredJSON = `
 	}
 `
 
-var updatedClusterJSON = `
-	{
-		"cluster": {
-			"id": "germany",
-			"services": [
-				{
-					"type": "shared",
-					"area": "shared",
-					"resources": [
-						{
-							"name": "stuff",
-							"capacity": 99,
-							"comment": "I got 99 problems, but a cluster ain't one.",
-							"domains_quota": 5,
-							"unit": "B",
-							"usage": 2
-						}
-					],
-					"max_scraped_at": 33,
-					"min_scraped_at": 33
-				}
-			],
-			"max_scraped_at": 22,
-			"min_scraped_at": 22
-		}
-	}
-`
-
 // HandleListClustersSuccessfully creates an HTTP handler at `/v1/clusters` on the
 // test handler mux that responds with a list of (two) clusters.
 func HandleListClustersSuccessfully(t *testing.T) {
@@ -304,9 +276,6 @@ func HandleUpdateClusterSuccessfully(t *testing.T) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprintf(w, updatedClusterJSON)
+		w.WriteHeader(http.StatusAccepted)
 	})
 }

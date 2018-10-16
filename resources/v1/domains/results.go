@@ -5,7 +5,7 @@ import (
 	"github.com/sapcc/limes/pkg/reports"
 )
 
-// CommonResult is the result of a Get/List/Update operation. Call its appropriate
+// CommonResult is the result of a Get/List operation. Call its appropriate
 // Extract method to interpret it as a Domain or a slice of Domains.
 type CommonResult struct {
 	gophercloud.Result

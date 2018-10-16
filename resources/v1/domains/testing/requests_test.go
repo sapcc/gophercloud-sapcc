@@ -335,68 +335,7 @@ func TestUpdateDomain(t *testing.T) {
 		},
 	}
 
-	actual, err := domains.Update(fake.ServiceClient(), "uuid-for-karachi", opts).Extract()
+	// if update succeeds then a 202 (no error) is returned.
+	err := domains.Update(fake.ServiceClient(), "uuid-for-karachi", opts)
 	th.AssertNoErr(t, err)
-
-	expected := &reports.Domain{
-		UUID: "uuid-for-karachi",
-		Name: "karachi",
-		Services: reports.DomainServices{
-			"shared": &reports.DomainService{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "shared",
-					Area: "shared",
-				},
-				Resources: reports.DomainResources{
-					"capacity": &reports.DomainResource{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "capacity",
-							Unit: limes.UnitBytes,
-						},
-						DomainQuota:   10,
-						ProjectsQuota: 5,
-						Usage:         2,
-					},
-					"things": &reports.DomainResource{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "things",
-						},
-						DomainQuota:   99,
-						ProjectsQuota: 5,
-						Usage:         2,
-					},
-				},
-				MaxScrapedAt: 22,
-				MinScrapedAt: 22,
-			},
-			"unshared": &reports.DomainService{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "unshared",
-					Area: "unshared",
-				},
-				Resources: reports.DomainResources{
-					"capacity": &reports.DomainResource{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "capacity",
-							Unit: limes.UnitBytes,
-						},
-						DomainQuota:   55,
-						ProjectsQuota: 25,
-						Usage:         10,
-					},
-					"things": &reports.DomainResource{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "things",
-						},
-						DomainQuota:   55,
-						ProjectsQuota: 25,
-						Usage:         10,
-					},
-				},
-				MaxScrapedAt: 11,
-				MinScrapedAt: 11,
-			},
-		},
-	}
-	th.CheckDeepEquals(t, expected, actual)
 }

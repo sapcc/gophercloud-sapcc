@@ -88,15 +88,14 @@ func (opts UpdateOpts) ToDomainUpdateMap() (map[string]interface{}, error) {
 }
 
 // Update modifies the attributes of a domain.
-func Update(c *gophercloud.ServiceClient, domainID string, opts UpdateOptsBuilder) (r CommonResult) {
+func Update(c *gophercloud.ServiceClient, domainID string, opts UpdateOptsBuilder) error {
 	url := updateURL(c, domainID)
 	b, err := opts.ToDomainUpdateMap()
 	if err != nil {
-		r.Err = err
-		return
+		return err
 	}
-	_, r.Err = c.Put(url, b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200, 202},
+	_, err = c.Put(url, b, nil, &gophercloud.RequestOpts{
+		OkCodes: []int{202},
 	})
-	return
+	return err
 }

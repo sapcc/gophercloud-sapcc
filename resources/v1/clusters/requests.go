@@ -11,7 +11,7 @@ type ListOptsBuilder interface {
 	ToClusterListQuery() (string, error)
 }
 
-// ListOpts enables filtering of a List request.
+// ListOpts contains parameters for filtering a List request
 type ListOpts struct {
 	Detail   bool   `q:"detail"`
 	Local    bool   `q:"local"`
@@ -46,7 +46,7 @@ type GetOptsBuilder interface {
 	ToClusterGetQuery() (string, error)
 }
 
-// GetOpts enables filtering of a Get request.
+// GetOpts contains parameters for filtering a Get request.
 type GetOpts struct {
 	Detail   bool   `q:"detail"`
 	Local    bool   `q:"local"`
@@ -81,26 +81,25 @@ type UpdateOptsBuilder interface {
 	ToClusterUpdateMap() (map[string]interface{}, error)
 }
 
-// UpdateOpts represents parameters to update a cluster.
+// UpdateOpts contains parameters to update a cluster.
 type UpdateOpts struct {
 	Services []api.ServiceCapacities `json:"services"`
 }
 
-// ToClusterUpdateMap formats a UpdateOpts into an Update request.
+// ToClusterUpdateMap formats a UpdateOpts into a request body.
 func (opts UpdateOpts) ToClusterUpdateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(opts, "cluster")
 }
 
 // Update modifies the attributes of a cluster.
-func Update(c *gophercloud.ServiceClient, clusterID string, opts UpdateOptsBuilder) (r CommonResult) {
+func Update(c *gophercloud.ServiceClient, clusterID string, opts UpdateOptsBuilder) error {
 	url := updateURL(c, clusterID)
 	b, err := opts.ToClusterUpdateMap()
 	if err != nil {
-		r.Err = err
-		return
+		return err
 	}
-	_, r.Err = c.Put(url, b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200, 202},
+	_, err = c.Put(url, b, nil, &gophercloud.RequestOpts{
+		OkCodes: []int{202},
 	})
-	return
+	return err
 }

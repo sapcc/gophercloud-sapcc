@@ -326,37 +326,7 @@ func TestUpdateCluster(t *testing.T) {
 		},
 	}
 
-	actual, err := clusters.Update(fake.ServiceClient(), "germany", opts).Extract()
+	// if update succeeds then a 202 (no error) is returned.
+	err := clusters.Update(fake.ServiceClient(), "germany", opts)
 	th.AssertNoErr(t, err)
-
-	var cap uint64 = 99
-	var scrap int64 = 22
-	expected := &reports.Cluster{
-		ID: "germany",
-		Services: reports.ClusterServices{
-			"shared": &reports.ClusterService{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "shared",
-					Area: "shared",
-				},
-				Resources: reports.ClusterResources{
-					"stuff": &reports.ClusterResource{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "stuff",
-							Unit: limes.UnitBytes,
-						},
-						Capacity:     &cap,
-						Comment:      "I got 99 problems, but a cluster ain't one.",
-						DomainsQuota: 5,
-						Usage:        2,
-					},
-				},
-				MaxScrapedAt: 33,
-				MinScrapedAt: 33,
-			},
-		},
-		MaxScrapedAt: &scrap,
-		MinScrapedAt: &scrap,
-	}
-	th.CheckDeepEquals(t, expected, actual)
 }

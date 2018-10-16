@@ -2,6 +2,8 @@
 package projects
 
 import (
+	"io/ioutil"
+
 	"github.com/gophercloud/gophercloud"
 	"github.com/sapcc/limes/pkg/api"
 )
@@ -89,18 +91,27 @@ func (opts UpdateOpts) ToProjectUpdateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(opts, "project")
 }
 
-// Update modifies the attributes of a project.
-func Update(c *gophercloud.ServiceClient, domainID string, projectID string, opts UpdateOptsBuilder) (r CommonResult) {
+// Update modifies the attributes of a project and returns the response body which contains non-fatal error messages.
+func Update(c *gophercloud.ServiceClient, domainID string, projectID string, opts UpdateOptsBuilder) ([]byte, error) {
 	url := updateURL(c, domainID, projectID)
 	b, err := opts.ToProjectUpdateMap()
 	if err != nil {
-		r.Err = err
-		return
+		return nil, err
 	}
-	_, r.Err = c.Put(url, b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200, 202},
+	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{
+		OkCodes: []int{202},
 	})
-	return
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
 }
 
 // Sync schedules a sync task that pulls a project's data from the backing services
@@ -108,6 +119,8 @@ func Update(c *gophercloud.ServiceClient, domainID string, projectID string, opt
 func Sync(c *gophercloud.ServiceClient, domainID string, projectID string) error {
 	url := syncURL(c, domainID, projectID)
 
-	_, err := c.Post(url, nil, nil, nil)
+	_, err := c.Post(url, nil, nil, &gophercloud.RequestOpts{
+		OkCodes: []int{202},
+	})
 	return err
 }
