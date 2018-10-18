@@ -252,6 +252,7 @@ func HandleListDomainsSuccessfully(t *testing.T) {
 
 		if (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things" {
+			th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 			fmt.Fprintf(w, domainFilteredListJSON)
 		}
 
@@ -271,6 +272,7 @@ func HandleGetDomainSuccessfully(t *testing.T) {
 
 		if (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things" {
+			th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 			fmt.Fprintf(w, domainFilteredJSON)
 		}
 
@@ -284,6 +286,7 @@ func HandleUpdateDomainSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-karachi", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 
 		w.WriteHeader(http.StatusAccepted)
 	})

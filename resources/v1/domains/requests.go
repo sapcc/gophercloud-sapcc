@@ -8,94 +8,136 @@ import (
 
 // ListOptsBuilder allows extensions to add additional parameters to the List request.
 type ListOptsBuilder interface {
-	ToDomainListQuery() (string, error)
+	ToDomainListParams() (map[string]string, string, error)
 }
 
-// ListOpts enables filtering of a List request.
+// ListOpts contains parameters for filtering a List request.
 type ListOpts struct {
+	Cluster  string `h:"X-Limes-Cluster-Id"`
 	Area     string `q:"area"`
 	Service  string `q:"service"`
 	Resource string `q:"resource"`
 }
 
-// ToDomainListQuery formats a ListOpts into a query string.
-func (opts ListOpts) ToDomainListQuery() (string, error) {
+// ToDomainListParams formats a ListOpts into a map of headers and a query string.
+func (opts ListOpts) ToDomainListParams() (map[string]string, string, error) {
+	h, err := gophercloud.BuildHeaders(opts)
+	if err != nil {
+		return nil, "", err
+	}
+
 	q, err := gophercloud.BuildQueryString(opts)
-	return q.String(), err
+	if err != nil {
+		return nil, "", err
+	}
+
+	return h, q.String(), nil
 }
 
 // List enumerates the domains to which the current token has access.
 func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) (r CommonResult) {
 	url := listURL(c)
+	headers := make(map[string]string)
 	if opts != nil {
-		query, err := opts.ToDomainListQuery()
+		h, q, err := opts.ToDomainListParams()
 		if err != nil {
 			r.Err = err
 			return
 		}
-		url += query
+		headers = h
+		url += q
 	}
-	_, r.Err = c.Get(url, &r.Body, nil)
+
+	_, r.Err = c.Get(url, &r.Body, &gophercloud.RequestOpts{
+		MoreHeaders: headers,
+	})
 	return
 }
 
 // GetOptsBuilder allows extensions to add additional parameters to the Get request.
 type GetOptsBuilder interface {
-	ToDomainGetQuery() (string, error)
+	ToDomainGetParams() (map[string]string, string, error)
 }
 
-// GetOpts enables filtering of a Get request.
+// GetOpts contains parameters for filtering a Get request.
 type GetOpts struct {
+	Cluster  string `h:"X-Limes-Cluster-Id"`
 	Area     string `q:"area"`
 	Service  string `q:"service"`
 	Resource string `q:"resource"`
 }
 
-// ToDomainGetQuery formats a GetOpts into a query string.
-func (opts GetOpts) ToDomainGetQuery() (string, error) {
+// ToDomainGetParams formats a GetOpts into a map of headers and a query string.
+func (opts GetOpts) ToDomainGetParams() (map[string]string, string, error) {
+	h, err := gophercloud.BuildHeaders(opts)
+	if err != nil {
+		return nil, "", err
+	}
+
 	q, err := gophercloud.BuildQueryString(opts)
-	return q.String(), err
+	if err != nil {
+		return nil, "", err
+	}
+
+	return h, q.String(), nil
 }
 
 // Get retrieves details on a single domain, by ID.
 func Get(c *gophercloud.ServiceClient, domainID string, opts GetOptsBuilder) (r CommonResult) {
 	url := getURL(c, domainID)
+	headers := make(map[string]string)
 	if opts != nil {
-		query, err := opts.ToDomainGetQuery()
+		h, q, err := opts.ToDomainGetParams()
 		if err != nil {
 			r.Err = err
 			return
 		}
-		url += query
+		headers = h
+		url += q
 	}
-	_, r.Err = c.Get(url, &r.Body, nil)
+
+	_, r.Err = c.Get(url, &r.Body, &gophercloud.RequestOpts{
+		MoreHeaders: headers,
+	})
 	return
 }
 
 // UpdateOptsBuilder allows extensions to add additional parameters to the Update request.
 type UpdateOptsBuilder interface {
-	ToDomainUpdateMap() (map[string]interface{}, error)
+	ToDomainUpdateMap() (map[string]string, map[string]interface{}, error)
 }
 
-// UpdateOpts represents parameters to update a domain.
+// UpdateOpts contains parameters to update a domain.
 type UpdateOpts struct {
+	Cluster  string            `h:"X-Limes-Cluster-Id"`
 	Services api.ServiceQuotas `json:"services"`
 }
 
-// ToDomainUpdateMap formats a UpdateOpts into an Update request.
-func (opts UpdateOpts) ToDomainUpdateMap() (map[string]interface{}, error) {
-	return gophercloud.BuildRequestBody(opts, "domain")
+// ToDomainUpdateMap formats a UpdateOpts into a map of headers and a request body.
+func (opts UpdateOpts) ToDomainUpdateMap() (map[string]string, map[string]interface{}, error) {
+	h, err := gophercloud.BuildHeaders(opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	b, err := gophercloud.BuildRequestBody(opts, "domain")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return h, b, nil
 }
 
 // Update modifies the attributes of a domain.
 func Update(c *gophercloud.ServiceClient, domainID string, opts UpdateOptsBuilder) error {
 	url := updateURL(c, domainID)
-	b, err := opts.ToDomainUpdateMap()
+	h, b, err := opts.ToDomainUpdateMap()
 	if err != nil {
 		return err
 	}
 	_, err = c.Put(url, b, nil, &gophercloud.RequestOpts{
-		OkCodes: []int{202},
+		OkCodes:     []int{202},
+		MoreHeaders: h,
 	})
 	return err
 }

@@ -65,6 +65,7 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 
 		if (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things" {
+			th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 			fmt.Fprintf(w, `
 				{
 					"projects": [
@@ -262,6 +263,7 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 
 		if (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things" {
+			th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 			fmt.Fprintf(w, `
 				{
 					"project": {
@@ -326,6 +328,7 @@ func HandleUpdateProjectSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 
 		w.WriteHeader(http.StatusAccepted)
 	})
@@ -337,6 +340,7 @@ func HandleSyncProjectSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-dresden/sync", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "POST")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 
 		w.WriteHeader(http.StatusAccepted)
 	})

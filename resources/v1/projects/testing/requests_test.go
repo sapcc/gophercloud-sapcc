@@ -17,8 +17,7 @@ func TestListProjects(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	result := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{})
-	actual, err := result.ExtractProjects()
+	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	backendQuota := int64(100)
@@ -147,8 +146,7 @@ func TestListProjectsDetailed(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	result := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Detail: true})
-	actual, err := result.ExtractProjects()
+	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Detail: true}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	expected := []reports.Project{
@@ -194,8 +192,11 @@ func TestListProjectsFiltered(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	result := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Service: "shared", Resource: "things"})
-	actual, err := result.ExtractProjects()
+	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
+		Cluster:  "fakecluster",
+		Service:  "shared",
+		Resource: "things",
+	}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	expected := []reports.Project{
@@ -344,6 +345,7 @@ func TestGetProjectFiltered(t *testing.T) {
 	HandleGetProjectSuccessfully(t)
 
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
+		Cluster:  "fakecluster",
 		Service:  "shared",
 		Resource: "things",
 	}).Extract()
@@ -382,6 +384,7 @@ func TestUpdateProject(t *testing.T) {
 	HandleUpdateProjectSuccessfully(t)
 
 	opts := projects.UpdateOpts{
+		Cluster: "fakecluster",
 		Services: api.ServiceQuotas{
 			"compute": api.ResourceQuotas{
 				"cores": limes.ValueWithUnit{42, limes.UnitNone},
@@ -400,6 +403,7 @@ func TestSyncProject(t *testing.T) {
 	HandleSyncProjectSuccessfully(t)
 
 	// if sync succeeds then a 202 (no error) is returned.
-	err := projects.Sync(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden")
+	err := projects.Sync(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden", projects.SyncOpts{
+		Cluster: "fakecluster"})
 	th.AssertNoErr(t, err)
 }
