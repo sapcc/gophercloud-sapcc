@@ -6,9 +6,7 @@ import (
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/gophercloud-limes/resources/v1/clusters"
-	"github.com/sapcc/limes/pkg/api"
-	"github.com/sapcc/limes/pkg/limes"
-	"github.com/sapcc/limes/pkg/reports"
+	"github.com/sapcc/limes"
 )
 
 func TestListCluster(t *testing.T) {
@@ -21,17 +19,17 @@ func TestListCluster(t *testing.T) {
 
 	var cap uint64 = 10
 	var scrap int64 = 22
-	expected := []reports.Cluster{
+	expected := []limes.ClusterReport{
 		{
 			ID: "pakistan",
-			Services: reports.ClusterServices{
-				"shared": &reports.ClusterService{
+			Services: limes.ClusterServiceReports{
+				"shared": &limes.ClusterServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "shared",
 						Area: "shared",
 					},
-					Resources: reports.ClusterResources{
-						"stuff": &reports.ClusterResource{
+					Resources: limes.ClusterResourceReports{
+						"stuff": &limes.ClusterResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "stuff",
 								Unit: limes.UnitBytes,
@@ -40,7 +38,7 @@ func TestListCluster(t *testing.T) {
 							DomainsQuota: 5,
 							Usage:        2,
 						},
-						"things": &reports.ClusterResource{
+						"things": &limes.ClusterResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
@@ -49,17 +47,17 @@ func TestListCluster(t *testing.T) {
 							Usage:        2,
 						},
 					},
-					MaxScrapedAt: 33,
-					MinScrapedAt: 33,
+					MaxScrapedAt: p2i64(33),
+					MinScrapedAt: p2i64(33),
 				},
-				"unshared": &reports.ClusterService{
+				"unshared": &limes.ClusterServiceReport{
 					Shared: true,
 					ServiceInfo: limes.ServiceInfo{
 						Type: "unshared",
 						Area: "contradiction",
 					},
-					Resources: reports.ClusterResources{
-						"stuff": &reports.ClusterResource{
+					Resources: limes.ClusterResourceReports{
+						"stuff": &limes.ClusterResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "stuff",
 								Unit: limes.UnitBytes,
@@ -69,7 +67,7 @@ func TestListCluster(t *testing.T) {
 							DomainsQuota: 5,
 							Usage:        2,
 						},
-						"things": &reports.ClusterResource{
+						"things": &limes.ClusterResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
@@ -78,8 +76,8 @@ func TestListCluster(t *testing.T) {
 							Usage:        2,
 						},
 					},
-					MaxScrapedAt: 33,
-					MinScrapedAt: 33,
+					MaxScrapedAt: p2i64(33),
+					MinScrapedAt: p2i64(33),
 				},
 			},
 			MaxScrapedAt: &scrap,
@@ -87,14 +85,14 @@ func TestListCluster(t *testing.T) {
 		},
 		{
 			ID: "germany",
-			Services: reports.ClusterServices{
-				"shared": &reports.ClusterService{
+			Services: limes.ClusterServiceReports{
+				"shared": &limes.ClusterServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "shared",
 						Area: "shared",
 					},
-					Resources: reports.ClusterResources{
-						"stuff": &reports.ClusterResource{
+					Resources: limes.ClusterResourceReports{
+						"stuff": &limes.ClusterResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "stuff",
 								Unit: limes.UnitBytes,
@@ -104,8 +102,8 @@ func TestListCluster(t *testing.T) {
 							Usage:        2,
 						},
 					},
-					MaxScrapedAt: 33,
-					MinScrapedAt: 33,
+					MaxScrapedAt: p2i64(33),
+					MinScrapedAt: p2i64(33),
 				},
 			},
 			MaxScrapedAt: &scrap,
@@ -128,17 +126,17 @@ func TestListFilteredCluster(t *testing.T) {
 
 	var cap uint64 = 10
 	var scrap int64 = 22
-	expected := []reports.Cluster{
+	expected := []limes.ClusterReport{
 		{
 			ID: "pakistan",
-			Services: reports.ClusterServices{
-				"shared": &reports.ClusterService{
+			Services: limes.ClusterServiceReports{
+				"shared": &limes.ClusterServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "shared",
 						Area: "shared",
 					},
-					Resources: reports.ClusterResources{
-						"stuff": &reports.ClusterResource{
+					Resources: limes.ClusterResourceReports{
+						"stuff": &limes.ClusterResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "stuff",
 								Unit: limes.UnitBytes,
@@ -148,8 +146,8 @@ func TestListFilteredCluster(t *testing.T) {
 							Usage:        2,
 						},
 					},
-					MaxScrapedAt: 33,
-					MinScrapedAt: 33,
+					MaxScrapedAt: p2i64(33),
+					MinScrapedAt: p2i64(33),
 				},
 			},
 			MaxScrapedAt: &scrap,
@@ -157,14 +155,14 @@ func TestListFilteredCluster(t *testing.T) {
 		},
 		{
 			ID: "germany",
-			Services: reports.ClusterServices{
-				"shared": &reports.ClusterService{
+			Services: limes.ClusterServiceReports{
+				"shared": &limes.ClusterServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "shared",
 						Area: "shared",
 					},
-					Resources: reports.ClusterResources{
-						"stuff": &reports.ClusterResource{
+					Resources: limes.ClusterResourceReports{
+						"stuff": &limes.ClusterResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "stuff",
 								Unit: limes.UnitBytes,
@@ -174,8 +172,8 @@ func TestListFilteredCluster(t *testing.T) {
 							Usage:        2,
 						},
 					},
-					MaxScrapedAt: 33,
-					MinScrapedAt: 33,
+					MaxScrapedAt: p2i64(33),
+					MinScrapedAt: p2i64(33),
 				},
 			},
 			MaxScrapedAt: &scrap,
@@ -195,16 +193,16 @@ func TestGetCluster(t *testing.T) {
 
 	var cap uint64 = 10
 	var scrap int64 = 22
-	expected := &reports.Cluster{
+	expected := &limes.ClusterReport{
 		ID: "pakistan",
-		Services: reports.ClusterServices{
-			"shared": &reports.ClusterService{
+		Services: limes.ClusterServiceReports{
+			"shared": &limes.ClusterServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "shared",
 					Area: "shared",
 				},
-				Resources: reports.ClusterResources{
-					"stuff": &reports.ClusterResource{
+				Resources: limes.ClusterResourceReports{
+					"stuff": &limes.ClusterResourceReport{
 						ResourceInfo: limes.ResourceInfo{
 							Name: "stuff",
 							Unit: limes.UnitBytes,
@@ -213,7 +211,7 @@ func TestGetCluster(t *testing.T) {
 						DomainsQuota: 5,
 						Usage:        2,
 					},
-					"things": &reports.ClusterResource{
+					"things": &limes.ClusterResourceReport{
 						ResourceInfo: limes.ResourceInfo{
 							Name: "things",
 						},
@@ -222,17 +220,17 @@ func TestGetCluster(t *testing.T) {
 						Usage:        2,
 					},
 				},
-				MaxScrapedAt: 33,
-				MinScrapedAt: 33,
+				MaxScrapedAt: p2i64(33),
+				MinScrapedAt: p2i64(33),
 			},
-			"unshared": &reports.ClusterService{
+			"unshared": &limes.ClusterServiceReport{
 				Shared: true,
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "contradiction",
 				},
-				Resources: reports.ClusterResources{
-					"stuff": &reports.ClusterResource{
+				Resources: limes.ClusterResourceReports{
+					"stuff": &limes.ClusterResourceReport{
 						ResourceInfo: limes.ResourceInfo{
 							Name: "stuff",
 							Unit: limes.UnitBytes,
@@ -242,7 +240,7 @@ func TestGetCluster(t *testing.T) {
 						DomainsQuota: 5,
 						Usage:        2,
 					},
-					"things": &reports.ClusterResource{
+					"things": &limes.ClusterResourceReport{
 						ResourceInfo: limes.ResourceInfo{
 							Name: "things",
 						},
@@ -251,8 +249,8 @@ func TestGetCluster(t *testing.T) {
 						Usage:        2,
 					},
 				},
-				MaxScrapedAt: 33,
-				MinScrapedAt: 33,
+				MaxScrapedAt: p2i64(33),
+				MinScrapedAt: p2i64(33),
 			},
 		},
 		MaxScrapedAt: &scrap,
@@ -275,17 +273,17 @@ func TestGetFilteredCluster(t *testing.T) {
 
 	var cap uint64 = 10
 	var scrap int64 = 22
-	expected := &reports.Cluster{
+	expected := &limes.ClusterReport{
 		ID: "pakistan",
-		Services: reports.ClusterServices{
-			"unshared": &reports.ClusterService{
+		Services: limes.ClusterServiceReports{
+			"unshared": &limes.ClusterServiceReport{
 				Shared: true,
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "contradiction",
 				},
-				Resources: reports.ClusterResources{
-					"stuff": &reports.ClusterResource{
+				Resources: limes.ClusterResourceReports{
+					"stuff": &limes.ClusterResourceReport{
 						ResourceInfo: limes.ResourceInfo{
 							Name: "stuff",
 							Unit: limes.UnitBytes,
@@ -297,8 +295,8 @@ func TestGetFilteredCluster(t *testing.T) {
 						Subcapacities: `[{"cores":200,"hypervisor":"cluster-1"},{"cores":800,"hypervisor":"cluster-2"}]`,
 					},
 				},
-				MaxScrapedAt: 33,
-				MinScrapedAt: 33,
+				MaxScrapedAt: p2i64(33),
+				MinScrapedAt: p2i64(33),
 			},
 		},
 		MaxScrapedAt: &scrap,
@@ -314,8 +312,8 @@ func TestUpdateCluster(t *testing.T) {
 
 	unit := limes.UnitBytes
 	opts := clusters.UpdateOpts{
-		Services: []api.ServiceCapacities{
-			{Type: "shared", Resources: []api.ResourceCapacity{
+		Services: []limes.ServiceCapacityRequest{
+			{Type: "shared", Resources: []limes.ResourceCapacityRequest{
 				{
 					Name:     "stuff",
 					Capacity: 99,
@@ -329,4 +327,8 @@ func TestUpdateCluster(t *testing.T) {
 	// if update succeeds then a 202 (no error) is returned.
 	err := clusters.Update(fake.ServiceClient(), "germany", opts)
 	th.AssertNoErr(t, err)
+}
+
+func p2i64(x int64) *int64 {
+	return &x
 }
