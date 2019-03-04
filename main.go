@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
 	"github.com/gophercloud/utils/openstack/clientconfig"
 
@@ -18,10 +17,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("could not initialize openstack client: %v", err)
 	}
-	limesClient := NewLimes(provider)
-	identityClient := NewIdentity(provider)
 
-	project, err := tokens.Get(identityClient, provider.Token()).ExtractProject()
+	limesClient, err := resources.NewLimesV1(provider, gophercloud.EndpointOpts{})
+	if err != nil {
+		log.Fatalf("could not initialize Limes client: %v", err)
+	}
+
+	project, err := provider.GetAuthResult().(tokens.CreateResult).ExtractProject()
 	if err != nil {
 		log.Fatalf("could not get project from token: %v", err)
 	}
@@ -38,20 +40,4 @@ func main() {
 	for _, project := range projectList {
 		fmt.Printf("%+v\n", project.Services)
 	}
-}
-
-func NewIdentity(provider *gophercloud.ProviderClient) *gophercloud.ServiceClient {
-	identity, err := openstack.NewIdentityV3(provider, gophercloud.EndpointOpts{})
-	if err != nil {
-		log.Fatalf("could not initialize identity client: %v", err)
-	}
-	return identity
-}
-
-func NewLimes(provider *gophercloud.ProviderClient) *gophercloud.ServiceClient {
-	limesClient, err := resources.NewLimesV1(provider, gophercloud.EndpointOpts{})
-	if err != nil {
-		log.Fatalf("could not initialize Limes client: %v", err)
-	}
-	return limesClient
 }
