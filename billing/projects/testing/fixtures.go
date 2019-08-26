@@ -80,11 +80,8 @@ const UpdateRequest = `
    "description" : "Demos and Tests",
    "responsible_primary_contact_email" : "example@mail.com",
    "cost_object" : {
-      "type" : "IO",
-      "name" : "1234567890",
       "inherited" : true
    },
-   "additional_information" : "",
    "project_id" : "e9141fb24eee4b3e9f25ae69cda31132",
    "domain_id" : "2bac466eed364d8a92e477459e908736",
    "project_name" : "project",
@@ -120,8 +117,6 @@ const UpdateResponse = `
   "domain_id": "2bac466eed364d8a92e477459e908736",
   "domain_name": "domain",
   "cost_object": {
-    "name": "1234567890",
-    "type": "IO",
     "inherited": true
   },
   "project_type": "quota",

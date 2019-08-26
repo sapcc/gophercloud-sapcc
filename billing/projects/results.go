@@ -39,7 +39,7 @@ type UpdateResult struct {
 
 // Project represents a Billing Project.
 type Project struct {
-	// An project ID
+	// A project ID
 	ProjectID string `json:"project_id"`
 	// Human-readable name for the project. Might not be unique.
 	ProjectName string `json:"project_name"`
@@ -104,11 +104,12 @@ type Project struct {
 // The cost object structure
 type CostObject struct {
 	// Shows, if the CO is inherited. Mandatory, if name/type not set
-	Inherited *bool `json:"inherited,omitempty"`
+	Inherited bool `json:"inherited"`
 	// Name of the costobject. Mandatory, if inherited not true
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 	// Costobject-Type Type of the costobject. Mandatory, if inherited not true
-	Type string `json:"type"`
+	// IO, CC, WBS, SO
+	Type string `json:"type,omitempty"`
 }
 
 func (r *Project) UnmarshalJSON(b []byte) error {

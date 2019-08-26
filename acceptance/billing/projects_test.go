@@ -8,7 +8,7 @@ import (
 	"github.com/sapcc/gophercloud-billing/billing/projects"
 )
 
-var projectID = "e9141fb24eee4b3e9f25ae69cda31132"
+var projectID = "3e0fd3f8e9ec449686ef26a16a284265"
 
 func TestProjectReadUpdate(t *testing.T) {
 	client, err := NewBillingClient()
@@ -19,7 +19,16 @@ func TestProjectReadUpdate(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	// restore initial project data
-	defer UpdateProject(t, client, projectID, ProjectToUpdateOpts(project))
+	defer UpdateProject(t, client, projectID, projects.ProjectToUpdateOpts(project))
+
+	UpdateProjectField(t, client, project, "Description")
+	UpdateProjectField(t, client, project, "RevenueRelevance")
+	UpdateProjectField(t, client, project, "BusinessCriticality")
+	UpdateProjectField(t, client, project, "AdditionalInformation")
+	UpdateProjectField(t, client, project, "NumberOfEndusers")
+
+	// valid project is required
+	//UpdateProjectField(t, client, project, "CostObject")
 }
 
 func TestProjectList(t *testing.T) {
@@ -40,5 +49,5 @@ func TestProjectList(t *testing.T) {
 	tools.PrintResource(t, allProjects)
 
 	// compare project and projects list
-	th.AssertDeepEquals(t, allProjects[0], project)
+	th.AssertDeepEquals(t, allProjects[0], *project)
 }

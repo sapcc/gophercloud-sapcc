@@ -12,8 +12,6 @@ import (
 	"github.com/sapcc/gophercloud-billing/billing/projects"
 )
 
-var iTrue = true
-
 var projectsList = []projects.Project{
 	{
 		ProjectID:   "e9141fb24eee4b3e9f25ae69cda31132",
@@ -25,7 +23,7 @@ var projectsList = []projects.Project{
 		CostObject: projects.CostObject{
 			Name:      "123456789",
 			Type:      "IO",
-			Inherited: new(bool),
+			Inherited: false,
 		},
 		ProjectType:                    "quota",
 		ResponsiblePrimaryContactID:    "D123456",
@@ -50,9 +48,7 @@ var updateResponse = projects.Project{
 	DomainID:    "2bac466eed364d8a92e477459e908736",
 	DomainName:  "domain",
 	CostObject: projects.CostObject{
-		Name:      "1234567890",
-		Type:      "IO",
-		Inherited: &iTrue,
+		Inherited: true,
 	},
 	ProjectType:                    "quota",
 	ResponsiblePrimaryContactID:    "D123456",
@@ -60,7 +56,6 @@ var updateResponse = projects.Project{
 	RevenueRelevance:               "generating",
 	BusinessCriticality:            "dev",
 	NumberOfEndusers:               99,
-	AdditionalInformation:          "",
 	ChangedBy:                      "41cab08d5af96b7c64b561c639be948dc16d9b2e263a3660bfa1e096422d522e",
 	ChangedAt:                      time.Date(2019, time.August, 26, 9, 9, 5, 457000000, time.UTC),
 	Collector:                      "billing.region.local",
@@ -128,84 +123,20 @@ func TestUpdate(t *testing.T) {
 		fmt.Fprintf(w, UpdateResponse)
 	})
 
-	revenueRelevance := "generating"
-	description := "Demos and Tests"
-	responsiblePrimaryContactEmail := "example@mail.com"
-	additionalInformation := ""
-	projectID := "e9141fb24eee4b3e9f25ae69cda31132"
-	domainID := "2bac466eed364d8a92e477459e908736"
-	projectName := "project"
-	numberOfEndusers := 99
-	responsiblePrimaryContactID := "D123456"
-	parentID := "2bac466eed364d8a92e477459e908736"
-	businessCriticality := "dev"
-
 	options := projects.UpdateOpts{
-		RevenueRelevance:               &revenueRelevance,
-		Description:                    &description,
-		ResponsiblePrimaryContactEmail: &responsiblePrimaryContactEmail,
-		CostObject: &projects.CostObject{
-			Type:      "IO",
-			Name:      "1234567890",
-			Inherited: &iTrue,
+		RevenueRelevance:               "generating",
+		Description:                    "Demos and Tests",
+		ResponsiblePrimaryContactEmail: "example@mail.com",
+		CostObject: projects.CostObject{
+			Inherited: true,
 		},
-		AdditionalInformation:       &additionalInformation,
-		ProjectID:                   &projectID,
-		DomainID:                    &domainID,
-		ProjectName:                 &projectName,
-		NumberOfEndusers:            &numberOfEndusers,
-		ResponsiblePrimaryContactID: &responsiblePrimaryContactID,
-		ParentID:                    &parentID,
-		BusinessCriticality:         &businessCriticality,
-	}
-
-	s, err := projects.Update(fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132", options).Extract()
-	th.AssertNoErr(t, err)
-
-	th.AssertDeepEquals(t, *s, updateResponse)
-}
-
-func TestUpdateNoCost(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-
-	th.Mux.HandleFunc("/projects/e9141fb24eee4b3e9f25ae69cda31132", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "PUT")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-		th.TestHeader(t, r, "Content-Type", "application/json")
-		th.TestHeader(t, r, "Accept", "application/json")
-		th.TestJSONRequest(t, r, UpdateRequestNoCost)
-
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		fmt.Fprintf(w, UpdateResponse)
-	})
-
-	revenueRelevance := "generating"
-	description := "Demos and Tests"
-	responsiblePrimaryContactEmail := "example@mail.com"
-	additionalInformation := ""
-	projectID := "e9141fb24eee4b3e9f25ae69cda31132"
-	domainID := "2bac466eed364d8a92e477459e908736"
-	projectName := "project"
-	numberOfEndusers := 99
-	responsiblePrimaryContactID := "D123456"
-	parentID := "2bac466eed364d8a92e477459e908736"
-	businessCriticality := "dev"
-
-	options := projects.UpdateOpts{
-		RevenueRelevance:               &revenueRelevance,
-		Description:                    &description,
-		ResponsiblePrimaryContactEmail: &responsiblePrimaryContactEmail,
-		AdditionalInformation:          &additionalInformation,
-		ProjectID:                      &projectID,
-		DomainID:                       &domainID,
-		ProjectName:                    &projectName,
-		NumberOfEndusers:               &numberOfEndusers,
-		ResponsiblePrimaryContactID:    &responsiblePrimaryContactID,
-		ParentID:                       &parentID,
-		BusinessCriticality:            &businessCriticality,
+		ProjectID:                   "e9141fb24eee4b3e9f25ae69cda31132",
+		DomainID:                    "2bac466eed364d8a92e477459e908736",
+		ProjectName:                 "project",
+		NumberOfEndusers:            99,
+		ResponsiblePrimaryContactID: "D123456",
+		ParentID:                    "2bac466eed364d8a92e477459e908736",
+		BusinessCriticality:         "dev",
 	}
 
 	s, err := projects.Update(fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132", options).Extract()
@@ -224,4 +155,14 @@ func TestMarshalUnmarshal(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, projectsList[0], unmarshalled)
+
+	// vice versa
+	jj, err = json.Marshal(projectsList)
+	th.AssertNoErr(t, err)
+
+	var unmarshalledProjects []projects.Project
+	err = json.Unmarshal(jj, &unmarshalledProjects)
+	th.AssertNoErr(t, err)
+
+	th.AssertDeepEquals(t, projectsList, unmarshalledProjects)
 }
