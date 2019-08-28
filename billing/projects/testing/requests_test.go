@@ -155,14 +155,4 @@ func TestMarshalUnmarshal(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, projectsList[0], unmarshalled)
-
-	// vice versa
-	jj, err = json.Marshal(projectsList)
-	th.AssertNoErr(t, err)
-
-	var unmarshalledProjects []projects.Project
-	err = json.Unmarshal(jj, &unmarshalledProjects)
-	th.AssertNoErr(t, err)
-
-	th.AssertDeepEquals(t, projectsList, unmarshalledProjects)
 }

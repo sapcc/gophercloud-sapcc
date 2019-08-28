@@ -76,35 +76,19 @@ const ListResponse = `
 
 const UpdateRequest = `
 {
-   "revenue_relevance" : "generating",
-   "description" : "Demos and Tests",
-   "responsible_primary_contact_email" : "example@mail.com",
-   "cost_object" : {
-      "inherited" : true
-   },
-   "project_id" : "e9141fb24eee4b3e9f25ae69cda31132",
-   "domain_id" : "2bac466eed364d8a92e477459e908736",
-   "project_name" : "project",
-   "number_of_endusers" : 99,
-   "responsible_primary_contact_id" : "D123456",
-   "parent_id" : "2bac466eed364d8a92e477459e908736",
-   "business_criticality" : "dev"
-}
-`
-
-const UpdateRequestNoCost = `
-{
-   "revenue_relevance" : "generating",
-   "description" : "Demos and Tests",
-   "responsible_primary_contact_email" : "example@mail.com",
-   "additional_information" : "",
-   "project_id" : "e9141fb24eee4b3e9f25ae69cda31132",
-   "domain_id" : "2bac466eed364d8a92e477459e908736",
-   "project_name" : "project",
-   "number_of_endusers" : 99,
-   "responsible_primary_contact_id" : "D123456",
-   "parent_id" : "2bac466eed364d8a92e477459e908736",
-   "business_criticality" : "dev"
+  "revenue_relevance" : "generating",
+  "description" : "Demos and Tests",
+  "responsible_primary_contact_email" : "example@mail.com",
+  "cost_object" : {
+     "inherited" : true
+  },
+  "project_id" : "e9141fb24eee4b3e9f25ae69cda31132",
+  "domain_id" : "2bac466eed364d8a92e477459e908736",
+  "project_name" : "project",
+  "number_of_endusers" : 99,
+  "responsible_primary_contact_id" : "D123456",
+  "parent_id" : "2bac466eed364d8a92e477459e908736",
+  "business_criticality" : "dev"
 }
 `
 
