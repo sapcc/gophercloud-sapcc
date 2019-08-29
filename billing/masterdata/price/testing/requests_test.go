@@ -121,3 +121,31 @@ func TestDateListOpts(t *testing.T) {
 
 	th.CheckDeepEquals(t, priceList, actual)
 }
+
+func TestRegionListOptsNoDate(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
+	th.Mux.HandleFunc("/masterdata/price/region/foo/0001-01-01T00:00:00/9999-12-31T00:00:00", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprintf(w, ListResponse)
+	})
+
+	listOpts := price.ListOpts{
+		Region:     "region",
+		MetricType: "foo",
+	}
+
+	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages()
+	th.AssertNoErr(t, err)
+
+	actual, err := price.ExtractPrices(allPrices)
+	th.AssertNoErr(t, err)
+
+	th.CheckDeepEquals(t, priceList, actual)
+}

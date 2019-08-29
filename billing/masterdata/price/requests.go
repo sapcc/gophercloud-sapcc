@@ -1,6 +1,7 @@
 package price
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gophercloud/gophercloud"
@@ -18,7 +19,18 @@ type ListOpts struct {
 
 // ToPriceListQuery formats a ListOpts into a query string.
 func (opts ListOpts) ToPriceListQuery() (string, error) {
-	// TODO: add error handling for the region/MetricType/From/To
+	if opts.Region != "" && opts.MetricType == "" {
+		return "", fmt.Errorf("MetricType option is required, when Region is set")
+	}
+
+	if (opts.From != (time.Time{}) || opts.To != (time.Time{})) && opts.Region == "" {
+		return "", fmt.Errorf("Region option is required, when From or To are set")
+	}
+
+	if opts.OnlyActive == true && opts.Region != "" {
+		return "", fmt.Errorf("Cannot use OnlyActive, when Region is set")
+	}
+
 	q, err := gophercloud.BuildQueryString(opts)
 	if err != nil {
 		return "", err
