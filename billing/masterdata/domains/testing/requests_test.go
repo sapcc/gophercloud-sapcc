@@ -9,7 +9,7 @@ import (
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
-	"github.com/sapcc/gophercloud-billing/billing/domains"
+	"github.com/sapcc/gophercloud-billing/billing/masterdata/domains"
 )
 
 var domainsList = []domains.Domain{

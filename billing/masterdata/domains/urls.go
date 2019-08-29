@@ -3,11 +3,11 @@ package domains
 import "github.com/gophercloud/gophercloud"
 
 func resourceURL(c *gophercloud.ServiceClient, id string) string {
-	return c.ServiceURL("domains", id)
+	return c.ServiceURL("masterdata/domains", id)
 }
 
 func rootURL(c *gophercloud.ServiceClient) string {
-	return c.ServiceURL("domains")
+	return c.ServiceURL("masterdata/domains")
 }
 
 func listURL(c *gophercloud.ServiceClient) string {

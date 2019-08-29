@@ -13,7 +13,7 @@ func NewBilling(client *gophercloud.ProviderClient, endpointOpts gophercloud.End
 		return sc, err
 	}
 
-	resourceBase := url + "masterdata/"
+	resourceBase := url
 	return &gophercloud.ServiceClient{
 		ProviderClient: client,
 		Endpoint:       url,

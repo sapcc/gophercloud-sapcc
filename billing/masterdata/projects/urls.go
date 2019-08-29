@@ -3,11 +3,11 @@ package projects
 import "github.com/gophercloud/gophercloud"
 
 func resourceURL(c *gophercloud.ServiceClient, id string) string {
-	return c.ServiceURL("projects", id)
+	return c.ServiceURL("masterdata/projects", id)
 }
 
 func rootURL(c *gophercloud.ServiceClient) string {
-	return c.ServiceURL("projects")
+	return c.ServiceURL("masterdata/projects")
 }
 
 func listURL(c *gophercloud.ServiceClient) string {
