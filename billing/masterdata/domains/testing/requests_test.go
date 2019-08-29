@@ -54,7 +54,7 @@ func TestList(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	th.Mux.HandleFunc("/domains", func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc("/masterdata/domains", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "GET")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
@@ -77,7 +77,7 @@ func TestGet(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	th.Mux.HandleFunc("/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc("/masterdata/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "GET")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
@@ -97,7 +97,7 @@ func TestUpdate(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	th.Mux.HandleFunc("/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
+	th.Mux.HandleFunc("/masterdata/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
