@@ -85,39 +85,6 @@ func (r *Run) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r *Run) MarshalJSON() ([]byte, error) {
-	type ext struct {
-		CreatedAt string `json:"created_at"`
-		UpdatedAt string `json:"updated_at"`
-	}
-	type tmp struct {
-		ext
-		Run
-	}
-
-	s := tmp{
-		ext{
-			CreatedAt: r.CreatedAt.Format(time.RFC3339),
-			UpdatedAt: r.UpdatedAt.Format(time.RFC3339),
-		},
-		Run{
-			ID:                   r.ID,
-			AutomationID:         r.AutomationID,
-			AutomationName:       r.AutomationName,
-			Selector:             r.Selector,
-			RepositoryRevision:   r.RepositoryRevision,
-			AutomationAttributes: r.AutomationAttributes,
-			State:                r.State,
-			Log:                  r.Log,
-			Jobs:                 r.Jobs,
-			Owner:                r.Owner,
-			ProjectID:            r.ProjectID,
-		},
-	}
-
-	return json.Marshal(s)
-}
-
 // RunPage is the page returned by a pager when traversing over a collection of
 // runs.
 type RunPage struct {

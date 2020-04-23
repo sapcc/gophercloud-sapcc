@@ -1,7 +1,6 @@
 package testing
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -143,16 +142,4 @@ func TestUpdate(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *s, updateResponse)
-}
-
-func TestMarshalUnmarshal(t *testing.T) {
-	// must be a pointer, becasue UnmarshalJSON uses a pointer receiver
-	jj, err := json.Marshal(&projectsList[0])
-	th.AssertNoErr(t, err)
-
-	var unmarshalled projects.Project
-	err = json.Unmarshal(jj, &unmarshalled)
-	th.AssertNoErr(t, err)
-
-	th.AssertDeepEquals(t, projectsList[0], unmarshalled)
 }

@@ -133,46 +133,6 @@ func (r *Automation) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r *Automation) MarshalJSON() ([]byte, error) {
-	type ext struct {
-		ID        int    `json:"id"`
-		CreatedAt string `json:"created_at"`
-		UpdatedAt string `json:"updated_at"`
-	}
-	type tmp struct {
-		ext
-		Automation
-	}
-
-	id, _ := strconv.Atoi(r.ID)
-	s := tmp{
-		ext{
-			ID:        id,
-			CreatedAt: r.CreatedAt.Format(time.RFC3339),
-			UpdatedAt: r.UpdatedAt.Format(time.RFC3339),
-		},
-		Automation{
-			Name:               r.Name,
-			Repository:         r.Repository,
-			RepositoryRevision: r.RepositoryRevision,
-			ProjectID:          r.ProjectID,
-			Timeout:            r.Timeout,
-			Tags:               r.Tags,
-			Type:               r.Type,
-			RunList:            r.RunList,
-			ChefAttributes:     r.ChefAttributes,
-			LogLevel:           r.LogLevel,
-			Debug:              r.Debug,
-			ChefVersion:        r.ChefVersion,
-			Path:               r.Path,
-			Arguments:          r.Arguments,
-			Environment:        r.Environment,
-		},
-	}
-
-	return json.Marshal(s)
-}
-
 // AutomationPage is the page returned by a pager when traversing over a collection
 // of automations.
 type AutomationPage struct {

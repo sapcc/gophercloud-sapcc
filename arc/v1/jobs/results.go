@@ -123,39 +123,6 @@ func (r *Job) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r *Job) MarshalJSON() ([]byte, error) {
-	type ext struct {
-		CreatedAt string `json:"created_at"`
-		UpdatedAt string `json:"updated_at"`
-	}
-	type tmp struct {
-		ext
-		Job
-	}
-
-	s := tmp{
-		ext{
-			CreatedAt: r.CreatedAt.Format(time.RFC3339),
-			UpdatedAt: r.UpdatedAt.Format(time.RFC3339),
-		},
-		Job{
-			Version:   r.Version,
-			Sender:    r.Sender,
-			RequestID: r.RequestID,
-			To:        r.To,
-			Timeout:   r.Timeout,
-			Agent:     r.Agent,
-			Action:    r.Action,
-			Payload:   r.Payload,
-			Status:    r.Status,
-			Project:   r.Project,
-			User:      r.User,
-		},
-	}
-
-	return json.Marshal(s)
-}
-
 // JobPage is the page returned by a pager when traversing over a collection
 // of jobs.
 type JobPage struct {

@@ -110,36 +110,6 @@ func (r *Agent) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r *Agent) MarshalJSON() ([]byte, error) {
-	type ext struct {
-		CreatedAt string `json:"created_at"`
-		UpdatedAt string `json:"updated_at"`
-	}
-	type tmp struct {
-		ext
-		Agent
-	}
-
-	s := tmp{
-		ext{
-			CreatedAt: r.CreatedAt.Format(time.RFC3339),
-			UpdatedAt: r.UpdatedAt.Format(time.RFC3339),
-		},
-		Agent{
-			DisplayName:  r.DisplayName,
-			AgentID:      r.AgentID,
-			Project:      r.Project,
-			Organization: r.Organization,
-			Facts:        r.Facts,
-			Tags:         r.Tags,
-			UpdatedWith:  r.UpdatedWith,
-			UpdatedBy:    r.UpdatedBy,
-		},
-	}
-
-	return json.Marshal(s)
-}
-
 // AgentPage is the page returned by a pager when traversing over a collection
 // of agents.
 type AgentPage struct {

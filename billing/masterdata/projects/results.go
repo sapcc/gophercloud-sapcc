@@ -130,28 +130,6 @@ func (r *Project) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r *Project) MarshalJSON() ([]byte, error) {
-	type ext struct {
-		CreatedAt string `json:"created_at"`
-		ChangedAt string `json:"changed_at"`
-	}
-
-	type tmp struct {
-		Project
-		ext
-	}
-
-	s := tmp{
-		*r,
-		ext{
-			CreatedAt: r.CreatedAt.Format(gophercloud.RFC3339MilliNoZ),
-			ChangedAt: r.ChangedAt.Format(gophercloud.RFC3339MilliNoZ),
-		},
-	}
-
-	return json.Marshal(s)
-}
-
 // ProjectPage is the page returned by a pager when traversing over a collection
 // of projects.
 type ProjectPage struct {

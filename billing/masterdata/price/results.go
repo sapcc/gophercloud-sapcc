@@ -41,28 +41,6 @@ func (r *Price) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (r *Price) MarshalJSON() ([]byte, error) {
-	type ext struct {
-		ValidFrom string `json:"VALID_FROM"`
-		ValidTo   string `json:"VALID_TO"`
-	}
-
-	type tmp struct {
-		Price
-		ext
-	}
-
-	s := tmp{
-		*r,
-		ext{
-			ValidFrom: r.ValidFrom.Format(gophercloud.RFC3339NoZ),
-			ValidTo:   r.ValidTo.Format(gophercloud.RFC3339NoZ),
-		},
-	}
-
-	return json.Marshal(s)
-}
-
 // PricePage is the page returned by a pager when traversing over a collection
 // of price.
 type PricePage struct {
