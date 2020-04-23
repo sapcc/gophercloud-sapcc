@@ -3,6 +3,7 @@ package testing
 import (
 	"testing"
 
+	"github.com/gophercloud/gophercloud"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
@@ -390,8 +391,42 @@ func TestUpdateProject(t *testing.T) {
 	}
 
 	// if update succeeds then a 202 (no error) is returned.
-	res := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts)
-	th.AssertNoErr(t, res.Err)
+	warn, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts).Extract()
+	th.AssertNoErr(t, err)
+	th.AssertDeepEquals(t, []byte{}, warn)
+}
+
+func TestUpdateProjectWarning(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandleUpdateProjectPartly(t)
+
+	// expecting to get 202 response code with a warning
+	opts := projects.UpdateOpts{
+		Cluster: "fakecluster",
+	}
+	body, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts).Extract()
+	th.AssertNoErr(t, err)
+	th.AssertDeepEquals(t, body, []byte("it is currently not allowed to set bursting.enabled and quotas in the same request"))
+}
+
+func TestUpdateProjectError(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandleUpdateProjectUnsuccessfully(t)
+
+	// expecting to get 400 response code
+	opts := projects.UpdateOpts{
+		Cluster: "fakecluster",
+	}
+	warn, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts).Extract()
+	th.AssertErr(t, err)
+	th.AssertDeepEquals(t, []byte(nil), warn)
+	if err, ok := err.(gophercloud.ErrDefault400); ok {
+		th.AssertDeepEquals(t, err.Body, []byte("it is currently not allowed to set bursting.enabled and quotas in the same request"))
+	} else {
+		t.Fatalf("Unexpected error response")
+	}
 }
 
 func TestSyncProject(t *testing.T) {

@@ -2,6 +2,8 @@
 package projects
 
 import (
+	"io/ioutil"
+
 	"github.com/gophercloud/gophercloud"
 	"github.com/sapcc/limes"
 )
@@ -140,12 +142,17 @@ func Update(c *gophercloud.ServiceClient, domainID string, projectID string, opt
 		r.Err = err
 		return
 	}
-	// TODO: non json response?
 	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{
-		OkCodes:     []int{202},
-		MoreHeaders: h,
+		OkCodes:          []int{202},
+		MoreHeaders:      h,
+		KeepResponseBody: true,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
+	if r.Err != nil {
+		return
+	}
+	defer resp.Body.Close()
+	r.Body, r.Err = ioutil.ReadAll(resp.Body)
 	return
 }
 
