@@ -6,7 +6,7 @@ import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/acceptance/tools"
 	th "github.com/gophercloud/gophercloud/testhelper"
-	"github.com/kayrus/gophercloud-lyra/automation/v1/automations"
+	"github.com/sapcc/gophercloud-sapcc/automation/v1/automations"
 )
 
 // CreateChefAutomation will create a Chef automation. An error will be

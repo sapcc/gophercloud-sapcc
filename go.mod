@@ -1,4 +1,4 @@
-module github.com/sapcc/gophercloud-limes
+module github.com/sapcc/gophercloud-sapcc
 
 go 1.12
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gophercloud/gophercloud/acceptance/tools"
 	th "github.com/gophercloud/gophercloud/testhelper"
-	"github.com/sapcc/gophercloud-billing/billing/masterdata/projects"
+	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/projects"
 )
 
 var projectID = "3e0fd3f8e9ec449686ef26a16a284265"

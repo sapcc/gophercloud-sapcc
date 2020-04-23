@@ -8,7 +8,7 @@ import (
 	"github.com/gophercloud/gophercloud/acceptance/clients"
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/utils/openstack/clientconfig"
-	"github.com/sapcc/gophercloud-billing/billing"
+	"github.com/sapcc/gophercloud-sapcc/billing"
 )
 
 // configureDebug will configure the provider client to print the API

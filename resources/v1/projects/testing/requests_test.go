@@ -5,7 +5,7 @@ import (
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
-	"github.com/sapcc/gophercloud-limes/resources/v1/projects"
+	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
 	"github.com/sapcc/limes"
 )
 

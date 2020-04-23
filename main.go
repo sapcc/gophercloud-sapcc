@@ -8,8 +8,8 @@ import (
 	"github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
 	"github.com/gophercloud/utils/openstack/clientconfig"
 
-	"github.com/sapcc/gophercloud-limes/resources"
-	"github.com/sapcc/gophercloud-limes/resources/v1/projects"
+	"github.com/sapcc/gophercloud-sapcc/resources"
+	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
 )
 
 func main() {

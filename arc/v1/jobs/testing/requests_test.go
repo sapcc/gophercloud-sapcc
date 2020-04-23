@@ -10,7 +10,7 @@ import (
 	"github.com/gophercloud/gophercloud/pagination"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
-	"github.com/kayrus/gophercloud-arc/arc/v1/jobs"
+	"github.com/sapcc/gophercloud-sapcc/arc/v1/jobs"
 )
 
 var jobsList = []jobs.Job{
