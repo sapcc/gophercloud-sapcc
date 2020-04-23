@@ -44,9 +44,10 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 
 // Get retrieves a specific automation based on its unique ID.
 func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	_, r.Err = c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -99,9 +100,10 @@ func Create(c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResul
 		r.Err = err
 		return
 	}
-	_, r.Err = c.Post(createURL(c), b, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Post(createURL(c), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{201},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -175,16 +177,18 @@ func Update(c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r 
 		r.Err = err
 		return
 	}
-	_, r.Err = c.Put(updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Put(updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
 // Delete accepts a unique ID and deletes the automation associated with it.
 func Delete(c *gophercloud.ServiceClient, id string) (r DeleteResult) {
-	_, r.Err = c.Delete(deleteURL(c, id), &gophercloud.RequestOpts{
+	resp, err := c.Delete(deleteURL(c, id), &gophercloud.RequestOpts{
 		OkCodes: []int{204},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }

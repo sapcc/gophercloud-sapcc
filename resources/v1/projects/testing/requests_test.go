@@ -390,8 +390,8 @@ func TestUpdateProject(t *testing.T) {
 	}
 
 	// if update succeeds then a 202 (no error) is returned.
-	_, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts)
-	th.AssertNoErr(t, err)
+	res := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts)
+	th.AssertNoErr(t, res.Err)
 }
 
 func TestSyncProject(t *testing.T) {
@@ -401,7 +401,7 @@ func TestSyncProject(t *testing.T) {
 
 	// if sync succeeds then a 202 (no error) is returned.
 	err := projects.Sync(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden", projects.SyncOpts{
-		Cluster: "fakecluster"})
+		Cluster: "fakecluster"}).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 

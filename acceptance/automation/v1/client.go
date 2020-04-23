@@ -1,4 +1,4 @@
-package automation
+package v1
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/acceptance/clients"
 	"github.com/gophercloud/gophercloud/openstack"
-	"github.com/sapcc/gophercloud-sapcc/automation"
+	cc_clients "github.com/sapcc/gophercloud-sapcc/clients"
 )
 
 // configureDebug will configure the provider client to print the API
@@ -40,7 +40,7 @@ func NewAutomationV1Client() (*gophercloud.ServiceClient, error) {
 
 	client = configureDebug(client)
 
-	return automation.NewAutomationV1(client, gophercloud.EndpointOpts{
+	return cc_clients.NewAutomationV1(client, gophercloud.EndpointOpts{
 		Region: os.Getenv("OS_REGION_NAME"),
 	})
 }

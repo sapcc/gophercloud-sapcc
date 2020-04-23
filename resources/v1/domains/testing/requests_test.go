@@ -337,7 +337,7 @@ func TestUpdateDomain(t *testing.T) {
 	}
 
 	// if update succeeds then a 202 (no error) is returned.
-	err := domains.Update(fake.ServiceClient(), "uuid-for-karachi", opts)
+	err := domains.Update(fake.ServiceClient(), "uuid-for-karachi", opts).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 

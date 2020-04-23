@@ -1,4 +1,4 @@
-package audit
+package v1
 
 import (
 	"net/http"
@@ -8,7 +8,7 @@ import (
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/utils/client"
 	"github.com/gophercloud/utils/openstack/clientconfig"
-	"github.com/sapcc/gophercloud-sapcc/audit"
+	"github.com/sapcc/gophercloud-sapcc/clients"
 )
 
 // configureDebug will configure the provider client to print the API
@@ -47,7 +47,7 @@ func NewHermesV1Client() (*gophercloud.ServiceClient, error) {
 		return nil, err
 	}
 
-	return audit.NewHermesV1(provider, gophercloud.EndpointOpts{
+	return clients.NewHermesV1(provider, gophercloud.EndpointOpts{
 		Region: os.Getenv("OS_REGION_NAME"),
 	})
 }

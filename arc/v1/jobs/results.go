@@ -2,8 +2,6 @@ package jobs
 
 import (
 	"encoding/json"
-	"io"
-	"io/ioutil"
 	"strconv"
 	"time"
 
@@ -53,7 +51,7 @@ type GetLogHeader struct {
 // ExtractContent method to interpret it as a response content.
 type GetLogResult struct {
 	gophercloud.HeaderResult
-	Body io.ReadCloser
+	Body []byte
 }
 
 // Extract will return a struct of headers returned from a call to GetLog.
@@ -72,14 +70,7 @@ func (r *GetLogResult) ExtractContent() ([]byte, error) {
 	if r.Err != nil {
 		return nil, r.Err
 	}
-	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return body, nil
+	return r.Body, nil
 }
 
 // User represents an Arc Job User.

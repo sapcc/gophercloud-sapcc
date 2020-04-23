@@ -1,6 +1,4 @@
-// +build acceptance networking
-
-package audit
+package v1
 
 import (
 	"testing"

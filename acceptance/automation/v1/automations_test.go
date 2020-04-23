@@ -1,6 +1,4 @@
-// +build acceptance networking
-
-package automation
+package v1
 
 import (
 	"testing"

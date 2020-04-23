@@ -1,6 +1,8 @@
 package jobs
 
 import (
+	"io/ioutil"
+
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
 )
@@ -48,9 +50,10 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 
 // Get retrieves a specific job based on its unique ID.
 func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	_, r.Err = c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -86,21 +89,24 @@ func Create(c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResul
 		r.Err = err
 		return
 	}
-	_, r.Err = c.Post(createURL(c), b, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Post(createURL(c), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
 // GetLog retrieves a log for a Job ID.
 func GetLog(c *gophercloud.ServiceClient, id string) (r GetLogResult) {
 	resp, err := c.Request("GET", getLogURL(c, id), &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+		OkCodes:          []int{200},
+		KeepResponseBody: true,
 	})
-	if resp != nil {
-		r.Header = resp.Header
-		r.Body = resp.Body
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
+	if r.Err != nil {
+		return
 	}
-	r.Err = err
+	defer resp.Body.Close()
+	r.Body, r.Err = ioutil.ReadAll(resp.Body)
 	return
 }

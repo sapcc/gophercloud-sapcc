@@ -15,9 +15,10 @@ func List(c *gophercloud.ServiceClient) pagination.Pager {
 
 // Get retrieves a specific project based on its unique ID.
 func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	_, r.Err = c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -96,9 +97,10 @@ func Update(c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r 
 		r.Err = err
 		return
 	}
-	_, r.Err = c.Put(updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Put(updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 

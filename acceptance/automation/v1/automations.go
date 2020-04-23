@@ -1,4 +1,4 @@
-package automation
+package v1
 
 import (
 	"testing"

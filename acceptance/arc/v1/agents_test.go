@@ -1,6 +1,4 @@
-// +build acceptance networking
-
-package arc
+package v1
 
 import (
 	"encoding/json"

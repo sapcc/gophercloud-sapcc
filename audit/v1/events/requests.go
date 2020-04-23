@@ -137,8 +137,9 @@ func Get(c *gophercloud.ServiceClient, id string, opts GetOptsBuilder) (r GetRes
 		url += query
 	}
 
-	_, r.Err = c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }

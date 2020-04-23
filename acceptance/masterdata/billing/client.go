@@ -8,7 +8,7 @@ import (
 	"github.com/gophercloud/gophercloud/acceptance/clients"
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/utils/openstack/clientconfig"
-	"github.com/sapcc/gophercloud-sapcc/billing"
+	cc_clients "github.com/sapcc/gophercloud-sapcc/clients"
 )
 
 // configureDebug will configure the provider client to print the API
@@ -41,7 +41,7 @@ func NewBillingClient() (*gophercloud.ServiceClient, error) {
 
 	client = configureDebug(client)
 
-	return billing.NewBilling(client, gophercloud.EndpointOpts{
+	return cc_clients.NewBilling(client, gophercloud.EndpointOpts{
 		Region: os.Getenv("OS_REGION_NAME"),
 	})
 }

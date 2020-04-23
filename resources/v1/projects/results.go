@@ -11,6 +11,18 @@ type CommonResult struct {
 	gophercloud.Result
 }
 
+// UpdateResult is the result of an Update operation. Call its appropriate
+// ExtractErr method to extract the error from the result.
+type UpdateResult struct {
+	gophercloud.Result
+}
+
+// SyncResult is the result of an Sync operation. Call its appropriate
+// ExtractErr method to extract the error from the result.
+type SyncResult struct {
+	gophercloud.ErrResult
+}
+
 // ExtractProjects interprets a CommonResult as a slice of Projects.
 func (r CommonResult) ExtractProjects() ([]limes.ProjectReport, error) {
 	var s struct {

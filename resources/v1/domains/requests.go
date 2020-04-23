@@ -48,9 +48,10 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) (r CommonResult) {
 		url += q
 	}
 
-	_, r.Err = c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -96,9 +97,10 @@ func Get(c *gophercloud.ServiceClient, domainID string, opts GetOptsBuilder) (r 
 		url += q
 	}
 
-	_, r.Err = c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -129,15 +131,17 @@ func (opts UpdateOpts) ToDomainUpdateMap() (map[string]string, map[string]interf
 }
 
 // Update modifies the attributes of a domain.
-func Update(c *gophercloud.ServiceClient, domainID string, opts UpdateOptsBuilder) error {
+func Update(c *gophercloud.ServiceClient, domainID string, opts UpdateOptsBuilder) (r UpdateResult) {
 	url := updateURL(c, domainID)
 	h, b, err := opts.ToDomainUpdateMap()
 	if err != nil {
-		return err
+		r.Err = err
+		return
 	}
-	_, err = c.Put(url, b, nil, &gophercloud.RequestOpts{
+	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{
 		OkCodes:     []int{202},
 		MoreHeaders: h,
 	})
-	return err
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
+	return
 }

@@ -2,8 +2,6 @@
 package projects
 
 import (
-	"io/ioutil"
-
 	"github.com/gophercloud/gophercloud"
 	"github.com/sapcc/limes"
 )
@@ -51,9 +49,10 @@ func List(c *gophercloud.ServiceClient, domainID string, opts ListOptsBuilder) (
 		url += q
 	}
 
-	_, r.Err = c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -100,9 +99,10 @@ func Get(c *gophercloud.ServiceClient, domainID string, projectID string, opts G
 		url += q
 	}
 
-	_, r.Err = c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -133,27 +133,20 @@ func (opts UpdateOpts) ToProjectUpdateMap() (map[string]string, map[string]inter
 }
 
 // Update modifies the attributes of a project and returns the response body which contains non-fatal error messages.
-func Update(c *gophercloud.ServiceClient, domainID string, projectID string, opts UpdateOptsBuilder) ([]byte, error) {
+func Update(c *gophercloud.ServiceClient, domainID string, projectID string, opts UpdateOptsBuilder) (r UpdateResult) {
 	url := updateURL(c, domainID, projectID)
 	h, b, err := opts.ToProjectUpdateMap()
 	if err != nil {
-		return nil, err
+		r.Err = err
+		return
 	}
+	// TODO: non json response?
 	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{
 		OkCodes:     []int{202},
 		MoreHeaders: h,
 	})
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return body, nil
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
+	return
 }
 
 // SyncOptsBuilder allows extensions to add additional parameters to the Sync request.
@@ -173,20 +166,22 @@ func (opts SyncOpts) ToProjectSyncParams() (map[string]string, error) {
 
 // Sync schedules a sync task that pulls a project's data from the backing services
 // into Limes' local database.
-func Sync(c *gophercloud.ServiceClient, domainID string, projectID string, opts SyncOptsBuilder) error {
+func Sync(c *gophercloud.ServiceClient, domainID string, projectID string, opts SyncOptsBuilder) (r SyncResult) {
 	url := syncURL(c, domainID, projectID)
 	headers := make(map[string]string)
 	if opts != nil {
 		h, err := opts.ToProjectSyncParams()
 		if err != nil {
-			return err
+			r.Err = err
+			return
 		}
 		headers = h
 	}
 
-	_, err := c.Post(url, nil, nil, &gophercloud.RequestOpts{
+	resp, err := c.Post(url, nil, nil, &gophercloud.RequestOpts{
 		OkCodes:     []int{202},
 		MoreHeaders: headers,
 	})
-	return err
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
+	return
 }

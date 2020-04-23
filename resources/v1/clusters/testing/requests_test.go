@@ -325,7 +325,7 @@ func TestUpdateCluster(t *testing.T) {
 	}
 
 	// if update succeeds then a 202 (no error) is returned.
-	err := clusters.Update(fake.ServiceClient(), "germany", opts)
+	err := clusters.Update(fake.ServiceClient(), "germany", opts).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 

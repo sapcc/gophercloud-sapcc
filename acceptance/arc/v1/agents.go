@@ -1,4 +1,4 @@
-package arc
+package v1
 
 import (
 	"testing"

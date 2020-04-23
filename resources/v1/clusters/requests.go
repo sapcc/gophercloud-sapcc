@@ -37,7 +37,8 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) (r CommonResult) {
 		}
 		url += query
 	}
-	_, r.Err = c.Get(url, &r.Body, nil)
+	resp, err := c.Get(url, &r.Body, nil)
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -72,7 +73,8 @@ func Get(c *gophercloud.ServiceClient, clusterID string, opts GetOptsBuilder) (r
 		}
 		url += query
 	}
-	_, r.Err = c.Get(url, &r.Body, nil)
+	resp, err := c.Get(url, &r.Body, nil)
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
@@ -92,14 +94,16 @@ func (opts UpdateOpts) ToClusterUpdateMap() (map[string]interface{}, error) {
 }
 
 // Update modifies the attributes of a cluster.
-func Update(c *gophercloud.ServiceClient, clusterID string, opts UpdateOptsBuilder) error {
+func Update(c *gophercloud.ServiceClient, clusterID string, opts UpdateOptsBuilder) (r UpdateResult) {
 	url := updateURL(c, clusterID)
 	b, err := opts.ToClusterUpdateMap()
 	if err != nil {
-		return err
+		r.Err = err
+		return
 	}
-	_, err = c.Put(url, b, nil, &gophercloud.RequestOpts{
+	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{
 		OkCodes: []int{202},
 	})
-	return err
+	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
+	return
 }

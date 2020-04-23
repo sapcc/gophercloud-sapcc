@@ -8,7 +8,7 @@ import (
 	"github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
 	"github.com/gophercloud/utils/openstack/clientconfig"
 
-	"github.com/sapcc/gophercloud-sapcc/resources"
+	"github.com/sapcc/gophercloud-sapcc/clients"
 	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
 )
 
@@ -18,7 +18,7 @@ func main() {
 		log.Fatalf("could not initialize openstack client: %v", err)
 	}
 
-	limesClient, err := resources.NewLimesV1(provider, gophercloud.EndpointOpts{})
+	limesClient, err := clients.NewLimesV1(provider, gophercloud.EndpointOpts{})
 	if err != nil {
 		log.Fatalf("could not initialize Limes client: %v", err)
 	}
