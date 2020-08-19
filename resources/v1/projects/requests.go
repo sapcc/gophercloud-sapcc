@@ -1,4 +1,3 @@
-// Package projects provides interaction with Limes at the project hierarchical level.
 package projects
 
 import (
