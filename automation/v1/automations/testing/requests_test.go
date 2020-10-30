@@ -168,6 +168,34 @@ func TestUpdate(t *testing.T) {
 	th.AssertDeepEquals(t, *s, tmp)
 }
 
+func TestUpdateCreds(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
+	th.Mux.HandleFunc("/automations/2", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "PUT")
+		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "Content-Type", "application/json")
+		th.TestHeader(t, r, "Accept", "application/json")
+		th.TestJSONRequest(t, r, UpdateRequestCreds)
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprintf(w, UpdateResponseCreds)
+	})
+
+	creds := "foobar"
+	options := automations.UpdateOpts{RepositoryCredentials: &creds}
+
+	s, err := automations.Update(fake.ServiceClient(), "2", options).Extract()
+	th.AssertNoErr(t, err)
+
+	tmp := automationsList[1]
+	tmp.RepositoryAuthenticationEnabled = true
+	th.AssertDeepEquals(t, *s, tmp)
+}
+
 func TestRemoveRunList(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
