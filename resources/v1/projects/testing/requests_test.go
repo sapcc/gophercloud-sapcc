@@ -385,7 +385,9 @@ func TestUpdateProject(t *testing.T) {
 		Cluster: "fakecluster",
 		Services: limes.QuotaRequest{
 			"compute": limes.ServiceQuotaRequest{
-				"cores": limes.ValueWithUnit{Value: 42, Unit: limes.UnitNone},
+				Resources: limes.ResourceQuotaRequest{
+					"cores": limes.ValueWithUnit{Value: 42, Unit: limes.UnitNone},
+				},
 			},
 		},
 	}

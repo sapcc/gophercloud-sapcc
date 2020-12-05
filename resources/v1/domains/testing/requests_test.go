@@ -331,7 +331,9 @@ func TestUpdateDomain(t *testing.T) {
 		Cluster: "fakecluster",
 		Services: limes.QuotaRequest{
 			"shared": limes.ServiceQuotaRequest{
-				"things": limes.ValueWithUnit{Value: 99, Unit: limes.UnitNone},
+				Resources: limes.ResourceQuotaRequest{
+					"things": limes.ValueWithUnit{Value: 99, Unit: limes.UnitNone},
+				},
 			},
 		},
 	}
