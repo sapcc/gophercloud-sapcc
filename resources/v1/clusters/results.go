@@ -11,12 +11,6 @@ type CommonResult struct {
 	gophercloud.Result
 }
 
-// UpdateResult is the result of an Update operation. Call its appropriate
-// ExtractErr method to extract the error from the result.
-type UpdateResult struct {
-	gophercloud.ErrResult
-}
-
 // ExtractClusters interprets a CommonResult as a slice of Clusters.
 func (r CommonResult) ExtractClusters() ([]limes.ClusterReport, error) {
 	var s struct {

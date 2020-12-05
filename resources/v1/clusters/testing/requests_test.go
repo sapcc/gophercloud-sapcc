@@ -305,30 +305,6 @@ func TestGetFilteredCluster(t *testing.T) {
 	th.CheckDeepEquals(t, expected, actual)
 }
 
-func TestUpdateCluster(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleUpdateClusterSuccessfully(t)
-
-	unit := limes.UnitBytes
-	opts := clusters.UpdateOpts{
-		Services: []limes.ServiceCapacityRequest{
-			{Type: "shared", Resources: []limes.ResourceCapacityRequest{
-				{
-					Name:     "stuff",
-					Capacity: 99,
-					Unit:     &unit,
-					Comment:  "I got 99 problems, but a cluster ain't one.",
-				},
-			}},
-		},
-	}
-
-	// if update succeeds then a 202 (no error) is returned.
-	err := clusters.Update(fake.ServiceClient(), "germany", opts).ExtractErr()
-	th.AssertNoErr(t, err)
-}
-
 func p2i64(x int64) *int64 {
 	return &x
 }

@@ -9,7 +9,3 @@ func listURL(client *gophercloud.ServiceClient) string {
 func getURL(client *gophercloud.ServiceClient, clusterID string) string {
 	return client.ServiceURL("clusters", clusterID)
 }
-
-func updateURL(client *gophercloud.ServiceClient, clusterID string) string {
-	return client.ServiceURL("clusters", clusterID)
-}

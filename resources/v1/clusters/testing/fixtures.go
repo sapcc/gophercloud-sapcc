@@ -268,14 +268,3 @@ func HandleGetClusterSuccessfully(t *testing.T) {
 		fmt.Fprintf(w, clusterJSON)
 	})
 }
-
-// HandleUpdateClusterSuccessfully creates an HTTP handler at `/v1/clusters/:cluster_id` on the
-// test handler mux that tests cluster update.
-func HandleUpdateClusterSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/clusters/germany", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "PUT")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-
-		w.WriteHeader(http.StatusAccepted)
-	})
-}

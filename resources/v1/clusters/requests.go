@@ -3,7 +3,6 @@ package clusters
 
 import (
 	"github.com/gophercloud/gophercloud"
-	"github.com/sapcc/limes"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the List request.
@@ -74,36 +73,6 @@ func Get(c *gophercloud.ServiceClient, clusterID string, opts GetOptsBuilder) (r
 		url += query
 	}
 	resp, err := c.Get(url, &r.Body, nil)
-	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
-	return
-}
-
-// UpdateOptsBuilder allows extensions to add additional parameters to the Update request.
-type UpdateOptsBuilder interface {
-	ToClusterUpdateMap() (map[string]interface{}, error)
-}
-
-// UpdateOpts contains parameters to update a cluster.
-type UpdateOpts struct {
-	Services []limes.ServiceCapacityRequest `json:"services"`
-}
-
-// ToClusterUpdateMap formats a UpdateOpts into a request body.
-func (opts UpdateOpts) ToClusterUpdateMap() (map[string]interface{}, error) {
-	return gophercloud.BuildRequestBody(opts, "cluster")
-}
-
-// Update modifies the attributes of a cluster.
-func Update(c *gophercloud.ServiceClient, clusterID string, opts UpdateOptsBuilder) (r UpdateResult) {
-	url := updateURL(c, clusterID)
-	b, err := opts.ToClusterUpdateMap()
-	if err != nil {
-		r.Err = err
-		return
-	}
-	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{
-		OkCodes: []int{202},
-	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
