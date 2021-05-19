@@ -35,7 +35,7 @@ func TestListCluster(t *testing.T) {
 								Unit: limes.UnitBytes,
 							},
 							Capacity:     &cap,
-							DomainsQuota: 5,
+							DomainsQuota: p2ui64(5),
 							Usage:        2,
 						},
 						"things": &limes.ClusterResourceReport{
@@ -43,7 +43,7 @@ func TestListCluster(t *testing.T) {
 								Name: "things",
 							},
 							Capacity:     &cap,
-							DomainsQuota: 5,
+							DomainsQuota: p2ui64(5),
 							Usage:        2,
 						},
 					},
@@ -63,8 +63,7 @@ func TestListCluster(t *testing.T) {
 								Unit: limes.UnitBytes,
 							},
 							Capacity:     &cap,
-							Comment:      "tasty tests are so tasty",
-							DomainsQuota: 5,
+							DomainsQuota: p2ui64(5),
 							Usage:        2,
 						},
 						"things": &limes.ClusterResourceReport{
@@ -72,7 +71,7 @@ func TestListCluster(t *testing.T) {
 								Name: "things",
 							},
 							Capacity:     &cap,
-							DomainsQuota: 5,
+							DomainsQuota: p2ui64(5),
 							Usage:        2,
 						},
 					},
@@ -98,7 +97,7 @@ func TestListCluster(t *testing.T) {
 								Unit: limes.UnitBytes,
 							},
 							Capacity:     &cap,
-							DomainsQuota: 5,
+							DomainsQuota: p2ui64(5),
 							Usage:        2,
 						},
 					},
@@ -142,7 +141,7 @@ func TestListFilteredCluster(t *testing.T) {
 								Unit: limes.UnitBytes,
 							},
 							Capacity:     &cap,
-							DomainsQuota: 5,
+							DomainsQuota: p2ui64(5),
 							Usage:        2,
 						},
 					},
@@ -168,7 +167,7 @@ func TestListFilteredCluster(t *testing.T) {
 								Unit: limes.UnitBytes,
 							},
 							Capacity:     &cap,
-							DomainsQuota: 5,
+							DomainsQuota: p2ui64(5),
 							Usage:        2,
 						},
 					},
@@ -208,7 +207,7 @@ func TestGetCluster(t *testing.T) {
 							Unit: limes.UnitBytes,
 						},
 						Capacity:     &cap,
-						DomainsQuota: 5,
+						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
 					"things": &limes.ClusterResourceReport{
@@ -216,7 +215,7 @@ func TestGetCluster(t *testing.T) {
 							Name: "things",
 						},
 						Capacity:     &cap,
-						DomainsQuota: 5,
+						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
 				},
@@ -236,8 +235,7 @@ func TestGetCluster(t *testing.T) {
 							Unit: limes.UnitBytes,
 						},
 						Capacity:     &cap,
-						Comment:      "tasty tests are so tasty",
-						DomainsQuota: 5,
+						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
 					"things": &limes.ClusterResourceReport{
@@ -245,7 +243,7 @@ func TestGetCluster(t *testing.T) {
 							Name: "things",
 						},
 						Capacity:     &cap,
-						DomainsQuota: 5,
+						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
 				},
@@ -289,8 +287,7 @@ func TestGetFilteredCluster(t *testing.T) {
 							Unit: limes.UnitBytes,
 						},
 						Capacity:      &cap,
-						Comment:       "tasty tests are so tasty",
-						DomainsQuota:  4,
+						DomainsQuota:  p2ui64(4),
 						Usage:         2,
 						Subcapacities: `[{"cores":200,"hypervisor":"cluster-1"},{"cores":800,"hypervisor":"cluster-2"}]`,
 					},
@@ -306,5 +303,9 @@ func TestGetFilteredCluster(t *testing.T) {
 }
 
 func p2i64(x int64) *int64 {
+	return &x
+}
+
+func p2ui64(x uint64) *uint64 {
 	return &x
 }
