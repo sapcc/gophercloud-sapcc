@@ -37,14 +37,14 @@ func TestListProjects(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 						"things": &limes.ProjectResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
@@ -62,14 +62,14 @@ func TestListProjects(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 						"things": &limes.ProjectResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
@@ -94,7 +94,7 @@ func TestListProjects(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota:        10,
+							Quota:        p2ui64(10),
 							Usage:        2,
 							BackendQuota: &backendQuota,
 						},
@@ -102,7 +102,7 @@ func TestListProjects(t *testing.T) {
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
@@ -120,14 +120,14 @@ func TestListProjects(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 						"things": &limes.ProjectResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
@@ -165,14 +165,14 @@ func TestListProjectsDetailed(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 						"things": &limes.ProjectResourceReport{
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
-							Quota:        10,
+							Quota:        p2ui64(10),
 							Usage:        2,
 							Subresources: limes.JSONString(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
 						},
@@ -214,7 +214,7 @@ func TestListProjectsFiltered(t *testing.T) {
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
@@ -238,7 +238,7 @@ func TestListProjectsFiltered(t *testing.T) {
 							ResourceInfo: limes.ResourceInfo{
 								Name: "things",
 							},
-							Quota: 10,
+							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
@@ -275,14 +275,14 @@ func TestGetProject(t *testing.T) {
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
-						Quota: 10,
+						Quota: p2ui64(10),
 						Usage: 2,
 					},
 					"things": &limes.ProjectResourceReport{
 						ResourceInfo: limes.ResourceInfo{
 							Name: "things",
 						},
-						Quota: 10,
+						Quota: p2ui64(10),
 						Usage: 2,
 					},
 				},
@@ -318,14 +318,14 @@ func TestGetProjectDetailed(t *testing.T) {
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
-						Quota: 10,
+						Quota: p2ui64(10),
 						Usage: 2,
 					},
 					"things": &limes.ProjectResourceReport{
 						ResourceInfo: limes.ResourceInfo{
 							Name: "things",
 						},
-						Quota:        10,
+						Quota:        p2ui64(10),
 						Usage:        2,
 						Subresources: limes.JSONString(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
 					},
@@ -365,7 +365,7 @@ func TestGetProjectFiltered(t *testing.T) {
 						ResourceInfo: limes.ResourceInfo{
 							Name: "things",
 						},
-						Quota: 10,
+						Quota: p2ui64(10),
 						Usage: 2,
 					},
 				},
@@ -443,5 +443,9 @@ func TestSyncProject(t *testing.T) {
 }
 
 func p2i64(x int64) *int64 {
+	return &x
+}
+
+func p2ui64(x uint64) *uint64 {
 	return &x
 }
