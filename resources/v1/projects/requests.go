@@ -19,6 +19,7 @@ type ListOpts struct {
 	Area     string `q:"area"`
 	Service  string `q:"service"`
 	Resource string `q:"resource"`
+	Rates    string `q:"rates"`
 }
 
 // ToProjectListParams formats a ListOpts into a map of headers and a query string.
@@ -69,6 +70,7 @@ type GetOpts struct {
 	Area     string `q:"area"`
 	Service  string `q:"service"`
 	Resource string `q:"resource"`
+	Rates    string `q:"rates"`
 }
 
 // ToProjectGetParams formats a GetOpts into a map of headers and a query string.

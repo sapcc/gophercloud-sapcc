@@ -23,8 +23,12 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 
 		var fixtureName string
 		switch {
-		case r.URL.Query().Get("detail") != "":
+		case r.URL.Query().Has("detail"):
 			fixtureName = "list-details.json"
+		case r.URL.Query().Get("rates") == "only":
+			fixtureName = "list-rates-only.json"
+		case r.URL.Query().Get("rates") == "true" && r.URL.Query().Get("service") == "shared":
+			fixtureName = "list-filtered-with-rates.json"
 		case (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things":
 
@@ -52,8 +56,12 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 
 		var fixtureName string
 		switch {
-		case r.URL.Query().Get("detail") != "":
+		case r.URL.Query().Has("detail"):
 			fixtureName = "get-details.json"
+		case r.URL.Query().Get("rates") == "only":
+			fixtureName = "get-rates-only.json"
+		case r.URL.Query().Get("rates") == "true" && r.URL.Query().Get("service") == "shared":
+			fixtureName = "get-filtered-with-rates.json"
 		case (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things":
 
