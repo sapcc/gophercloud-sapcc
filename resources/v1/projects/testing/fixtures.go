@@ -2,7 +2,9 @@ package testing
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"path/filepath"
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/testhelper"
@@ -19,192 +21,22 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		if r.URL.Query().Get("detail") != "" {
-			fmt.Fprintf(w, `
-				{
-					"projects": [
-					  {
-							"id": "uuid-for-berlin",
-							"name": "berlin",
-							"parent_id": "uuid-for-germany",
-							"services": [
-								{
-									"type": "shared",
-									"area": "shared",
-									"resources": [
-										{
-											"name": "capacity",
-											"unit": "B",
-											"quota": 10,
-											"usage": 2
-										},
-										{
-											"name": "things",
-											"quota": 10,
-											"usage": 2,
-											"subresources": [
-												{
-													"id": "thirdthing",
-													"value": 5
-												},
-												{
-													"id": "fourththing",
-													"value": 123
-												}
-											]
-										}
-									],
-									"scraped_at": 22
-								}
-							]
-						}
-					]
-				}`)
-			return
-		}
+		var fixtureName string
+		switch {
+		case r.URL.Query().Get("detail") != "":
+			fixtureName = "list-details.json"
+		case (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
+			r.URL.Query().Get("resource") == "things":
 
-		if (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
-			r.URL.Query().Get("resource") == "things" {
 			th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
-			fmt.Fprintf(w, `
-				{
-					"projects": [
-						{
-							"id": "uuid-for-berlin",
-							"name": "berlin",
-							"parent_id": "uuid-for-germany",
-							"services": [
-								{
-									"type": "shared",
-									"area": "shared",
-									"resources": [
-										{
-											"name": "things",
-											"quota": 10,
-											"usage": 2
-										}
-									],
-									"scraped_at": 22
-								}
-							]
-						},
-						{
-							"id": "uuid-for-dresden",
-							"name": "dresden",
-							"parent_id": "uuid-for-berlin",
-							"services": [
-								{
-									"type": "shared",
-									"area": "shared",
-									"resources": [
-										{
-											"name": "things",
-											"quota": 10,
-											"usage": 2
-										}
-									],
-									"scraped_at": 44
-								}
-							]
-						}
-					]
-				}`)
-			return
+			fixtureName = "list-filtered.json"
+		default:
+			fixtureName = "list.json"
 		}
 
-		fmt.Fprintf(w, `
-			{
-				"projects": [
-					{
-						"id": "uuid-for-berlin",
-						"name": "berlin",
-						"parent_id": "uuid-for-germany",
-						"services": [
-							{
-								"type": "shared",
-								"area": "shared",
-								"resources": [
-									{
-										"name": "capacity",
-										"unit": "B",
-										"quota": 10,
-										"usage": 2
-									},
-									{
-										"name": "things",
-										"quota": 10,
-										"usage": 2
-									}
-								],
-								"scraped_at": 22
-							},
-							{
-								"type": "unshared",
-								"area": "unshared",
-								"resources": [
-									{
-										"name": "capacity",
-										"unit": "B",
-										"quota": 10,
-										"usage": 2
-									},
-									{
-										"name": "things",
-										"quota": 10,
-										"usage": 2
-									}
-								],
-								"scraped_at": 11
-							}
-						]
-					},
-					{
-						"id": "uuid-for-dresden",
-						"name": "dresden",
-						"parent_id": "uuid-for-berlin",
-						"services": [
-							{
-								"type": "shared",
-								"area": "shared",
-								"resources": [
-									{
-										"name": "capacity",
-										"unit": "B",
-										"quota": 10,
-										"usage": 2,
-										"backend_quota": 100
-									},
-									{
-										"name": "things",
-										"quota": 10,
-										"usage": 2
-									}
-								],
-								"scraped_at": 44
-							},
-							{
-								"type": "unshared",
-								"area": "unshared",
-								"resources": [
-									{
-										"name": "capacity",
-										"unit": "B",
-										"quota": 10,
-										"usage": 2
-									},
-									{
-										"name": "things",
-										"quota": 10,
-										"usage": 2
-									}
-								],
-								"scraped_at": 33
-							}
-						]
-					}
-				]
-			}
-    `)
+		jsonBytes, err := ioutil.ReadFile(filepath.Join("fixtures", fixtureName))
+		th.AssertNoErr(t, err)
+		fmt.Fprint(w, string(jsonBytes))
 	})
 }
 
@@ -218,107 +50,22 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		if r.URL.Query().Get("detail") != "" {
-			fmt.Fprintf(w, `
-				{
-					"project": {
-						"id": "uuid-for-berlin",
-						"name": "berlin",
-						"parent_id": "uuid-for-germany",
-						"services": [
-							{
-								"type": "shared",
-								"area": "shared",
-								"resources": [
-									{
-										"name": "capacity",
-										"unit": "B",
-										"quota": 10,
-										"usage": 2
-									},
-									{
-										"name": "things",
-										"quota": 10,
-										"usage": 2,
-										"subresources": [
-											{
-												"id": "thirdthing",
-												"value": 5
-											},
-											{
-												"id": "fourththing",
-												"value": 123
-											}
-										]
-									}
-								],
-								"scraped_at": 22
-							}
-						]
-					}
-				}
-			`)
-			return
-		}
+		var fixtureName string
+		switch {
+		case r.URL.Query().Get("detail") != "":
+			fixtureName = "get-details.json"
+		case (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
+			r.URL.Query().Get("resource") == "things":
 
-		if (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
-			r.URL.Query().Get("resource") == "things" {
 			th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
-			fmt.Fprintf(w, `
-				{
-					"project": {
-						"id": "uuid-for-berlin",
-						"name": "berlin",
-						"parent_id": "uuid-for-germany",
-						"services": [
-							{
-								"type": "shared",
-								"area": "shared",
-								"resources": [
-									{
-										"name": "things",
-										"quota": 10,
-										"usage": 2
-									}
-								],
-								"scraped_at": 22
-							}
-						]
-					}
-				}
-			`)
-			return
+			fixtureName = "get-filtered.json"
+		default:
+			fixtureName = "get.json"
 		}
 
-		fmt.Fprintf(w, `
-			{
-				"project": {
-					"id": "uuid-for-berlin",
-					"name": "berlin",
-					"parent_id": "uuid-for-germany",
-					"services": [
-						{
-							"type": "shared",
-							"area": "shared",
-							"resources": [
-								{
-									"name": "capacity",
-									"unit": "B",
-									"quota": 10,
-									"usage": 2
-								},
-								{
-									"name": "things",
-									"quota": 10,
-									"usage": 2
-								}
-							],
-							"scraped_at": 22
-						}
-					]
-				}
-			}
-		`)
+		jsonBytes, err := ioutil.ReadFile(filepath.Join("fixtures", fixtureName))
+		th.AssertNoErr(t, err)
+		fmt.Fprint(w, string(jsonBytes))
 	})
 }
 
