@@ -256,7 +256,7 @@ func TestListProjectsRatesOnly(t *testing.T) {
 	HandleListProjectsSuccessfully(t)
 
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
-		Rates: "only",
+		Rates: projects.OnlyRates,
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
@@ -361,7 +361,7 @@ func TestListProjectsFilteredWithRates(t *testing.T) {
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
 		Cluster:  "fakecluster",
 		Services: []string{"shared"},
-		Rates:    "true",
+		Rates:    projects.WithRates,
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
@@ -564,7 +564,7 @@ func TestGetProjectRatesOnly(t *testing.T) {
 	HandleGetProjectSuccessfully(t)
 
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
-		Rates: "only",
+		Rates: projects.OnlyRates,
 	}).Extract()
 	th.AssertNoErr(t, err)
 
@@ -607,7 +607,7 @@ func TestGetProjectFilteredWithRates(t *testing.T) {
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
 		Cluster:  "fakecluster",
 		Services: []string{"shared"},
-		Rates:    "true",
+		Rates:    projects.WithRates,
 	}).Extract()
 	th.AssertNoErr(t, err)
 

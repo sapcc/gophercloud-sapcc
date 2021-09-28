@@ -9,6 +9,7 @@ import (
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
 )
 
 // HandleListProjectsSuccessfully creates an HTTP handler at `/domains/:domain_id/projects` on the
@@ -25,9 +26,9 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 		switch {
 		case r.URL.Query().Has("detail"):
 			fixtureName = "list-details.json"
-		case r.URL.Query().Get("rates") == "only":
+		case r.URL.Query().Get("rates") == string(projects.OnlyRates):
 			fixtureName = "list-rates-only.json"
-		case r.URL.Query().Get("rates") == "true" && r.URL.Query().Get("service") == "shared":
+		case r.URL.Query().Get("rates") == string(projects.WithRates) && r.URL.Query().Get("service") == "shared":
 			fixtureName = "list-filtered-with-rates.json"
 		case (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things":
@@ -58,9 +59,9 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 		switch {
 		case r.URL.Query().Has("detail"):
 			fixtureName = "get-details.json"
-		case r.URL.Query().Get("rates") == "only":
+		case r.URL.Query().Get("rates") == string(projects.OnlyRates):
 			fixtureName = "get-rates-only.json"
-		case r.URL.Query().Get("rates") == "true" && r.URL.Query().Get("service") == "shared":
+		case r.URL.Query().Get("rates") == string(projects.WithRates) && r.URL.Query().Get("service") == "shared":
 			fixtureName = "get-filtered-with-rates.json"
 		case (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things":

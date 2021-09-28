@@ -7,6 +7,16 @@ import (
 	"github.com/sapcc/limes"
 )
 
+// RatesDisplay determines the presence of rate limits in a project's Get/List response.
+type RatesDisplay string
+
+const (
+	// WithoutRates is the default value, it is only here for documentation purposes.
+	WithoutRates RatesDisplay = ""
+	WithRates    RatesDisplay = "true"
+	OnlyRates    RatesDisplay = "only"
+)
+
 // ListOptsBuilder allows extensions to add additional parameters to the List request.
 type ListOptsBuilder interface {
 	ToProjectListParams() (map[string]string, string, error)
@@ -14,12 +24,12 @@ type ListOptsBuilder interface {
 
 // ListOpts contains parameters for filtering a List request.
 type ListOpts struct {
-	Cluster   string   `h:"X-Limes-Cluster-Id"`
-	Detail    bool     `q:"detail"`
-	Areas     []string `q:"area"`
-	Services  []string `q:"service"`
-	Resources []string `q:"resource"`
-	Rates     string   `q:"rates"`
+	Cluster   string       `h:"X-Limes-Cluster-Id"`
+	Detail    bool         `q:"detail"`
+	Areas     []string     `q:"area"`
+	Services  []string     `q:"service"`
+	Resources []string     `q:"resource"`
+	Rates     RatesDisplay `q:"rates"`
 }
 
 // ToProjectListParams formats a ListOpts into a map of headers and a query string.
@@ -65,12 +75,12 @@ type GetOptsBuilder interface {
 
 // GetOpts contains parameters for filtering a Get request.
 type GetOpts struct {
-	Cluster   string   `h:"X-Limes-Cluster-Id"`
-	Detail    bool     `q:"detail"`
-	Areas     []string `q:"area"`
-	Services  []string `q:"service"`
-	Resources []string `q:"resource"`
-	Rates     string   `q:"rates"`
+	Cluster   string       `h:"X-Limes-Cluster-Id"`
+	Detail    bool         `q:"detail"`
+	Areas     []string     `q:"area"`
+	Services  []string     `q:"service"`
+	Resources []string     `q:"resource"`
+	Rates     RatesDisplay `q:"rates"`
 }
 
 // ToProjectGetParams formats a GetOpts into a map of headers and a query string.
