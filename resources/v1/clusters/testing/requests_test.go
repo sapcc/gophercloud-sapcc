@@ -118,8 +118,8 @@ func TestListFilteredCluster(t *testing.T) {
 	HandleListClustersSuccessfully(t)
 
 	actual, err := clusters.List(fake.ServiceClient(), clusters.ListOpts{
-		Service:  "shared",
-		Resource: "stuff",
+		Service:  []string{"shared"},
+		Resource: []string{"stuff"},
 	}).ExtractClusters()
 	th.AssertNoErr(t, err)
 
@@ -264,8 +264,8 @@ func TestGetFilteredCluster(t *testing.T) {
 
 	actual, err := clusters.Get(fake.ServiceClient(), "pakistan", clusters.GetOpts{
 		Detail:   true,
-		Service:  "unshared",
-		Resource: "stuff",
+		Service:  []string{"unshared"},
+		Resource: []string{"stuff"},
 	}).Extract()
 	th.AssertNoErr(t, err)
 

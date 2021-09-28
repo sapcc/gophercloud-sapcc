@@ -192,8 +192,8 @@ func TestListProjectsFiltered(t *testing.T) {
 
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
 		Cluster:  "fakecluster",
-		Service:  "shared",
-		Resource: "things",
+		Service:  []string{"shared"},
+		Resource: []string{"things"},
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
@@ -360,7 +360,7 @@ func TestListProjectsFilteredWithRates(t *testing.T) {
 
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
 		Cluster: "fakecluster",
-		Service: "shared",
+		Service: []string{"shared"},
 		Rates:   "true",
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
@@ -526,8 +526,8 @@ func TestGetProjectFiltered(t *testing.T) {
 
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
 		Cluster:  "fakecluster",
-		Service:  "shared",
-		Resource: "things",
+		Service:  []string{"shared"},
+		Resource: []string{"things"},
 	}).Extract()
 	th.AssertNoErr(t, err)
 
@@ -606,7 +606,7 @@ func TestGetProjectFilteredWithRates(t *testing.T) {
 
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
 		Cluster: "fakecluster",
-		Service: "shared",
+		Service: []string{"shared"},
 		Rates:   "true",
 	}).Extract()
 	th.AssertNoErr(t, err)
