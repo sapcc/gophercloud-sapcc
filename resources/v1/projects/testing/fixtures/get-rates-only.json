@@ -1,0 +1,24 @@
+{
+  "project": {
+    "id": "uuid-for-berlin",
+    "name": "berlin",
+    "parent_id": "uuid-for-germany",
+    "services": [
+      {
+        "type": "shared",
+        "area": "shared",
+        "resources": [],
+        "rates": [
+          {
+            "name": "some_action",
+            "unit": "B",
+            "limit": 5,
+            "window": "2m",
+            "usage_as_bigint": "1069298"
+          }
+        ],
+        "rates_scraped_at": 24
+      }
+    ]
+  }
+}

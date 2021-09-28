@@ -12,11 +12,11 @@ type ListOptsBuilder interface {
 
 // ListOpts contains parameters for filtering a List request
 type ListOpts struct {
-	Detail   bool   `q:"detail"`
-	Local    bool   `q:"local"`
-	Area     string `q:"area"`
-	Service  string `q:"service"`
-	Resource string `q:"resource"`
+	Detail    bool     `q:"detail"`
+	Local     bool     `q:"local"`
+	Areas     []string `q:"area"`
+	Services  []string `q:"service"`
+	Resources []string `q:"resource"`
 }
 
 // ToClusterListQuery formats a ListOpts into a query string.
@@ -48,11 +48,11 @@ type GetOptsBuilder interface {
 
 // GetOpts contains parameters for filtering a Get request.
 type GetOpts struct {
-	Detail   bool   `q:"detail"`
-	Local    bool   `q:"local"`
-	Area     string `q:"area"`
-	Service  string `q:"service"`
-	Resource string `q:"resource"`
+	Detail    bool     `q:"detail"`
+	Local     bool     `q:"local"`
+	Areas     []string `q:"area"`
+	Services  []string `q:"service"`
+	Resources []string `q:"resource"`
 }
 
 // ToClusterGetQuery formats a GetOpts into a query string.

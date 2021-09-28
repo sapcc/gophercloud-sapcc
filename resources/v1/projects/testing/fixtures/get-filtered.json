@@ -1,0 +1,21 @@
+{
+  "project": {
+    "id": "uuid-for-berlin",
+    "name": "berlin",
+    "parent_id": "uuid-for-germany",
+    "services": [
+      {
+        "type": "shared",
+        "area": "shared",
+        "resources": [
+          {
+            "name": "things",
+            "quota": 10,
+            "usage": 2
+          }
+        ],
+        "scraped_at": 22
+      }
+    ]
+  }
+}

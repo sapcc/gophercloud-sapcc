@@ -191,9 +191,9 @@ func TestListProjectsFiltered(t *testing.T) {
 	HandleListProjectsSuccessfully(t)
 
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
-		Cluster:  "fakecluster",
-		Service:  "shared",
-		Resource: "things",
+		Cluster:   "fakecluster",
+		Services:  []string{"shared"},
+		Resources: []string{"things"},
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
@@ -242,6 +242,188 @@ func TestListProjectsFiltered(t *testing.T) {
 							Usage: 2,
 						},
 					},
+					ScrapedAt: p2i64(44),
+				},
+			},
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
+}
+
+func TestListProjectsRatesOnly(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandleListProjectsSuccessfully(t)
+
+	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
+		Rates: projects.OnlyRates,
+	}).ExtractProjects()
+	th.AssertNoErr(t, err)
+
+	rateWindow := 2 * limes.WindowMinutes
+	expected := []limes.ProjectReport{
+		{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+			Services: limes.ProjectServiceReports{
+				"shared": &limes.ProjectServiceReport{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
+					},
+					Resources: limes.ProjectResourceReports{},
+					Rates: limes.ProjectRateLimitReports{
+						"some_action": &limes.ProjectRateLimitReport{
+							RateInfo: limes.RateInfo{
+								Name: "some_action",
+								Unit: limes.UnitBytes,
+							},
+							Limit:         5,
+							Window:        &rateWindow,
+							UsageAsBigint: "1069298",
+						},
+					},
+					RatesScrapedAt: p2i64(24),
+				},
+				"unshared": &limes.ProjectServiceReport{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "unshared",
+						Area:        "unshared",
+						ProductName: "",
+					},
+					Resources: limes.ProjectResourceReports{},
+					Rates: limes.ProjectRateLimitReports{
+						"service/something/action:update/removeFloatingIp": &limes.ProjectRateLimitReport{
+							RateInfo: limes.RateInfo{
+								Name: "service/something/action:update/removeFloatingIp",
+							},
+							Limit:  2,
+							Window: &rateWindow,
+						},
+					},
+					RatesScrapedAt: p2i64(24),
+				},
+			},
+		},
+		{
+			UUID:       "uuid-for-dresden",
+			Name:       "dresden",
+			ParentUUID: "uuid-for-berlin",
+			Services: limes.ProjectServiceReports{
+				"shared": &limes.ProjectServiceReport{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
+					},
+					Resources: limes.ProjectResourceReports{},
+					Rates:     limes.ProjectRateLimitReports{},
+				},
+				"unshared": &limes.ProjectServiceReport{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "unshared",
+						Area:        "unshared",
+						ProductName: "",
+					},
+					Resources: limes.ProjectResourceReports{},
+					Rates: limes.ProjectRateLimitReports{
+						"service/something:create": &limes.ProjectRateLimitReport{
+							RateInfo: limes.RateInfo{
+								Name: "service/something:create",
+							},
+							Limit:         5,
+							Window:        &rateWindow,
+							UsageAsBigint: "1069298",
+						},
+						"service/something/action:update/addFloatingIp": &limes.ProjectRateLimitReport{
+							RateInfo: limes.RateInfo{
+								Name: "service/something/action:update/addFloatingIp",
+							},
+							Limit:  2,
+							Window: &rateWindow,
+						},
+					},
+					RatesScrapedAt: p2i64(24),
+				},
+			},
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
+}
+
+func TestListProjectsFilteredWithRates(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandleListProjectsSuccessfully(t)
+
+	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
+		Cluster:  "fakecluster",
+		Services: []string{"shared"},
+		Rates:    projects.WithRates,
+	}).ExtractProjects()
+	th.AssertNoErr(t, err)
+
+	rateWindow := 2 * limes.WindowMinutes
+	expected := []limes.ProjectReport{
+		{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+			Services: limes.ProjectServiceReports{
+				"shared": &limes.ProjectServiceReport{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
+					},
+					Resources: limes.ProjectResourceReports{
+						"things": &limes.ProjectResourceReport{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota: p2ui64(10),
+							Usage: 2,
+						},
+					},
+					Rates: limes.ProjectRateLimitReports{
+						"some_action": &limes.ProjectRateLimitReport{
+							RateInfo: limes.RateInfo{
+								Name: "some_action",
+								Unit: limes.UnitBytes,
+							},
+							Limit:         5,
+							Window:        &rateWindow,
+							UsageAsBigint: "1069298",
+						},
+					},
+					ScrapedAt:      p2i64(22),
+					RatesScrapedAt: p2i64(24),
+				},
+			},
+		},
+		{
+			UUID:       "uuid-for-dresden",
+			Name:       "dresden",
+			ParentUUID: "uuid-for-berlin",
+			Services: limes.ProjectServiceReports{
+				"shared": &limes.ProjectServiceReport{
+					ServiceInfo: limes.ServiceInfo{
+						Type:        "shared",
+						Area:        "shared",
+						ProductName: "",
+					},
+					Resources: limes.ProjectResourceReports{
+						"things": &limes.ProjectResourceReport{
+							ResourceInfo: limes.ResourceInfo{
+								Name: "things",
+							},
+							Quota: p2ui64(10),
+							Usage: 2,
+						},
+					},
+					Rates:     limes.ProjectRateLimitReports{},
 					ScrapedAt: p2i64(44),
 				},
 			},
@@ -343,9 +525,9 @@ func TestGetProjectFiltered(t *testing.T) {
 	HandleGetProjectSuccessfully(t)
 
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
-		Cluster:  "fakecluster",
-		Service:  "shared",
-		Resource: "things",
+		Cluster:   "fakecluster",
+		Services:  []string{"shared"},
+		Resources: []string{"things"},
 	}).Extract()
 	th.AssertNoErr(t, err)
 
@@ -370,6 +552,99 @@ func TestGetProjectFiltered(t *testing.T) {
 					},
 				},
 				ScrapedAt: p2i64(22),
+			},
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
+}
+
+func TestGetProjectRatesOnly(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandleGetProjectSuccessfully(t)
+
+	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
+		Rates: projects.OnlyRates,
+	}).Extract()
+	th.AssertNoErr(t, err)
+
+	rateWindow := 2 * limes.WindowMinutes
+	expected := &limes.ProjectReport{
+		UUID:       "uuid-for-berlin",
+		Name:       "berlin",
+		ParentUUID: "uuid-for-germany",
+		Services: limes.ProjectServiceReports{
+			"shared": &limes.ProjectServiceReport{
+				ServiceInfo: limes.ServiceInfo{
+					Type:        "shared",
+					Area:        "shared",
+					ProductName: "",
+				},
+				Resources: limes.ProjectResourceReports{},
+				Rates: limes.ProjectRateLimitReports{
+					"some_action": &limes.ProjectRateLimitReport{
+						RateInfo: limes.RateInfo{
+							Name: "some_action",
+							Unit: limes.UnitBytes,
+						},
+						Limit:         5,
+						Window:        &rateWindow,
+						UsageAsBigint: "1069298",
+					},
+				},
+				RatesScrapedAt: p2i64(24),
+			},
+		},
+	}
+	th.CheckDeepEquals(t, expected, actual)
+}
+
+func TestGetProjectFilteredWithRates(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandleGetProjectSuccessfully(t)
+
+	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
+		Cluster:  "fakecluster",
+		Services: []string{"shared"},
+		Rates:    projects.WithRates,
+	}).Extract()
+	th.AssertNoErr(t, err)
+
+	rateWindow := 2 * limes.WindowMinutes
+	expected := &limes.ProjectReport{
+		UUID:       "uuid-for-berlin",
+		Name:       "berlin",
+		ParentUUID: "uuid-for-germany",
+		Services: limes.ProjectServiceReports{
+			"shared": &limes.ProjectServiceReport{
+				ServiceInfo: limes.ServiceInfo{
+					Type:        "shared",
+					Area:        "shared",
+					ProductName: "",
+				},
+				Resources: limes.ProjectResourceReports{
+					"things": &limes.ProjectResourceReport{
+						ResourceInfo: limes.ResourceInfo{
+							Name: "things",
+						},
+						Quota: p2ui64(10),
+						Usage: 2,
+					},
+				},
+				Rates: limes.ProjectRateLimitReports{
+					"some_action": &limes.ProjectRateLimitReport{
+						RateInfo: limes.RateInfo{
+							Name: "some_action",
+							Unit: limes.UnitBytes,
+						},
+						Limit:         5,
+						Window:        &rateWindow,
+						UsageAsBigint: "1069298",
+					},
+				},
+				ScrapedAt:      p2i64(22),
+				RatesScrapedAt: p2i64(24),
 			},
 		},
 	}
@@ -438,7 +713,8 @@ func TestSyncProject(t *testing.T) {
 
 	// if sync succeeds then a 202 (no error) is returned.
 	err := projects.Sync(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden", projects.SyncOpts{
-		Cluster: "fakecluster"}).ExtractErr()
+		Cluster: "fakecluster",
+	}).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 

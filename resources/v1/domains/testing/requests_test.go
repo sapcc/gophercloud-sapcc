@@ -153,9 +153,9 @@ func TestListFilteredDomain(t *testing.T) {
 	HandleListDomainsSuccessfully(t)
 
 	actual, err := domains.List(fake.ServiceClient(), domains.ListOpts{
-		Cluster:  "fakecluster",
-		Service:  "shared",
-		Resource: "things",
+		Cluster:   "fakecluster",
+		Services:  []string{"shared"},
+		Resources: []string{"things"},
 	}).ExtractDomains()
 	th.AssertNoErr(t, err)
 
@@ -289,9 +289,9 @@ func TestGetDomainFiltered(t *testing.T) {
 	HandleGetDomainSuccessfully(t)
 
 	actual, err := domains.Get(fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{
-		Cluster:  "fakecluster",
-		Service:  "shared",
-		Resource: "things",
+		Cluster:   "fakecluster",
+		Services:  []string{"shared"},
+		Resources: []string{"things"},
 	}).Extract()
 	th.AssertNoErr(t, err)
 
