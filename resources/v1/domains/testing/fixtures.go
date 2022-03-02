@@ -2,243 +2,14 @@ package testing
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"path/filepath"
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 )
-
-var domainListJSON = `
-	{
-		"domains": [
-			{
-				"id": "uuid-for-karachi",
-				"name": "karachi",
-				"services": [
-					{
-						"type": "shared",
-						"area": "shared",
-						"resources": [
-							{
-								"name": "capacity",
-								"unit": "B",
-								"quota": 10,
-								"projects_quota": 5,
-								"usage": 2
-							},
-							{
-								"name": "things",
-								"quota": 10,
-								"projects_quota": 5,
-								"usage": 2
-							}
-						],
-						"max_scraped_at": 22,
-						"min_scraped_at": 22
-					},
-					{
-						"type": "unshared",
-						"area": "unshared",
-						"resources": [
-							{
-								"name": "capacity",
-								"unit": "B",
-								"quota": 55,
-								"projects_quota": 25,
-								"usage": 10
-							},
-							{
-								"name": "things",
-								"quota": 55,
-								"projects_quota": 25,
-								"usage": 10
-							}
-						],
-						"max_scraped_at": 11,
-						"min_scraped_at": 11
-					}
-				]
-			},
-			{
-				"id": "uuid-for-lahore",
-				"name": "lahore",
-				"services": [
-					{
-						"type": "shared",
-						"area": "shared",
-						"resources": [
-							{
-								"name": "capacity",
-								"unit": "B",
-								"quota": 10,
-								"projects_quota": 5,
-								"usage": 2
-							},
-							{
-								"name": "things",
-								"quota": 10,
-								"projects_quota": 5,
-								"usage": 2
-							}
-						],
-						"max_scraped_at": 22,
-						"min_scraped_at": 22
-					},
-					{
-						"type": "unshared",
-						"area": "unshared",
-						"resources": [
-							{
-								"name": "capacity",
-								"unit": "B",
-								"quota": 55,
-								"projects_quota": 25,
-								"usage": 10,
-								"backend_quota": 0,
-								"infinite_backend_quota": true
-							},
-							{
-								"name": "things",
-								"externally_managed": true,
-								"quota": 55,
-								"projects_quota": 25,
-								"usage": 10
-							}
-						],
-						"max_scraped_at": 11,
-						"min_scraped_at": 11
-					}
-				]
-			}
-		]
-	}
-`
-
-var domainFilteredListJSON = `
-	{
-		"domains": [
-			{
-				"id": "uuid-for-karachi",
-				"name": "karachi",
-				"services": [
-					{
-						"type": "shared",
-						"area": "shared",
-						"resources": [
-							{
-								"name": "things",
-								"quota": 10,
-								"projects_quota": 5,
-								"usage": 2
-							}
-						],
-						"max_scraped_at": 22,
-						"min_scraped_at": 22
-					}
-				]
-			},
-			{
-				"id": "uuid-for-lahore",
-				"name": "lahore",
-				"services": [
-					{
-						"type": "shared",
-						"area": "shared",
-						"resources": [
-							{
-								"name": "things",
-								"quota": 10,
-								"projects_quota": 5,
-								"usage": 2
-							}
-						],
-						"max_scraped_at": 22,
-						"min_scraped_at": 22
-					}
-				]
-			}
-		]
-	}
-`
-
-var domainJSON = `
-	{
-		"domain": {
-			"id": "uuid-for-karachi",
-			"name": "karachi",
-			"services": [
-				{
-					"type": "shared",
-					"area": "shared",
-					"resources": [
-						{
-							"name": "capacity",
-							"unit": "B",
-							"quota": 10,
-							"projects_quota": 5,
-							"usage": 2
-						},
-						{
-							"name": "things",
-							"quota": 10,
-							"projects_quota": 5,
-							"usage": 2
-						}
-					],
-					"max_scraped_at": 22,
-					"min_scraped_at": 22
-				},
-				{
-					"type": "unshared",
-					"area": "unshared",
-					"resources": [
-						{
-							"name": "capacity",
-							"unit": "B",
-							"quota": 55,
-							"projects_quota": 25,
-							"usage": 10
-						},
-						{
-							"name": "things",
-							"quota": 55,
-							"projects_quota": 25,
-							"usage": 10
-						}
-					],
-					"max_scraped_at": 11,
-					"min_scraped_at": 11
-				}
-			]
-		}
-	}
-`
-
-var domainFilteredJSON = `
-	{
-		"domain": {
-			"id": "uuid-for-karachi",
-			"name": "karachi",
-			"services": [
-				{
-					"type": "shared",
-					"area": "shared",
-					"resources": [
-						{
-							"name": "things",
-							"quota": 10,
-							"projects_quota": 5,
-							"usage": 2
-						}
-					],
-					"max_scraped_at": 22,
-					"min_scraped_at": 22
-				}
-			]
-		}
-	}
-`
 
 // HandleListDomainsSuccessfully creates an HTTP handler at `/v1/domains` on the
 // test handler mux that responds with a list of (two) domains.
@@ -250,12 +21,15 @@ func HandleListDomainsSuccessfully(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
+		fixtureName := "list.json"
 		if (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things" {
-			fmt.Fprintf(w, domainFilteredListJSON)
+			fixtureName = "list-filtered.json"
 		}
 
-		fmt.Fprintf(w, domainListJSON)
+		jsonBytes, err := ioutil.ReadFile(filepath.Join("fixtures", fixtureName))
+		th.AssertNoErr(t, err)
+		fmt.Fprint(w, string(jsonBytes))
 	})
 }
 
@@ -269,12 +43,15 @@ func HandleGetDomainSuccessfully(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
+		fixtureName := "get.json"
 		if (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things" {
-			fmt.Fprintf(w, domainFilteredJSON)
+			fixtureName = "get-filtered.json"
 		}
 
-		fmt.Fprintf(w, domainJSON)
+		jsonBytes, err := ioutil.ReadFile(filepath.Join("fixtures", fixtureName))
+		th.AssertNoErr(t, err)
+		fmt.Fprint(w, string(jsonBytes))
 	})
 }
 

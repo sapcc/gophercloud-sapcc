@@ -1,0 +1,103 @@
+{
+  "domains": [
+    {
+      "id": "uuid-for-karachi",
+      "name": "karachi",
+      "services": [
+        {
+          "type": "shared",
+          "area": "shared",
+          "resources": [
+            {
+              "name": "capacity",
+              "unit": "B",
+              "quota": 10,
+              "projects_quota": 5,
+              "usage": 2
+            },
+            {
+              "name": "things",
+              "quota": 10,
+              "projects_quota": 5,
+              "usage": 2
+            }
+          ],
+          "max_scraped_at": 22,
+          "min_scraped_at": 22
+        },
+        {
+          "type": "unshared",
+          "area": "unshared",
+          "resources": [
+            {
+              "name": "capacity",
+              "unit": "B",
+              "quota": 55,
+              "projects_quota": 25,
+              "usage": 10
+            },
+            {
+              "name": "things",
+              "quota": 55,
+              "projects_quota": 25,
+              "usage": 10
+            }
+          ],
+          "max_scraped_at": 11,
+          "min_scraped_at": 11
+        }
+      ]
+    },
+    {
+      "id": "uuid-for-lahore",
+      "name": "lahore",
+      "services": [
+        {
+          "type": "shared",
+          "area": "shared",
+          "resources": [
+            {
+              "name": "capacity",
+              "unit": "B",
+              "quota": 10,
+              "projects_quota": 5,
+              "usage": 2
+            },
+            {
+              "name": "things",
+              "quota": 10,
+              "projects_quota": 5,
+              "usage": 2
+            }
+          ],
+          "max_scraped_at": 22,
+          "min_scraped_at": 22
+        },
+        {
+          "type": "unshared",
+          "area": "unshared",
+          "resources": [
+            {
+              "name": "capacity",
+              "unit": "B",
+              "quota": 55,
+              "projects_quota": 25,
+              "usage": 10,
+              "backend_quota": 0,
+              "infinite_backend_quota": true
+            },
+            {
+              "name": "things",
+              "externally_managed": true,
+              "quota": 55,
+              "projects_quota": 25,
+              "usage": 10
+            }
+          ],
+          "max_scraped_at": 11,
+          "min_scraped_at": 11
+        }
+      ]
+    }
+  ]
+}
