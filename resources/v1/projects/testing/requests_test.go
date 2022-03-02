@@ -191,7 +191,6 @@ func TestListProjectsFiltered(t *testing.T) {
 	HandleListProjectsSuccessfully(t)
 
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
-		Cluster:   "fakecluster",
 		Services:  []string{"shared"},
 		Resources: []string{"things"},
 	}).ExtractProjects()
@@ -359,7 +358,6 @@ func TestListProjectsFilteredWithRates(t *testing.T) {
 	HandleListProjectsSuccessfully(t)
 
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
-		Cluster:  "fakecluster",
 		Services: []string{"shared"},
 		Rates:    projects.WithRates,
 	}).ExtractProjects()
@@ -525,7 +523,6 @@ func TestGetProjectFiltered(t *testing.T) {
 	HandleGetProjectSuccessfully(t)
 
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
-		Cluster:   "fakecluster",
 		Services:  []string{"shared"},
 		Resources: []string{"things"},
 	}).Extract()
@@ -605,7 +602,6 @@ func TestGetProjectFilteredWithRates(t *testing.T) {
 	HandleGetProjectSuccessfully(t)
 
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
-		Cluster:  "fakecluster",
 		Services: []string{"shared"},
 		Rates:    projects.WithRates,
 	}).Extract()
@@ -657,7 +653,6 @@ func TestUpdateProject(t *testing.T) {
 	HandleUpdateProjectSuccessfully(t)
 
 	opts := projects.UpdateOpts{
-		Cluster: "fakecluster",
 		Services: limes.QuotaRequest{
 			"compute": limes.ServiceQuotaRequest{
 				Resources: limes.ResourceQuotaRequest{
@@ -679,10 +674,7 @@ func TestUpdateProjectWarning(t *testing.T) {
 	HandleUpdateProjectPartly(t)
 
 	// expecting to get 202 response code with a warning
-	opts := projects.UpdateOpts{
-		Cluster: "fakecluster",
-	}
-	body, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts).Extract()
+	body, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.UpdateOpts{}).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, body, []byte("it is currently not allowed to set bursting.enabled and quotas in the same request"))
 }
@@ -693,10 +685,7 @@ func TestUpdateProjectError(t *testing.T) {
 	HandleUpdateProjectUnsuccessfully(t)
 
 	// expecting to get 400 response code
-	opts := projects.UpdateOpts{
-		Cluster: "fakecluster",
-	}
-	warn, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts).Extract()
+	warn, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.UpdateOpts{}).Extract()
 	th.AssertErr(t, err)
 	th.AssertDeepEquals(t, []byte(nil), warn)
 	if err, ok := err.(gophercloud.ErrDefault400); ok {
@@ -712,9 +701,7 @@ func TestSyncProject(t *testing.T) {
 	HandleSyncProjectSuccessfully(t)
 
 	// if sync succeeds then a 202 (no error) is returned.
-	err := projects.Sync(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden", projects.SyncOpts{
-		Cluster: "fakecluster",
-	}).ExtractErr()
+	err := projects.Sync(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden").ExtractErr()
 	th.AssertNoErr(t, err)
 }
 

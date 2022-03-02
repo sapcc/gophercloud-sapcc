@@ -33,7 +33,6 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 		case (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things":
 
-			th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 			fixtureName = "list-filtered.json"
 		default:
 			fixtureName = "list.json"
@@ -66,7 +65,6 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 		case (r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared") &&
 			r.URL.Query().Get("resource") == "things":
 
-			th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 			fixtureName = "get-filtered.json"
 		default:
 			fixtureName = "get.json"
@@ -84,7 +82,6 @@ func HandleUpdateProjectSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-		th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 
 		w.WriteHeader(http.StatusAccepted)
 	})
@@ -96,7 +93,6 @@ func HandleSyncProjectSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-dresden/sync", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "POST")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-		th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 
 		w.WriteHeader(http.StatusAccepted)
 	})
@@ -108,7 +104,6 @@ func HandleUpdateProjectPartly(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-		th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 
 		w.WriteHeader(http.StatusAccepted)
 		fmt.Fprintf(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
@@ -121,7 +116,6 @@ func HandleUpdateProjectUnsuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-		th.TestHeader(t, r, "X-Limes-Cluster-Id", "fakecluster")
 
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
