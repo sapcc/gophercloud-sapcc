@@ -153,7 +153,6 @@ func TestListFilteredDomain(t *testing.T) {
 	HandleListDomainsSuccessfully(t)
 
 	actual, err := domains.List(fake.ServiceClient(), domains.ListOpts{
-		Cluster:   "fakecluster",
 		Services:  []string{"shared"},
 		Resources: []string{"things"},
 	}).ExtractDomains()
@@ -289,7 +288,6 @@ func TestGetDomainFiltered(t *testing.T) {
 	HandleGetDomainSuccessfully(t)
 
 	actual, err := domains.Get(fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{
-		Cluster:   "fakecluster",
 		Services:  []string{"shared"},
 		Resources: []string{"things"},
 	}).Extract()
@@ -328,7 +326,6 @@ func TestUpdateDomain(t *testing.T) {
 	HandleUpdateDomainSuccessfully(t)
 
 	opts := domains.UpdateOpts{
-		Cluster: "fakecluster",
 		Services: limes.QuotaRequest{
 			"shared": limes.ServiceQuotaRequest{
 				Resources: limes.ResourceQuotaRequest{

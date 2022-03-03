@@ -9,185 +9,12 @@ import (
 	"github.com/sapcc/limes"
 )
 
-func TestListCluster(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListClustersSuccessfully(t)
-
-	actual, err := clusters.List(fake.ServiceClient(), clusters.ListOpts{}).ExtractClusters()
-	th.AssertNoErr(t, err)
-
-	var cap uint64 = 10
-	var scrap int64 = 22
-	expected := []limes.ClusterReport{
-		{
-			ID: "pakistan",
-			Services: limes.ClusterServiceReports{
-				"shared": &limes.ClusterServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type: "shared",
-						Area: "shared",
-					},
-					Resources: limes.ClusterResourceReports{
-						"stuff": &limes.ClusterResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "stuff",
-								Unit: limes.UnitBytes,
-							},
-							Capacity:     &cap,
-							DomainsQuota: p2ui64(5),
-							Usage:        2,
-						},
-						"things": &limes.ClusterResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "things",
-							},
-							Capacity:     &cap,
-							DomainsQuota: p2ui64(5),
-							Usage:        2,
-						},
-					},
-					MaxScrapedAt: p2i64(33),
-					MinScrapedAt: p2i64(33),
-				},
-				"unshared": &limes.ClusterServiceReport{
-					Shared: true,
-					ServiceInfo: limes.ServiceInfo{
-						Type: "unshared",
-						Area: "contradiction",
-					},
-					Resources: limes.ClusterResourceReports{
-						"stuff": &limes.ClusterResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "stuff",
-								Unit: limes.UnitBytes,
-							},
-							Capacity:     &cap,
-							DomainsQuota: p2ui64(5),
-							Usage:        2,
-						},
-						"things": &limes.ClusterResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "things",
-							},
-							Capacity:     &cap,
-							DomainsQuota: p2ui64(5),
-							Usage:        2,
-						},
-					},
-					MaxScrapedAt: p2i64(33),
-					MinScrapedAt: p2i64(33),
-				},
-			},
-			MaxScrapedAt: &scrap,
-			MinScrapedAt: &scrap,
-		},
-		{
-			ID: "germany",
-			Services: limes.ClusterServiceReports{
-				"shared": &limes.ClusterServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type: "shared",
-						Area: "shared",
-					},
-					Resources: limes.ClusterResourceReports{
-						"stuff": &limes.ClusterResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "stuff",
-								Unit: limes.UnitBytes,
-							},
-							Capacity:     &cap,
-							DomainsQuota: p2ui64(5),
-							Usage:        2,
-						},
-					},
-					MaxScrapedAt: p2i64(33),
-					MinScrapedAt: p2i64(33),
-				},
-			},
-			MaxScrapedAt: &scrap,
-			MinScrapedAt: &scrap,
-		},
-	}
-	th.CheckDeepEquals(t, expected, actual)
-}
-
-func TestListFilteredCluster(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListClustersSuccessfully(t)
-
-	actual, err := clusters.List(fake.ServiceClient(), clusters.ListOpts{
-		Services:  []string{"shared"},
-		Resources: []string{"stuff"},
-	}).ExtractClusters()
-	th.AssertNoErr(t, err)
-
-	var cap uint64 = 10
-	var scrap int64 = 22
-	expected := []limes.ClusterReport{
-		{
-			ID: "pakistan",
-			Services: limes.ClusterServiceReports{
-				"shared": &limes.ClusterServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type: "shared",
-						Area: "shared",
-					},
-					Resources: limes.ClusterResourceReports{
-						"stuff": &limes.ClusterResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "stuff",
-								Unit: limes.UnitBytes,
-							},
-							Capacity:     &cap,
-							DomainsQuota: p2ui64(5),
-							Usage:        2,
-						},
-					},
-					MaxScrapedAt: p2i64(33),
-					MinScrapedAt: p2i64(33),
-				},
-			},
-			MaxScrapedAt: &scrap,
-			MinScrapedAt: &scrap,
-		},
-		{
-			ID: "germany",
-			Services: limes.ClusterServiceReports{
-				"shared": &limes.ClusterServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type: "shared",
-						Area: "shared",
-					},
-					Resources: limes.ClusterResourceReports{
-						"stuff": &limes.ClusterResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "stuff",
-								Unit: limes.UnitBytes,
-							},
-							Capacity:     &cap,
-							DomainsQuota: p2ui64(5),
-							Usage:        2,
-						},
-					},
-					MaxScrapedAt: p2i64(33),
-					MinScrapedAt: p2i64(33),
-				},
-			},
-			MaxScrapedAt: &scrap,
-			MinScrapedAt: &scrap,
-		},
-	}
-	th.CheckDeepEquals(t, expected, actual)
-}
-
 func TestGetCluster(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	HandleGetClusterSuccessfully(t)
 
-	actual, err := clusters.Get(fake.ServiceClient(), "pakistan", clusters.GetOpts{}).Extract()
+	actual, err := clusters.Get(fake.ServiceClient(), clusters.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	var cap uint64 = 10
@@ -223,7 +50,6 @@ func TestGetCluster(t *testing.T) {
 				MinScrapedAt: p2i64(33),
 			},
 			"unshared": &limes.ClusterServiceReport{
-				Shared: true,
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "contradiction",
@@ -262,7 +88,7 @@ func TestGetFilteredCluster(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetClusterSuccessfully(t)
 
-	actual, err := clusters.Get(fake.ServiceClient(), "pakistan", clusters.GetOpts{
+	actual, err := clusters.Get(fake.ServiceClient(), clusters.GetOpts{
 		Detail:    true,
 		Services:  []string{"unshared"},
 		Resources: []string{"stuff"},
@@ -275,7 +101,6 @@ func TestGetFilteredCluster(t *testing.T) {
 		ID: "pakistan",
 		Services: limes.ClusterServiceReports{
 			"unshared": &limes.ClusterServiceReport{
-				Shared: true,
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "contradiction",

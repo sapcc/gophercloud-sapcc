@@ -1,0 +1,29 @@
+{
+  "cluster": {
+    "id": "pakistan",
+    "services": [
+      {
+        "type": "unshared",
+        "area": "contradiction",
+        "resources": [
+          {
+            "name": "stuff",
+            "capacity": 10,
+            "comment": "tasty tests are so tasty",
+            "domains_quota": 4,
+            "unit": "B",
+            "usage": 2,
+            "subcapacities": [
+              { "hypervisor": "cluster-1", "cores": 200 },
+              { "hypervisor": "cluster-2", "cores": 800 }
+            ]
+          }
+        ],
+        "max_scraped_at": 33,
+        "min_scraped_at": 33
+      }
+    ],
+    "max_scraped_at": 22,
+    "min_scraped_at": 22
+  }
+}

@@ -2,6 +2,8 @@
 package domains
 
 import (
+	"net/http"
+
 	"github.com/gophercloud/gophercloud"
 	"github.com/sapcc/limes"
 )
@@ -13,7 +15,6 @@ type ListOptsBuilder interface {
 
 // ListOpts contains parameters for filtering a List request.
 type ListOpts struct {
-	Cluster   string   `h:"X-Limes-Cluster-Id"`
 	Areas     []string `q:"area"`
 	Services  []string `q:"service"`
 	Resources []string `q:"resource"`
@@ -62,7 +63,6 @@ type GetOptsBuilder interface {
 
 // GetOpts contains parameters for filtering a Get request.
 type GetOpts struct {
-	Cluster   string   `h:"X-Limes-Cluster-Id"`
 	Areas     []string `q:"area"`
 	Services  []string `q:"service"`
 	Resources []string `q:"resource"`
@@ -111,7 +111,6 @@ type UpdateOptsBuilder interface {
 
 // UpdateOpts contains parameters to update a domain.
 type UpdateOpts struct {
-	Cluster  string             `h:"X-Limes-Cluster-Id"`
 	Services limes.QuotaRequest `json:"services"`
 }
 
@@ -139,7 +138,7 @@ func Update(c *gophercloud.ServiceClient, domainID string, opts UpdateOptsBuilde
 		return
 	}
 	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{
-		OkCodes:     []int{202},
+		OkCodes:     []int{http.StatusAccepted},
 		MoreHeaders: h,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)

@@ -1,0 +1,44 @@
+{
+  "domains": [
+    {
+      "id": "uuid-for-karachi",
+      "name": "karachi",
+      "services": [
+        {
+          "type": "shared",
+          "area": "shared",
+          "resources": [
+            {
+              "name": "things",
+              "quota": 10,
+              "projects_quota": 5,
+              "usage": 2
+            }
+          ],
+          "max_scraped_at": 22,
+          "min_scraped_at": 22
+        }
+      ]
+    },
+    {
+      "id": "uuid-for-lahore",
+      "name": "lahore",
+      "services": [
+        {
+          "type": "shared",
+          "area": "shared",
+          "resources": [
+            {
+              "name": "things",
+              "quota": 10,
+              "projects_quota": 5,
+              "usage": 2
+            }
+          ],
+          "max_scraped_at": 22,
+          "min_scraped_at": 22
+        }
+      ]
+    }
+  ]
+}
