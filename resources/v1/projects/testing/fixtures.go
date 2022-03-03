@@ -40,7 +40,7 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 
 		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))
 		th.AssertNoErr(t, err)
-		fmt.Fprint(w, string(jsonBytes))
+		w.Write(jsonBytes)
 	})
 }
 
@@ -72,7 +72,7 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 
 		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))
 		th.AssertNoErr(t, err)
-		fmt.Fprint(w, string(jsonBytes))
+		w.Write(jsonBytes)
 	})
 }
 
