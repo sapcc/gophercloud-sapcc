@@ -50,7 +50,6 @@ func TestGetCluster(t *testing.T) {
 				MinScrapedAt: p2i64(33),
 			},
 			"unshared": &limes.ClusterServiceReport{
-				Shared: true,
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "contradiction",
@@ -102,7 +101,6 @@ func TestGetFilteredCluster(t *testing.T) {
 		ID: "pakistan",
 		Services: limes.ClusterServiceReports{
 			"unshared": &limes.ClusterServiceReport{
-				Shared: true,
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "contradiction",

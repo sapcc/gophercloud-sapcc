@@ -24,7 +24,6 @@
         "min_scraped_at": 33
       },
       {
-        "shared": true,
         "type": "unshared",
         "area": "contradiction",
         "resources": [

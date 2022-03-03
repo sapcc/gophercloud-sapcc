@@ -3,7 +3,6 @@
     "id": "pakistan",
     "services": [
       {
-        "shared": true,
         "type": "unshared",
         "area": "contradiction",
         "resources": [
