@@ -1,0 +1,53 @@
+{
+  "cluster": {
+    "id": "pakistan",
+    "services": [
+      {
+        "type": "shared",
+        "area": "shared",
+        "resources": [
+          {
+            "name": "stuff",
+            "capacity": 10,
+            "domains_quota": 5,
+            "unit": "B",
+            "usage": 2
+          },
+          {
+            "name": "things",
+            "capacity": 10,
+            "domains_quota": 5,
+            "usage": 2
+          }
+        ],
+        "max_scraped_at": 33,
+        "min_scraped_at": 33
+      },
+      {
+        "shared": true,
+        "type": "unshared",
+        "area": "contradiction",
+        "resources": [
+          {
+            "name": "stuff",
+            "capacity": 10,
+            "comment": "tasty tests are so tasty",
+            "domains_quota": 5,
+            "unit": "B",
+            "usage": 2
+          },
+          {
+            "name": "things",
+            "capacity": 10,
+            "domains_quota": 5,
+            "usage": 2
+          }
+        ],
+        "max_scraped_at": 33,
+        "min_scraped_at": 33
+      }
+    ],
+    "max_scraped_at": 22,
+    "min_scraped_at": 22
+  }
+}
