@@ -1,7 +1,7 @@
 package projects
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/gophercloud/gophercloud"
@@ -161,7 +161,7 @@ func Update(c *gophercloud.ServiceClient, domainID string, projectID string, opt
 		return
 	}
 	defer resp.Body.Close()
-	r.Body, r.Err = ioutil.ReadAll(resp.Body)
+	r.Body, r.Err = io.ReadAll(resp.Body)
 	return
 }
 

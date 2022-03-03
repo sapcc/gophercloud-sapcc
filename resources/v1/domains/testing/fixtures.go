@@ -2,8 +2,8 @@ package testing
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -27,7 +27,7 @@ func HandleListDomainsSuccessfully(t *testing.T) {
 			fixtureName = "list-filtered.json"
 		}
 
-		jsonBytes, err := ioutil.ReadFile(filepath.Join("fixtures", fixtureName))
+		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))
 		th.AssertNoErr(t, err)
 		fmt.Fprint(w, string(jsonBytes))
 	})
@@ -49,7 +49,7 @@ func HandleGetDomainSuccessfully(t *testing.T) {
 			fixtureName = "get-filtered.json"
 		}
 
-		jsonBytes, err := ioutil.ReadFile(filepath.Join("fixtures", fixtureName))
+		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))
 		th.AssertNoErr(t, err)
 		fmt.Fprint(w, string(jsonBytes))
 	})
