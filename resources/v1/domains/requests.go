@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gophercloud/gophercloud"
-	"github.com/sapcc/limes"
+	"github.com/sapcc/go-api-declarations/limes"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the List request.

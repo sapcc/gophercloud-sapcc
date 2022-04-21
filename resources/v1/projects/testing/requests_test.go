@@ -6,8 +6,9 @@ import (
 	"github.com/gophercloud/gophercloud"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
+	"github.com/sapcc/go-api-declarations/limes"
+
 	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
-	"github.com/sapcc/limes"
 )
 
 func TestListProjects(t *testing.T) {

@@ -2,7 +2,7 @@ package clusters
 
 import (
 	"github.com/gophercloud/gophercloud"
-	"github.com/sapcc/limes"
+	"github.com/sapcc/go-api-declarations/limes"
 )
 
 // CommonResult is the result of a Get/List operation. Call its appropriate

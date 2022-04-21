@@ -5,8 +5,9 @@ import (
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	"github.com/sapcc/go-api-declarations/limes"
+
 	"github.com/sapcc/gophercloud-sapcc/resources/v1/domains"
-	"github.com/sapcc/limes"
 )
 
 func TestListDomain(t *testing.T) {

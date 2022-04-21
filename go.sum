@@ -265,6 +265,8 @@ github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af/go.mod h1:XWv6So
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/rs/cors v1.6.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=
 github.com/rs/cors v1.7.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=
+github.com/sapcc/go-api-declarations v1.0.0 h1:csuVc9HDrF9JF65f8I3PR7t3rLWbuKXVi7ZZkp8ZHRY=
+github.com/sapcc/go-api-declarations v1.0.0/go.mod h1:zS+2xqmbtAyQxQz1liJp0qxDgop78fb4Sfk/IB0PvH0=
 github.com/sapcc/go-bits v0.0.0-20180828115508-ed29938ce01c/go.mod h1:KeP5OOqQIgrauiDb/8shKWOq1YoplBALYNvpV4jizPo=
 github.com/sapcc/go-bits v0.0.0-20190910095551-3863bd6b4943/go.mod h1:YpW83RbRSHPedMBfuvdfYJMQbejxSxzK1Kj/39szShw=
 github.com/sapcc/go-bits v0.0.0-20220420164641-de8a04267267 h1:r4qHi4KEXtlRmHDhUvJZcaNx5w5AANwryt2zGFZxZY0=
@@ -273,8 +275,6 @@ github.com/sapcc/hermes v0.0.0-20190722215605-d772f40f9fc6/go.mod h1:WM5CVlqFCGM
 github.com/sapcc/hermes v0.0.0-20220325003036-ae3739880b29/go.mod h1:1fxCUJjYnq0n63o61aXG+5G1oCKApPb667aiGawNvHQ=
 github.com/sapcc/hermes v0.0.0-20220420173150-ce9c7348dca6 h1:0/ndvMIpDyuTk7FOVCTv9mYeBwPRuUTPsHCJLKzcco4=
 github.com/sapcc/hermes v0.0.0-20220420173150-ce9c7348dca6/go.mod h1:AL2rqovlBShcY0rQ4MbvtWsKpCJo0zVkrN6D/EDvcaA=
-github.com/sapcc/limes v0.0.0-20220421001348-020b456956f7 h1:vIofMcMgGCEqipmAvB64u6VdR7ZnyV333LO0lTPViMU=
-github.com/sapcc/limes v0.0.0-20220421001348-020b456956f7/go.mod h1:2FJUai/kljs7LwKmG5FdWgG00ZREEd6ug50CeZednSY=
 github.com/sergi/go-diff v1.2.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=

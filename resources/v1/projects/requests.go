@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gophercloud/gophercloud"
-	"github.com/sapcc/limes"
+	"github.com/sapcc/go-api-declarations/limes"
 )
 
 // RatesDisplay determines the presence of rate limits in a project's Get/List response.
