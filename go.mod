@@ -5,8 +5,8 @@ go 1.17
 require (
 	github.com/gophercloud/gophercloud v0.24.0
 	github.com/gophercloud/utils v0.0.0-20220307143606-8e7800759d16
-	github.com/sapcc/hermes v0.0.0-20220420171133-3c3173acbc6e
-	github.com/sapcc/limes v0.0.0-20220420174925-1b3d2fd7fdbc
+	github.com/sapcc/hermes v0.0.0-20220420173150-ce9c7348dca6
+	github.com/sapcc/limes v0.0.0-20220421001348-020b456956f7
 )
 
 require (
