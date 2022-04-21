@@ -1,6 +1,7 @@
 package testing
 
 import (
+	"encoding/json"
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/testhelper"
@@ -115,7 +116,7 @@ func TestGetFilteredCluster(t *testing.T) {
 						Capacity:      &cap,
 						DomainsQuota:  p2ui64(4),
 						Usage:         2,
-						Subcapacities: `[{"cores":200,"hypervisor":"cluster-1"},{"cores":800,"hypervisor":"cluster-2"}]`,
+						Subcapacities: json.RawMessage(`[{"cores":200,"hypervisor":"cluster-1"},{"cores":800,"hypervisor":"cluster-2"}]`),
 					},
 				},
 				MaxScrapedAt: p2i64(33),
