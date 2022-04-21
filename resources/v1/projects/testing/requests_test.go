@@ -509,7 +509,7 @@ func TestGetProjectDetailed(t *testing.T) {
 						},
 						Quota:        p2ui64(10),
 						Usage:        2,
-						Subresources: limes.JSONString(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
+						Subresources: json.RawMessage(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
 					},
 				},
 				ScrapedAt: p2i64(22),
