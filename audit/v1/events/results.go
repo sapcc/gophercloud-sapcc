@@ -3,7 +3,7 @@ package events
 import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
-	"github.com/sapcc/hermes/pkg/cadf"
+	"github.com/sapcc/go-api-declarations/cadf"
 )
 
 type GetResult struct {
