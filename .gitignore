@@ -1,0 +1,3 @@
+# We use go-makefile-maker for only generating GitHub workflows and don't need
+# the Makefile it generates.
+Makefile
