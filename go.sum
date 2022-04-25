@@ -16,8 +16,8 @@ github.com/sapcc/go-api-declarations v1.1.0 h1:xZDnW0LmpAqCX7j8TJ+V3gnBmV4CjXviF
 github.com/sapcc/go-api-declarations v1.1.0/go.mod h1:zS+2xqmbtAyQxQz1liJp0qxDgop78fb4Sfk/IB0PvH0=
 github.com/sapcc/go-bits v0.0.0-20220421001326-5fc35d483379 h1:L0+tCCnbgOCqIepWpzEZp6CcR086TogTwLuROxMtw/U=
 github.com/sapcc/go-bits v0.0.0-20220421001326-5fc35d483379/go.mod h1:cDXXlfA5JDB2K2wJ/Y3mgkBabmXRJPHUkPrx4Jt8XD0=
-github.com/sapcc/hermes v0.0.0-20220421185221-22632bbd8e54 h1:hS8z08Xsv5OoQWw0+QveMB/G7wuYjgwL9P7oaHwTJPY=
-github.com/sapcc/hermes v0.0.0-20220421185221-22632bbd8e54/go.mod h1:K3qhEgThuwKNGMjzM+ZkWm4EOLJqDfdaPNz/gCN2p8Y=
+github.com/sapcc/hermes v0.0.0-20220422160131-8bbc517e425c h1:Y+fD6f6bewxflMaQhcWGkTOfjti9ib12dTkqLMrH4RI=
+github.com/sapcc/hermes v0.0.0-20220422160131-8bbc517e425c/go.mod h1:TeqTDT9Gg6TxJJ9cPd82NQVxtkGRrcqNPMGDlBWwPPM=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad/go.mod h1:jdWPYTVW3xRLrWPugEBEK3UY2ZEsg3UU495nc5E+M+I=
 golang.org/x/crypto v0.0.0-20211202192323-5770296d904e/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
