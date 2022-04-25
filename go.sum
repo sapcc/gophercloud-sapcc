@@ -12,8 +12,8 @@ github.com/hashicorp/golang-lru v0.5.4 h1:YDjusn29QI/Das2iO9M0BHnIbxPeyuCHsjMW+l
 github.com/hashicorp/golang-lru v0.5.4/go.mod h1:iADmTwqILo4mZ8BN3D2Q6+9jd8WM5uGBxy+E8yxSoD4=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
 github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
-github.com/sapcc/go-api-declarations v1.0.0 h1:csuVc9HDrF9JF65f8I3PR7t3rLWbuKXVi7ZZkp8ZHRY=
-github.com/sapcc/go-api-declarations v1.0.0/go.mod h1:zS+2xqmbtAyQxQz1liJp0qxDgop78fb4Sfk/IB0PvH0=
+github.com/sapcc/go-api-declarations v1.1.0 h1:xZDnW0LmpAqCX7j8TJ+V3gnBmV4CjXviFxnjISCxUcE=
+github.com/sapcc/go-api-declarations v1.1.0/go.mod h1:zS+2xqmbtAyQxQz1liJp0qxDgop78fb4Sfk/IB0PvH0=
 github.com/sapcc/go-bits v0.0.0-20220421001326-5fc35d483379 h1:L0+tCCnbgOCqIepWpzEZp6CcR086TogTwLuROxMtw/U=
 github.com/sapcc/go-bits v0.0.0-20220421001326-5fc35d483379/go.mod h1:cDXXlfA5JDB2K2wJ/Y3mgkBabmXRJPHUkPrx4Jt8XD0=
 github.com/sapcc/hermes v0.0.0-20220421185221-22632bbd8e54 h1:hS8z08Xsv5OoQWw0+QveMB/G7wuYjgwL9P7oaHwTJPY=
