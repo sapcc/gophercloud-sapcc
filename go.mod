@@ -1,6 +1,6 @@
 module github.com/sapcc/gophercloud-sapcc
 
-go 1.17
+go 1.18
 
 require (
 	github.com/gophercloud/gophercloud v0.25.0
