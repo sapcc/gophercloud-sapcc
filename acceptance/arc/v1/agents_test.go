@@ -27,11 +27,11 @@ func TestAgentInit(t *testing.T) {
 	jsonConfig, err := InitAgent(t, client, "application/json")
 	th.AssertNoErr(t, err)
 
-	var initJson agents.InitJSON
-	err = json.Unmarshal([]byte(*jsonConfig), &initJson)
+	var initJSON agents.InitJSON
+	err = json.Unmarshal([]byte(*jsonConfig), &initJSON)
 	th.AssertNoErr(t, err)
 
-	tools.PrintResource(t, initJson)
+	tools.PrintResource(t, initJSON)
 }
 
 func TestAgentList(t *testing.T) {

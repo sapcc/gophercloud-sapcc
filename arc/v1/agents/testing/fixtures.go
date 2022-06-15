@@ -38,7 +38,7 @@ const GetResponse = `
 }
 `
 
-const InitResponseJson = `
+const InitResponseJSON = `
 {
   "token": "4d523051-089f-41ce-aaf7-727fee19c28a",
   "url": "https://arc.example.com/api/v1/agents/init/4d523051-089f-41ce-aaf7-727fee19c28a",

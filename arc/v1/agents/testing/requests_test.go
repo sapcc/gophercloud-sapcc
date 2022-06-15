@@ -155,7 +155,7 @@ func TestInitJSON(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, InitResponseJson)
+		fmt.Fprintf(w, InitResponseJSON)
 	})
 
 	jsonResp := &agents.InitJSON{
@@ -182,11 +182,11 @@ func TestInitJSON(t *testing.T) {
 	n, err := response.ExtractContent()
 	th.AssertNoErr(t, err)
 
-	var initJson agents.InitJSON
-	err = json.Unmarshal(n, &initJson)
+	var initJSON agents.InitJSON
+	err = json.Unmarshal(n, &initJSON)
 	th.AssertNoErr(t, err)
 
-	th.AssertDeepEquals(t, *jsonResp, initJson)
+	th.AssertDeepEquals(t, *jsonResp, initJSON)
 }
 
 // TODO required headers
