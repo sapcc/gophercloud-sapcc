@@ -17,6 +17,7 @@ func TestEventList(t *testing.T) {
 	var count int
 	var allEvents []events.Event
 
+	//nolint:errcheck
 	events.List(client, events.ListOpts{Limit: 5000}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		tmp, err := events.ExtractEvents(page)

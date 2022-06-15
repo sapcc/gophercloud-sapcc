@@ -74,6 +74,7 @@ func TestList(t *testing.T) {
 
 	count := 0
 
+	//nolint:errcheck
 	runs.List(fake.ServiceClient(), runs.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := runs.ExtractRuns(page)

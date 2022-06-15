@@ -48,6 +48,7 @@ func TestRunList(t *testing.T) {
 	count := 0
 	var allRuns []runs.Run
 
+	//nolint:errcheck
 	runs.List(client, runs.ListOpts{PerPage: 1}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		tmp, err := runs.ExtractRuns(page)

@@ -28,6 +28,6 @@ func HandleGetClusterSuccessfully(t *testing.T) {
 
 		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))
 		th.AssertNoErr(t, err)
-		w.Write(jsonBytes)
+		w.Write(jsonBytes) //nolint:errcheck
 	})
 }

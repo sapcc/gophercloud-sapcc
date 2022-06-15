@@ -41,6 +41,7 @@ func TestAgentList(t *testing.T) {
 	var count int
 	var allAgents []agents.Agent
 
+	//nolint:errcheck
 	agents.List(client, agents.ListOpts{PerPage: 1}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		tmp, err := agents.ExtractAgents(page)

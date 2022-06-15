@@ -75,6 +75,7 @@ func TestList(t *testing.T) {
 
 	count := 0
 
+	//nolint:errcheck
 	jobs.List(fake.ServiceClient(), jobs.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := jobs.ExtractJobs(page)

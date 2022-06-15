@@ -62,6 +62,7 @@ func TestList(t *testing.T) {
 
 	count := 0
 
+	//nolint:errcheck
 	automations.List(fake.ServiceClient(), automations.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := automations.ExtractAutomations(page)

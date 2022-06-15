@@ -85,6 +85,7 @@ func TestList(t *testing.T) {
 
 	count := 0
 
+	//nolint:errcheck
 	events.List(fake.ServiceClient(), events.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := events.ExtractEvents(page)
@@ -96,7 +97,7 @@ func TestList(t *testing.T) {
 		th.CheckDeepEquals(t, eventsList, actual)
 
 		return true, nil
-	})
+	}) //nolint:errcheck
 
 	if count != 1 {
 		t.Errorf("Expected 1 page, got %d", count)
