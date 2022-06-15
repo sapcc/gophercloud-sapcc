@@ -27,7 +27,7 @@ func (opts ListOpts) ToPriceListQuery() (string, error) {
 		return "", fmt.Errorf("option Region is required, when From or To are set")
 	}
 
-	if opts.OnlyActive == true && opts.Region != "" {
+	if opts.OnlyActive && opts.Region != "" {
 		return "", fmt.Errorf("cannot use OnlyActive, when Region is set")
 	}
 
