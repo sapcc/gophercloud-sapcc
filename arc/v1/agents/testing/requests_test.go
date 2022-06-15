@@ -193,6 +193,9 @@ func TestInitJSON(t *testing.T) {
 // TODO required headers
 /*
 func TestRequiredInitOpts(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
 	res := agents.Init(fake.ServiceClient(), agents.InitOpts{})
 	if res.Err == nil || !strings.Contains(fmt.Sprintf("%s", res.Err), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
