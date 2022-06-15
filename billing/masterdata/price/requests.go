@@ -20,15 +20,15 @@ type ListOpts struct {
 // ToPriceListQuery formats a ListOpts into a query string.
 func (opts ListOpts) ToPriceListQuery() (string, error) {
 	if opts.Region != "" && opts.MetricType == "" {
-		return "", fmt.Errorf("MetricType option is required, when Region is set")
+		return "", fmt.Errorf("option MetricType is required, when Region is set")
 	}
 
 	if (opts.From != (time.Time{}) || opts.To != (time.Time{})) && opts.Region == "" {
-		return "", fmt.Errorf("Region option is required, when From or To are set")
+		return "", fmt.Errorf("option Region is required, when From or To are set")
 	}
 
 	if opts.OnlyActive == true && opts.Region != "" {
-		return "", fmt.Errorf("Cannot use OnlyActive, when Region is set")
+		return "", fmt.Errorf("cannot use OnlyActive, when Region is set")
 	}
 
 	q, err := gophercloud.BuildQueryString(opts)

@@ -68,7 +68,7 @@ func UpdateProjectField(t *testing.T, client *gophercloud.ServiceClient, project
 		data := update(t, client, project.ProjectID, opts)
 		th.AssertDeepEquals(t, opts.CostObject, data.CostObject)
 	default:
-		th.AssertNoErr(t, fmt.Errorf("Unknown field %s", field))
+		th.AssertNoErr(t, fmt.Errorf("unknown field %s", field))
 	}
 }
 
