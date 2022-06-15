@@ -57,7 +57,7 @@ func TestList(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, ListResponse)
+		fmt.Fprint(w, ListResponse)
 	})
 
 	count := 0
@@ -92,7 +92,7 @@ func TestGet(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, GetResponse)
+		fmt.Fprint(w, GetResponse)
 	})
 
 	n, err := automations.Get(fake.ServiceClient(), "2").Extract()
@@ -115,7 +115,7 @@ func TestCreate(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 
-		fmt.Fprintf(w, CreateResponse)
+		fmt.Fprint(w, CreateResponse)
 	})
 
 	options := automations.CreateOpts{
@@ -157,7 +157,7 @@ func TestUpdate(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, UpdateResponse)
+		fmt.Fprint(w, UpdateResponse)
 	})
 
 	options := automations.UpdateOpts{Debug: new(bool)}
@@ -184,7 +184,7 @@ func TestUpdateCreds(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, UpdateResponseCreds)
+		fmt.Fprint(w, UpdateResponseCreds)
 	})
 
 	creds := "foobar"
@@ -212,7 +212,7 @@ func TestRemoveRunList(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, RemoveRunListResponse)
+		fmt.Fprint(w, RemoveRunListResponse)
 	})
 
 	options := automations.UpdateOpts{

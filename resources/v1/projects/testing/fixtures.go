@@ -108,7 +108,7 @@ func HandleUpdateProjectPartly(t *testing.T) {
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.WriteHeader(http.StatusAccepted)
-		fmt.Fprintf(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
+		fmt.Fprint(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
 	})
 }
 
@@ -120,6 +120,6 @@ func HandleUpdateProjectUnsuccessfully(t *testing.T) {
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
+		fmt.Fprint(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
 	})
 }

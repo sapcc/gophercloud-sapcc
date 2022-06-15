@@ -70,7 +70,7 @@ func TestList(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, ListResponse)
+		fmt.Fprint(w, ListResponse)
 	})
 
 	count := 0
@@ -105,7 +105,7 @@ func TestGet(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, GetResponse)
+		fmt.Fprint(w, GetResponse)
 	})
 
 	n, err := jobs.Get(fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
@@ -128,7 +128,7 @@ func TestCreate(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, CreateResponse)
+		fmt.Fprint(w, CreateResponse)
 	})
 
 	options := jobs.CreateOpts{
@@ -153,7 +153,7 @@ func TestGetLog(t *testing.T) {
 		w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, LogResponse)
+		fmt.Fprint(w, LogResponse)
 	})
 
 	response := jobs.GetLog(fake.ServiceClient(), "7ec336bd-fcd1-42af-a663-da578dd0b224")

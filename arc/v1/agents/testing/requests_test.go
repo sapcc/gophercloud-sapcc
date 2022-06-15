@@ -67,7 +67,7 @@ func TestList(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, ListResponse)
+		fmt.Fprint(w, ListResponse)
 	})
 
 	count := 0
@@ -102,7 +102,7 @@ func TestGet(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, GetResponse)
+		fmt.Fprint(w, GetResponse)
 	})
 
 	n, err := agents.Get(fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
@@ -123,7 +123,7 @@ func TestInit(t *testing.T) {
 		w.Header().Add("Content-Type", "text/x-powershellscript")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, InitResponsePowerShell)
+		fmt.Fprint(w, InitResponsePowerShell)
 	})
 
 	options := agents.InitOpts{
@@ -156,7 +156,7 @@ func TestInitJSON(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, InitResponseJSON)
+		fmt.Fprint(w, InitResponseJSON)
 	})
 
 	jsonResp := &agents.InitJSON{
@@ -227,7 +227,7 @@ func TestGetTags(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, GetTagsResponse)
+		fmt.Fprint(w, GetTagsResponse)
 	})
 
 	n, err := agents.GetTags(fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
@@ -279,7 +279,7 @@ func TestGetFacts(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, GetFactsResponse)
+		fmt.Fprint(w, GetFactsResponse)
 	})
 
 	n, err := agents.GetFacts(fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
