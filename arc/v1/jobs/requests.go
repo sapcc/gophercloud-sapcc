@@ -1,7 +1,7 @@
 package jobs
 
 import (
-	"io/ioutil"
+	"io"
 
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
@@ -107,6 +107,6 @@ func GetLog(c *gophercloud.ServiceClient, id string) (r GetLogResult) {
 		return
 	}
 	defer resp.Body.Close()
-	r.Body, r.Err = ioutil.ReadAll(resp.Body)
+	r.Body, r.Err = io.ReadAll(resp.Body)
 	return
 }

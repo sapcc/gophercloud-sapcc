@@ -1,7 +1,7 @@
 package agents
 
 import (
-	"io/ioutil"
+	"io"
 
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
@@ -100,7 +100,7 @@ func Init(c *gophercloud.ServiceClient, opts InitOptsBuilder) (r InitResult) {
 		return
 	}
 	defer resp.Body.Close()
-	r.Body, r.Err = ioutil.ReadAll(resp.Body)
+	r.Body, r.Err = io.ReadAll(resp.Body)
 	return
 }
 
