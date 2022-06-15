@@ -7,6 +7,7 @@ import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/acceptance/clients"
 	"github.com/gophercloud/gophercloud/openstack"
+
 	cc_clients "github.com/sapcc/gophercloud-sapcc/clients"
 )
 

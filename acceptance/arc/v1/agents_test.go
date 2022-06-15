@@ -8,6 +8,7 @@ import (
 	"github.com/gophercloud/gophercloud/acceptance/tools"
 	"github.com/gophercloud/gophercloud/pagination"
 	th "github.com/gophercloud/gophercloud/testhelper"
+
 	"github.com/sapcc/gophercloud-sapcc/arc/v1/agents"
 )
 

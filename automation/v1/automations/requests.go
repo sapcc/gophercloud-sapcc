@@ -172,7 +172,6 @@ func (opts UpdateOpts) ToAutomationUpdateMap() (map[string]interface{}, error) {
 	}
 
 	return b, nil
-
 }
 
 // Update accepts a UpdateOpts struct and updates an existing automation using

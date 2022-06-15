@@ -9,6 +9,7 @@ import (
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/go-api-declarations/cadf"
+
 	"github.com/sapcc/gophercloud-sapcc/audit/v1/events"
 )
 

@@ -8,6 +8,7 @@ import (
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/utils/client"
 	"github.com/gophercloud/utils/openstack/clientconfig"
+
 	"github.com/sapcc/gophercloud-sapcc/clients"
 )
 

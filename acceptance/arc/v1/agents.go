@@ -5,6 +5,7 @@ import (
 
 	"github.com/gophercloud/gophercloud"
 	th "github.com/gophercloud/gophercloud/testhelper"
+
 	"github.com/sapcc/gophercloud-sapcc/arc/v1/agents"
 )
 
