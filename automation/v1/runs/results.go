@@ -7,6 +7,8 @@ import (
 
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+
+	"github.com/sapcc/gophercloud-sapcc/util"
 )
 
 const (
@@ -112,37 +114,10 @@ func (r RunPage) NextPageURL() (string, error) {
 
 // LastMarker returns the next page in a ListResult.
 func (r RunPage) LastMarker() (string, error) {
-	totalPages := -1
-	currentPage := -1
-	var err error
-
-	page := r.URL.Query().Get("page")
-	if page == "" {
-		currentPage = 1
-	} else {
-		currentPage, err = strconv.Atoi(page)
-		if err != nil {
-			return invalidMarker, err
-		}
-		if currentPage < 1 {
-			currentPage = 1
-		}
+	currentPage, totalPages, err := util.GetCurrentAndTotalPages(r.MarkerPageBase)
+	if err != nil || currentPage >= totalPages {
+		return invalidMarker, err
 	}
-
-	if pages, ok := r.Header["Pagination-Pages"]; ok {
-		for _, p := range pages {
-			totalPages, err = strconv.Atoi(p)
-			if err != nil {
-				return invalidMarker, err
-			}
-			break
-		}
-	}
-
-	if currentPage >= totalPages {
-		return invalidMarker, nil
-	}
-
 	return strconv.Itoa(currentPage + 1), nil
 }
 
