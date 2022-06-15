@@ -18,10 +18,6 @@ func getURL(c *gophercloud.ServiceClient, id string) string {
 	return resourceURL(c, id)
 }
 
-func createURL(c *gophercloud.ServiceClient) string {
-	return rootURL(c)
-}
-
 func initURL(c *gophercloud.ServiceClient) string {
 	return c.ServiceURL("agents", "init")
 }
