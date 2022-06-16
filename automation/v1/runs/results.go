@@ -1,3 +1,17 @@
+// Copyright 2020 SAP SE
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package runs
 
 import (
@@ -7,6 +21,8 @@ import (
 
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+
+	"github.com/sapcc/gophercloud-sapcc/util"
 )
 
 const (
@@ -112,37 +128,10 @@ func (r RunPage) NextPageURL() (string, error) {
 
 // LastMarker returns the next page in a ListResult.
 func (r RunPage) LastMarker() (string, error) {
-	totalPages := -1
-	currentPage := -1
-	var err error
-
-	page := r.URL.Query().Get("page")
-	if page == "" {
-		currentPage = 1
-	} else {
-		currentPage, err = strconv.Atoi(page)
-		if err != nil {
-			return invalidMarker, err
-		}
-		if currentPage < 1 {
-			currentPage = 1
-		}
+	currentPage, totalPages, err := util.GetCurrentAndTotalPages(r.MarkerPageBase)
+	if err != nil || currentPage >= totalPages {
+		return invalidMarker, err
 	}
-
-	if pages, ok := r.Header["Pagination-Pages"]; ok {
-		for _, p := range pages {
-			totalPages, err = strconv.Atoi(p)
-			if err != nil {
-				return invalidMarker, err
-			}
-			break
-		}
-	}
-
-	if currentPage >= totalPages {
-		return invalidMarker, nil
-	}
-
 	return strconv.Itoa(currentPage + 1), nil
 }
 

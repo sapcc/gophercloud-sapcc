@@ -1,3 +1,17 @@
+// Copyright 2020 SAP SE
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package v1
 
 import (
@@ -8,6 +22,7 @@ import (
 	"github.com/gophercloud/gophercloud/acceptance/tools"
 	"github.com/gophercloud/gophercloud/pagination"
 	th "github.com/gophercloud/gophercloud/testhelper"
+
 	"github.com/sapcc/gophercloud-sapcc/arc/v1/agents"
 )
 
@@ -26,11 +41,11 @@ func TestAgentInit(t *testing.T) {
 	jsonConfig, err := InitAgent(t, client, "application/json")
 	th.AssertNoErr(t, err)
 
-	var initJson agents.InitJSON
-	err = json.Unmarshal([]byte(*jsonConfig), &initJson)
+	var initJSON agents.InitJSON
+	err = json.Unmarshal([]byte(*jsonConfig), &initJSON)
 	th.AssertNoErr(t, err)
 
-	tools.PrintResource(t, initJson)
+	tools.PrintResource(t, initJSON)
 }
 
 func TestAgentList(t *testing.T) {
@@ -40,6 +55,7 @@ func TestAgentList(t *testing.T) {
 	var count int
 	var allAgents []agents.Agent
 
+	//nolint:errcheck
 	agents.List(client, agents.ListOpts{PerPage: 1}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		tmp, err := agents.ExtractAgents(page)

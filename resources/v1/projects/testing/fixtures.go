@@ -1,3 +1,18 @@
+// Copyright 2020 SAP SE
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+//nolint:dupl
 package testing
 
 import (
@@ -41,7 +56,7 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 
 		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))
 		th.AssertNoErr(t, err)
-		w.Write(jsonBytes)
+		w.Write(jsonBytes) //nolint:errcheck
 	})
 }
 
@@ -73,7 +88,7 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 
 		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))
 		th.AssertNoErr(t, err)
-		w.Write(jsonBytes)
+		w.Write(jsonBytes) //nolint:errcheck
 	})
 }
 
@@ -107,7 +122,7 @@ func HandleUpdateProjectPartly(t *testing.T) {
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.WriteHeader(http.StatusAccepted)
-		fmt.Fprintf(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
+		fmt.Fprint(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
 	})
 }
 
@@ -119,6 +134,6 @@ func HandleUpdateProjectUnsuccessfully(t *testing.T) {
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
+		fmt.Fprint(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
 	})
 }

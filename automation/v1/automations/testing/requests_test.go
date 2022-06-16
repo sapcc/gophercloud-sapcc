@@ -1,3 +1,17 @@
+// Copyright 2020 SAP SE
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package testing
 
 import (
@@ -10,6 +24,7 @@ import (
 	"github.com/gophercloud/gophercloud/pagination"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
+
 	"github.com/sapcc/gophercloud-sapcc/automation/v1/automations"
 )
 
@@ -56,11 +71,12 @@ func TestList(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, ListResponse)
+		fmt.Fprint(w, ListResponse)
 	})
 
 	count := 0
 
+	//nolint:errcheck
 	automations.List(fake.ServiceClient(), automations.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := automations.ExtractAutomations(page)
@@ -90,7 +106,7 @@ func TestGet(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, GetResponse)
+		fmt.Fprint(w, GetResponse)
 	})
 
 	n, err := automations.Get(fake.ServiceClient(), "2").Extract()
@@ -113,7 +129,7 @@ func TestCreate(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 
-		fmt.Fprintf(w, CreateResponse)
+		fmt.Fprint(w, CreateResponse)
 	})
 
 	options := automations.CreateOpts{
@@ -135,6 +151,9 @@ func TestCreate(t *testing.T) {
 }
 
 func TestRequiredCreateOpts(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
 	res := automations.Create(fake.ServiceClient(), automations.CreateOpts{})
 	if res.Err == nil || !strings.Contains(fmt.Sprintf("%s", res.Err), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
@@ -155,7 +174,7 @@ func TestUpdate(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, UpdateResponse)
+		fmt.Fprint(w, UpdateResponse)
 	})
 
 	options := automations.UpdateOpts{Debug: new(bool)}
@@ -182,7 +201,7 @@ func TestUpdateCreds(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, UpdateResponseCreds)
+		fmt.Fprint(w, UpdateResponseCreds)
 	})
 
 	creds := "foobar"
@@ -210,7 +229,7 @@ func TestRemoveRunList(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, RemoveRunListResponse)
+		fmt.Fprint(w, RemoveRunListResponse)
 	})
 
 	options := automations.UpdateOpts{

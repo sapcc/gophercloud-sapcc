@@ -1,16 +1,35 @@
 # Configuration file for <https://github.com/sapcc/go-makefile-maker>
 
+testPackages:
+  # Tests under the `acceptance` directory require OpenStack therefore we don't
+  # run them when `make check` is invoked as this would result in a non-zero
+  # exit code in our CI.
+  except: '/acceptance'
+
+coverageTest:
+  # Tests under the `acceptance` directory require OpenStack therefore we
+  # ignore these packages for coverage reporting.
+  except: '/acceptance'
+
+golangciLint:
+  createConfig: true
+
+renovate:
+  enabled: true
+
 githubWorkflow:
   global:
     assignees:
       - majewsky
       - SuperSandro2000
     ignorePaths: [ "**.md" ] # all Markdown files
+  ci:
+    enabled: true
+    coveralls: true
+  license:
+    enabled: true
   securityChecks:
     enabled: true
   spellCheck:
     enabled: true
     ignorePaths: [] # override global setting so that nothing is ignored
-
-renovate:
-  enabled: true

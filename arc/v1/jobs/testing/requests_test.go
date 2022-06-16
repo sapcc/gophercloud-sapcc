@@ -1,3 +1,17 @@
+// Copyright 2020 SAP SE
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package testing
 
 import (
@@ -10,6 +24,7 @@ import (
 	"github.com/gophercloud/gophercloud/pagination"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
+
 	"github.com/sapcc/gophercloud-sapcc/arc/v1/jobs"
 )
 
@@ -69,11 +84,12 @@ func TestList(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, ListResponse)
+		fmt.Fprint(w, ListResponse)
 	})
 
 	count := 0
 
+	//nolint:errcheck
 	jobs.List(fake.ServiceClient(), jobs.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := jobs.ExtractJobs(page)
@@ -103,7 +119,7 @@ func TestGet(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, GetResponse)
+		fmt.Fprint(w, GetResponse)
 	})
 
 	n, err := jobs.Get(fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
@@ -126,7 +142,7 @@ func TestCreate(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, CreateResponse)
+		fmt.Fprint(w, CreateResponse)
 	})
 
 	options := jobs.CreateOpts{
@@ -151,7 +167,7 @@ func TestGetLog(t *testing.T) {
 		w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
 
-		fmt.Fprintf(w, LogResponse)
+		fmt.Fprint(w, LogResponse)
 	})
 
 	response := jobs.GetLog(fake.ServiceClient(), "7ec336bd-fcd1-42af-a663-da578dd0b224")
@@ -170,6 +186,9 @@ func TestGetLog(t *testing.T) {
 }
 
 func TestRequiredCreateOpts(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
 	res := jobs.Create(fake.ServiceClient(), jobs.CreateOpts{})
 	if res.Err == nil || !strings.Contains(fmt.Sprintf("%s", res.Err), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
