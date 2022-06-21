@@ -61,11 +61,12 @@ type ListOpts struct {
 	InitiatorType string `q:"initiator_type"`
 	InitiatorName string `q:"initiator_name"`
 
-	Action    string `q:"action"`
-	Outcome   string `q:"outcome"`
-	Time      []DateQuery
-	DomainID  string `q:"domain_id"`
-	ProjectID string `q:"project_id"`
+	Action      string `q:"action"`
+	Outcome     string `q:"outcome"`
+	RequestPath string `q:"request_path"`
+	Time        []DateQuery
+	DomainID    string `q:"domain_id"`
+	ProjectID   string `q:"project_id"`
 
 	// Sort will sort the results in the requested order.
 	Sort string `q:"sort"`
