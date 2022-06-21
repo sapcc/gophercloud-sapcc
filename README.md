@@ -1,6 +1,8 @@
 # gophercloud-sapcc
 
-[![PkgGoDev](https://pkg.go.dev/badge/sapcc/gophercloud-sapcc)](https://pkg.go.dev/github.com/sapcc/gophercloud-sapcc?tab=subdirectories)
+[![Go Reference](https://pkg.go.dev/badge/github.com/sapcc/gophercloud-sapcc.svg)](https://pkg.go.dev/github.com/sapcc/gophercloud-sapcc)
+[![Coverage Status](https://coveralls.io/repos/github/sapcc/gophercloud-sapcc/badge.svg?branch=master)](https://coveralls.io/github/sapcc/gophercloud-sapcc?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/sapcc/gophercloud-sapcc)](https://goreportcard.com/report/github.com/sapcc/gophercloud-sapcc)
 
 Gophercloud extensions for:
 
