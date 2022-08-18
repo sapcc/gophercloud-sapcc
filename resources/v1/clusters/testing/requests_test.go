@@ -33,7 +33,7 @@ func TestGetCluster(t *testing.T) {
 	actual, err := clusters.Get(fake.ServiceClient(), clusters.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
-	var cap uint64 = 10
+	var capacity uint64 = 10
 	var scrap int64 = 22
 	expected := &limes.ClusterReport{
 		ID: "pakistan",
@@ -49,7 +49,7 @@ func TestGetCluster(t *testing.T) {
 							Name: "stuff",
 							Unit: limes.UnitBytes,
 						},
-						Capacity:     &cap,
+						Capacity:     &capacity,
 						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
@@ -57,7 +57,7 @@ func TestGetCluster(t *testing.T) {
 						ResourceInfo: limes.ResourceInfo{
 							Name: "things",
 						},
-						Capacity:     &cap,
+						Capacity:     &capacity,
 						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
@@ -76,7 +76,7 @@ func TestGetCluster(t *testing.T) {
 							Name: "stuff",
 							Unit: limes.UnitBytes,
 						},
-						Capacity:     &cap,
+						Capacity:     &capacity,
 						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
@@ -84,7 +84,7 @@ func TestGetCluster(t *testing.T) {
 						ResourceInfo: limes.ResourceInfo{
 							Name: "things",
 						},
-						Capacity:     &cap,
+						Capacity:     &capacity,
 						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
@@ -111,7 +111,7 @@ func TestGetFilteredCluster(t *testing.T) {
 	}).Extract()
 	th.AssertNoErr(t, err)
 
-	var cap uint64 = 10
+	var capacity uint64 = 10
 	var scrap int64 = 22
 	expected := &limes.ClusterReport{
 		ID: "pakistan",
@@ -127,7 +127,7 @@ func TestGetFilteredCluster(t *testing.T) {
 							Name: "stuff",
 							Unit: limes.UnitBytes,
 						},
-						Capacity:      &cap,
+						Capacity:      &capacity,
 						DomainsQuota:  p2ui64(4),
 						Usage:         2,
 						Subcapacities: json.RawMessage(`[{"cores":200,"hypervisor":"cluster-1"},{"cores":800,"hypervisor":"cluster-2"}]`),

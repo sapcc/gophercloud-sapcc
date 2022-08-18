@@ -163,12 +163,14 @@ const UpdateResponse = `
 }
 `
 
+//nolint:gosec // test fixtures
 const UpdateRequestCreds = `
 {
   "repository_credentials": "foobar"
 }
 `
 
+//nolint:gosec // test fixtures
 const UpdateResponseCreds = `
 {
   "id": 2,

@@ -44,7 +44,7 @@ func tagsURL(c *gophercloud.ServiceClient, id string) string {
 	return c.ServiceURL("agents", id, "tags")
 }
 
-func deleteTagURL(c *gophercloud.ServiceClient, id string, key string) string {
+func deleteTagURL(c *gophercloud.ServiceClient, id, key string) string {
 	return c.ServiceURL("agents", id, "tags", key)
 }
 

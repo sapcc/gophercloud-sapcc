@@ -88,15 +88,15 @@ func ListObjects(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.
 	return list(c, opts, listURL(c, "objects"))
 }
 
-func list(c *gophercloud.ServiceClient, opts ListOptsBuilder, url string) pagination.Pager {
+func list(c *gophercloud.ServiceClient, opts ListOptsBuilder, serviceURL string) pagination.Pager {
 	if opts != nil {
 		query, err := opts.ToCostingListQuery()
 		if err != nil {
 			return pagination.Pager{Err: err}
 		}
-		url += query
+		serviceURL += query
 	}
-	return pagination.NewPager(c, url, func(r pagination.PageResult) pagination.Page {
+	return pagination.NewPager(c, serviceURL, func(r pagination.PageResult) pagination.Page {
 		return CostingPage{pagination.SinglePageBase(r)}
 	})
 }

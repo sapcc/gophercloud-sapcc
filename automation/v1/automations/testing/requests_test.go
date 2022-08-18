@@ -155,7 +155,7 @@ func TestRequiredCreateOpts(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	res := automations.Create(fake.ServiceClient(), automations.CreateOpts{})
-	if res.Err == nil || !strings.Contains(fmt.Sprintf("%s", res.Err), "Missing input for argument") {
+	if res.Err == nil || !strings.Contains(res.Err.Error(), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
 	}
 }

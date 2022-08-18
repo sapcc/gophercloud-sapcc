@@ -162,7 +162,7 @@ func GetTags(client *gophercloud.ServiceClient, agentID string) (r TagsResult) {
 }
 
 // DeleteTag deletes an individual tag from an agent.
-func DeleteTag(client *gophercloud.ServiceClient, agentID string, key string) (r TagsErrResult) {
+func DeleteTag(client *gophercloud.ServiceClient, agentID, key string) (r TagsErrResult) {
 	resp, err := client.Delete(deleteTagURL(client, agentID, key), &gophercloud.RequestOpts{
 		OkCodes: []int{204},
 	})
