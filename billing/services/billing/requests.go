@@ -65,15 +65,15 @@ func (opts ListOpts) ToBillingListQuery() (string, error) {
 // List returns a Pager which allows you to iterate over a collection of
 // billing.
 func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
-	url := listURL(c)
+	serviceURL := listURL(c)
 	if opts != nil {
 		query, err := opts.ToBillingListQuery()
 		if err != nil {
 			return pagination.Pager{Err: err}
 		}
-		url += query
+		serviceURL += query
 	}
-	return pagination.NewPager(c, url, func(r pagination.PageResult) pagination.Page {
+	return pagination.NewPager(c, serviceURL, func(r pagination.PageResult) pagination.Page {
 		return BillingPage{pagination.SinglePageBase(r)}
 	})
 }

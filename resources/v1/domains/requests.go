@@ -35,7 +35,7 @@ type ListOpts struct {
 }
 
 // ToDomainListParams formats a ListOpts into a map of headers and a query string.
-func (opts ListOpts) ToDomainListParams() (map[string]string, string, error) {
+func (opts ListOpts) ToDomainListParams() (headers map[string]string, queryString string, err error) {
 	h, err := gophercloud.BuildHeaders(opts)
 	if err != nil {
 		return nil, "", err
@@ -63,7 +63,7 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) (r CommonResult) {
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -83,7 +83,7 @@ type GetOpts struct {
 }
 
 // ToDomainGetParams formats a GetOpts into a map of headers and a query string.
-func (opts GetOpts) ToDomainGetParams() (map[string]string, string, error) {
+func (opts GetOpts) ToDomainGetParams() (headers map[string]string, quersString string, err error) {
 	h, err := gophercloud.BuildHeaders(opts)
 	if err != nil {
 		return nil, "", err
@@ -111,7 +111,7 @@ func Get(c *gophercloud.ServiceClient, domainID string, opts GetOptsBuilder) (r 
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -129,7 +129,7 @@ type UpdateOpts struct {
 }
 
 // ToDomainUpdateMap formats a UpdateOpts into a map of headers and a request body.
-func (opts UpdateOpts) ToDomainUpdateMap() (map[string]string, map[string]interface{}, error) {
+func (opts UpdateOpts) ToDomainUpdateMap() (headers map[string]string, requestBody map[string]interface{}, err error) {
 	h, err := gophercloud.BuildHeaders(opts)
 	if err != nil {
 		return nil, nil, err
@@ -151,7 +151,7 @@ func Update(c *gophercloud.ServiceClient, domainID string, opts UpdateOptsBuilde
 		r.Err = err
 		return
 	}
-	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{
+	resp, err := c.Put(url, b, nil, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
 		OkCodes:     []int{http.StatusAccepted},
 		MoreHeaders: h,
 	})
