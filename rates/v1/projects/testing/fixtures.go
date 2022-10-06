@@ -35,9 +35,9 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fixtureName := "list-rates-only.json"
+		fixtureName := "list.json"
 		if r.URL.Query().Get("service") == "shared" {
-			fixtureName = "list-filtered-with-rates.json"
+			fixtureName = "list-filtered.json"
 		}
 
 		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))
@@ -56,9 +56,9 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
-		fixtureName := "get-rates-only.json"
+		fixtureName := "get.json"
 		if r.URL.Query().Get("service") == "shared" {
-			fixtureName = "get-filtered-with-rates.json"
+			fixtureName = "get-filtered.json"
 		}
 
 		jsonBytes, err := os.ReadFile(filepath.Join("fixtures", fixtureName))

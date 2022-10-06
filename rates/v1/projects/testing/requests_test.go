@@ -25,7 +25,7 @@ import (
 	"github.com/sapcc/gophercloud-sapcc/rates/v1/projects"
 )
 
-func TestListProjectsRatesOnly(t *testing.T) {
+func TestListProjectsRates(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
@@ -126,7 +126,7 @@ func TestListProjectsRatesOnly(t *testing.T) {
 	th.CheckDeepEquals(t, expected, actual)
 }
 
-func TestListProjectsFilteredWithRates(t *testing.T) {
+func TestListProjectsFilteredRates(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
@@ -203,7 +203,7 @@ func TestListProjectsFilteredWithRates(t *testing.T) {
 	th.CheckDeepEquals(t, expected, actual)
 }
 
-func TestGetProjectRatesOnly(t *testing.T) {
+func TestGetProjectRates(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	HandleGetProjectSuccessfully(t)
@@ -242,7 +242,7 @@ func TestGetProjectRatesOnly(t *testing.T) {
 	th.CheckDeepEquals(t, expected, actual)
 }
 
-func TestGetProjectFilteredWithRates(t *testing.T) {
+func TestGetProjectFilteredRates(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	HandleGetProjectSuccessfully(t)
