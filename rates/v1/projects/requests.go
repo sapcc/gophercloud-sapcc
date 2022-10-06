@@ -53,7 +53,7 @@ func List(c *gophercloud.ServiceClient, domainID string, opts ReadOptsBuilder) (
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -74,7 +74,7 @@ func Get(c *gophercloud.ServiceClient, domainID, projectID string, opts ReadOpts
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
+	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
