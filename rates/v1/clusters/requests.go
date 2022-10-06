@@ -27,6 +27,7 @@ type GetOptsBuilder interface {
 // GetOpts contains parameters for filtering a Get request.
 type GetOpts struct {
 	Services []string `q:"service"`
+	Areas    []string `q:"area"`
 }
 
 // ToClusterGetQuery formats a GetOpts into a query string.

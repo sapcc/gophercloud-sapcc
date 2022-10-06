@@ -35,7 +35,7 @@ func HandleGetClusterSuccessfully(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 
 		fixtureName := "get.json"
-		if r.URL.Query().Get("service") == "shared" {
+		if r.URL.Query().Get("service") == "shared" || r.URL.Query().Get("area") == "shared" {
 			fixtureName = "get-filtered.json"
 		}
 

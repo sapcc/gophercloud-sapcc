@@ -24,6 +24,7 @@ type ReadOptsBuilder interface {
 // ReadOpts contains parameters for filtering a Get/List request.
 type ReadOpts struct {
 	Services []string `q:"service"`
+	Areas    []string `q:"area"`
 }
 
 // ToProjectReadParams formats a ReadOpts into a map of headers and a query string.
