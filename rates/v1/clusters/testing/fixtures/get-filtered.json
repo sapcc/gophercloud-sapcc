@@ -1,0 +1,21 @@
+{
+  "cluster": {
+    "id": "current",
+    "services": [
+      {
+        "type": "shared",
+        "area": "shared",
+        "resources": [],
+        "rates": [
+          {
+            "name": "service/shared/objects:create",
+            "limit": 5000,
+            "window": "1s"
+          }
+        ],
+        "max_rates_scraped_at": 45,
+        "min_rates_scraped_at": 23
+      }
+    ]
+  }
+}

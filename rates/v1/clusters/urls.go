@@ -1,4 +1,4 @@
-// Copyright 2020 SAP SE
+// Copyright 2022 SAP SE
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,22 +14,8 @@
 
 package clusters
 
-import (
-	"github.com/gophercloud/gophercloud"
-	"github.com/sapcc/go-api-declarations/limes"
-)
+import "github.com/gophercloud/gophercloud"
 
-// CommonResult is the result of a Get operation. Call its appropriate
-// Extract method to interpret it as a Cluster.
-type CommonResult struct {
-	gophercloud.Result
-}
-
-// Extract interprets a CommonResult as a Cluster.
-func (r CommonResult) Extract() (*limes.ClusterReport, error) {
-	var s struct {
-		Cluster *limes.ClusterReport `json:"cluster"`
-	}
-	err := r.ExtractInto(&s)
-	return s.Cluster, err
+func getURL(client *gophercloud.ServiceClient) string {
+	return client.ServiceURL("clusters", "current")
 }

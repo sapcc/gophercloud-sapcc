@@ -1,4 +1,4 @@
-// Copyright 2020 SAP SE
+// Copyright 2022 SAP SE
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ import (
 	"github.com/sapcc/go-api-declarations/limes"
 )
 
-// CommonResult is the result of a Get operation. Call its appropriate
-// Extract method to interpret it as a Cluster.
+// CommonResult is the result of a Get/List operation. Call its appropriate
+// Extract method to interpret it as a Cluster or a slice of Clusters.
 type CommonResult struct {
 	gophercloud.Result
 }
