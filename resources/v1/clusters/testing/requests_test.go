@@ -17,10 +17,12 @@ package testing
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
+	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
 	"github.com/sapcc/gophercloud-sapcc/resources/v1/clusters"
 )
@@ -35,17 +37,19 @@ func TestGetCluster(t *testing.T) {
 
 	var capacity uint64 = 10
 	var scrap int64 = 22
-	expected := &limes.ClusterReport{
-		ID: "pakistan",
-		Services: limes.ClusterServiceReports{
-			"shared": &limes.ClusterServiceReport{
+	expected := &limesresources.ClusterReport{
+		ClusterInfo: limes.ClusterInfo{
+			ID: "pakistan",
+		},
+		Services: limesresources.ClusterServiceReports{
+			"shared": &limesresources.ClusterServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "shared",
 					Area: "shared",
 				},
-				Resources: limes.ClusterResourceReports{
-					"stuff": &limes.ClusterResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.ClusterResourceReports{
+					"stuff": &limesresources.ClusterResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "stuff",
 							Unit: limes.UnitBytes,
 						},
@@ -53,8 +57,8 @@ func TestGetCluster(t *testing.T) {
 						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
-					"things": &limes.ClusterResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+					"things": &limesresources.ClusterResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
 						Capacity:     &capacity,
@@ -62,17 +66,17 @@ func TestGetCluster(t *testing.T) {
 						Usage:        2,
 					},
 				},
-				MaxScrapedAt: p2i64(33),
-				MinScrapedAt: p2i64(33),
+				MaxScrapedAt: p2time(33),
+				MinScrapedAt: p2time(33),
 			},
-			"unshared": &limes.ClusterServiceReport{
+			"unshared": &limesresources.ClusterServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "contradiction",
 				},
-				Resources: limes.ClusterResourceReports{
-					"stuff": &limes.ClusterResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.ClusterResourceReports{
+					"stuff": &limesresources.ClusterResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "stuff",
 							Unit: limes.UnitBytes,
 						},
@@ -80,8 +84,8 @@ func TestGetCluster(t *testing.T) {
 						DomainsQuota: p2ui64(5),
 						Usage:        2,
 					},
-					"things": &limes.ClusterResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+					"things": &limesresources.ClusterResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
 						Capacity:     &capacity,
@@ -89,12 +93,12 @@ func TestGetCluster(t *testing.T) {
 						Usage:        2,
 					},
 				},
-				MaxScrapedAt: p2i64(33),
-				MinScrapedAt: p2i64(33),
+				MaxScrapedAt: p2time(33),
+				MinScrapedAt: p2time(33),
 			},
 		},
-		MaxScrapedAt: &scrap,
-		MinScrapedAt: &scrap,
+		MaxScrapedAt: p2time(scrap),
+		MinScrapedAt: p2time(scrap),
 	}
 	th.CheckDeepEquals(t, expected, actual)
 }
@@ -113,17 +117,19 @@ func TestGetFilteredCluster(t *testing.T) {
 
 	var capacity uint64 = 10
 	var scrap int64 = 22
-	expected := &limes.ClusterReport{
-		ID: "pakistan",
-		Services: limes.ClusterServiceReports{
-			"unshared": &limes.ClusterServiceReport{
+	expected := &limesresources.ClusterReport{
+		ClusterInfo: limes.ClusterInfo{
+			ID: "pakistan",
+		},
+		Services: limesresources.ClusterServiceReports{
+			"unshared": &limesresources.ClusterServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "contradiction",
 				},
-				Resources: limes.ClusterResourceReports{
-					"stuff": &limes.ClusterResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.ClusterResourceReports{
+					"stuff": &limesresources.ClusterResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "stuff",
 							Unit: limes.UnitBytes,
 						},
@@ -133,18 +139,19 @@ func TestGetFilteredCluster(t *testing.T) {
 						Subcapacities: json.RawMessage(`[{"cores":200,"hypervisor":"cluster-1"},{"cores":800,"hypervisor":"cluster-2"}]`),
 					},
 				},
-				MaxScrapedAt: p2i64(33),
-				MinScrapedAt: p2i64(33),
+				MaxScrapedAt: p2time(33),
+				MinScrapedAt: p2time(33),
 			},
 		},
-		MaxScrapedAt: &scrap,
-		MinScrapedAt: &scrap,
+		MaxScrapedAt: p2time(scrap),
+		MinScrapedAt: p2time(scrap),
 	}
 	th.CheckDeepEquals(t, expected, actual)
 }
 
-func p2i64(x int64) *int64 {
-	return &x
+func p2time(timestamp int64) *limes.UnixEncodedTime {
+	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
+	return &t
 }
 
 func p2ui64(x uint64) *uint64 {

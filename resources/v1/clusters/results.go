@@ -16,7 +16,7 @@ package clusters
 
 import (
 	"github.com/gophercloud/gophercloud"
-	"github.com/sapcc/go-api-declarations/limes"
+	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 )
 
 // CommonResult is the result of a Get operation. Call its appropriate
@@ -26,9 +26,9 @@ type CommonResult struct {
 }
 
 // Extract interprets a CommonResult as a Cluster.
-func (r CommonResult) Extract() (*limes.ClusterReport, error) {
+func (r CommonResult) Extract() (*limesresources.ClusterReport, error) {
 	var s struct {
-		Cluster *limes.ClusterReport `json:"cluster"`
+		Cluster *limesresources.ClusterReport `json:"cluster"`
 	}
 	err := r.ExtractInto(&s)
 	return s.Cluster, err

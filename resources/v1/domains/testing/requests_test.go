@@ -17,10 +17,12 @@ package testing
 
 import (
 	"testing"
+	"time"
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
+	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
 	"github.com/sapcc/gophercloud-sapcc/resources/v1/domains"
 )
@@ -35,19 +37,21 @@ func TestListDomain(t *testing.T) {
 
 	var backendQ uint64
 	infiniteBackendQ := true
-	expected := []limes.DomainReport{
+	expected := []limesresources.DomainReport{
 		{
-			UUID: "uuid-for-karachi",
-			Name: "karachi",
-			Services: limes.DomainServiceReports{
-				"shared": &limes.DomainServiceReport{
+			DomainInfo: limes.DomainInfo{
+				UUID: "uuid-for-karachi",
+				Name: "karachi",
+			},
+			Services: limesresources.DomainServiceReports{
+				"shared": &limesresources.DomainServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "shared",
 						Area: "shared",
 					},
-					Resources: limes.DomainResourceReports{
-						"capacity": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.DomainResourceReports{
+						"capacity": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
@@ -55,8 +59,8 @@ func TestListDomain(t *testing.T) {
 							ProjectsQuota: p2ui64(5),
 							Usage:         2,
 						},
-						"things": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+						"things": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							DomainQuota:   p2ui64(10),
@@ -64,17 +68,17 @@ func TestListDomain(t *testing.T) {
 							Usage:         2,
 						},
 					},
-					MaxScrapedAt: p2i64(22),
-					MinScrapedAt: p2i64(22),
+					MaxScrapedAt: p2time(22),
+					MinScrapedAt: p2time(22),
 				},
-				"unshared": &limes.DomainServiceReport{
+				"unshared": &limesresources.DomainServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "unshared",
 						Area: "unshared",
 					},
-					Resources: limes.DomainResourceReports{
-						"capacity": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.DomainResourceReports{
+						"capacity": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
@@ -82,8 +86,8 @@ func TestListDomain(t *testing.T) {
 							ProjectsQuota: p2ui64(25),
 							Usage:         10,
 						},
-						"things": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+						"things": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							DomainQuota:   p2ui64(55),
@@ -91,23 +95,25 @@ func TestListDomain(t *testing.T) {
 							Usage:         10,
 						},
 					},
-					MaxScrapedAt: p2i64(11),
-					MinScrapedAt: p2i64(11),
+					MaxScrapedAt: p2time(11),
+					MinScrapedAt: p2time(11),
 				},
 			},
 		},
 		{
-			UUID: "uuid-for-lahore",
-			Name: "lahore",
-			Services: limes.DomainServiceReports{
-				"shared": &limes.DomainServiceReport{
+			DomainInfo: limes.DomainInfo{
+				UUID: "uuid-for-lahore",
+				Name: "lahore",
+			},
+			Services: limesresources.DomainServiceReports{
+				"shared": &limesresources.DomainServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "shared",
 						Area: "shared",
 					},
-					Resources: limes.DomainResourceReports{
-						"capacity": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.DomainResourceReports{
+						"capacity": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
@@ -115,8 +121,8 @@ func TestListDomain(t *testing.T) {
 							ProjectsQuota: p2ui64(5),
 							Usage:         2,
 						},
-						"things": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+						"things": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							DomainQuota:   p2ui64(10),
@@ -124,17 +130,17 @@ func TestListDomain(t *testing.T) {
 							Usage:         2,
 						},
 					},
-					MaxScrapedAt: p2i64(22),
-					MinScrapedAt: p2i64(22),
+					MaxScrapedAt: p2time(22),
+					MinScrapedAt: p2time(22),
 				},
-				"unshared": &limes.DomainServiceReport{
+				"unshared": &limesresources.DomainServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "unshared",
 						Area: "unshared",
 					},
-					Resources: limes.DomainResourceReports{
-						"capacity": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.DomainResourceReports{
+						"capacity": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
@@ -144,18 +150,17 @@ func TestListDomain(t *testing.T) {
 							BackendQuota:         &backendQ,
 							InfiniteBackendQuota: &infiniteBackendQ,
 						},
-						"things": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name:              "things",
-								ExternallyManaged: true,
+						"things": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
+								Name: "things",
 							},
 							DomainQuota:   p2ui64(55),
 							ProjectsQuota: p2ui64(25),
 							Usage:         10,
 						},
 					},
-					MaxScrapedAt: p2i64(11),
-					MinScrapedAt: p2i64(11),
+					MaxScrapedAt: p2time(11),
+					MinScrapedAt: p2time(11),
 				},
 			},
 		},
@@ -174,19 +179,21 @@ func TestListFilteredDomain(t *testing.T) {
 	}).ExtractDomains()
 	th.AssertNoErr(t, err)
 
-	expected := []limes.DomainReport{
+	expected := []limesresources.DomainReport{
 		{
-			UUID: "uuid-for-karachi",
-			Name: "karachi",
-			Services: limes.DomainServiceReports{
-				"shared": &limes.DomainServiceReport{
+			DomainInfo: limes.DomainInfo{
+				UUID: "uuid-for-karachi",
+				Name: "karachi",
+			},
+			Services: limesresources.DomainServiceReports{
+				"shared": &limesresources.DomainServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "shared",
 						Area: "shared",
 					},
-					Resources: limes.DomainResourceReports{
-						"things": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.DomainResourceReports{
+						"things": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							DomainQuota:   p2ui64(10),
@@ -194,23 +201,25 @@ func TestListFilteredDomain(t *testing.T) {
 							Usage:         2,
 						},
 					},
-					MaxScrapedAt: p2i64(22),
-					MinScrapedAt: p2i64(22),
+					MaxScrapedAt: p2time(22),
+					MinScrapedAt: p2time(22),
 				},
 			},
 		},
 		{
-			UUID: "uuid-for-lahore",
-			Name: "lahore",
-			Services: limes.DomainServiceReports{
-				"shared": &limes.DomainServiceReport{
+			DomainInfo: limes.DomainInfo{
+				UUID: "uuid-for-lahore",
+				Name: "lahore",
+			},
+			Services: limesresources.DomainServiceReports{
+				"shared": &limesresources.DomainServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type: "shared",
 						Area: "shared",
 					},
-					Resources: limes.DomainResourceReports{
-						"things": &limes.DomainResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.DomainResourceReports{
+						"things": &limesresources.DomainResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							DomainQuota:   p2ui64(10),
@@ -218,8 +227,8 @@ func TestListFilteredDomain(t *testing.T) {
 							Usage:         2,
 						},
 					},
-					MaxScrapedAt: p2i64(22),
-					MinScrapedAt: p2i64(22),
+					MaxScrapedAt: p2time(22),
+					MinScrapedAt: p2time(22),
 				},
 			},
 		},
@@ -235,18 +244,20 @@ func TestGetDomain(t *testing.T) {
 	actual, err := domains.Get(fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
-	expected := &limes.DomainReport{
-		UUID: "uuid-for-karachi",
-		Name: "karachi",
-		Services: limes.DomainServiceReports{
-			"shared": &limes.DomainServiceReport{
+	expected := &limesresources.DomainReport{
+		DomainInfo: limes.DomainInfo{
+			UUID: "uuid-for-karachi",
+			Name: "karachi",
+		},
+		Services: limesresources.DomainServiceReports{
+			"shared": &limesresources.DomainServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "shared",
 					Area: "shared",
 				},
-				Resources: limes.DomainResourceReports{
-					"capacity": &limes.DomainResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.DomainResourceReports{
+					"capacity": &limesresources.DomainResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
@@ -254,8 +265,8 @@ func TestGetDomain(t *testing.T) {
 						ProjectsQuota: p2ui64(5),
 						Usage:         2,
 					},
-					"things": &limes.DomainResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+					"things": &limesresources.DomainResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
 						DomainQuota:   p2ui64(10),
@@ -263,17 +274,17 @@ func TestGetDomain(t *testing.T) {
 						Usage:         2,
 					},
 				},
-				MaxScrapedAt: p2i64(22),
-				MinScrapedAt: p2i64(22),
+				MaxScrapedAt: p2time(22),
+				MinScrapedAt: p2time(22),
 			},
-			"unshared": &limes.DomainServiceReport{
+			"unshared": &limesresources.DomainServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "unshared",
 				},
-				Resources: limes.DomainResourceReports{
-					"capacity": &limes.DomainResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.DomainResourceReports{
+					"capacity": &limesresources.DomainResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
@@ -281,8 +292,8 @@ func TestGetDomain(t *testing.T) {
 						ProjectsQuota: p2ui64(25),
 						Usage:         10,
 					},
-					"things": &limes.DomainResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+					"things": &limesresources.DomainResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
 						DomainQuota:   p2ui64(55),
@@ -290,8 +301,8 @@ func TestGetDomain(t *testing.T) {
 						Usage:         10,
 					},
 				},
-				MaxScrapedAt: p2i64(11),
-				MinScrapedAt: p2i64(11),
+				MaxScrapedAt: p2time(11),
+				MinScrapedAt: p2time(11),
 			},
 		},
 	}
@@ -309,18 +320,20 @@ func TestGetDomainFiltered(t *testing.T) {
 	}).Extract()
 	th.AssertNoErr(t, err)
 
-	expected := &limes.DomainReport{
-		UUID: "uuid-for-karachi",
-		Name: "karachi",
-		Services: limes.DomainServiceReports{
-			"shared": &limes.DomainServiceReport{
+	expected := &limesresources.DomainReport{
+		DomainInfo: limes.DomainInfo{
+			UUID: "uuid-for-karachi",
+			Name: "karachi",
+		},
+		Services: limesresources.DomainServiceReports{
+			"shared": &limesresources.DomainServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "shared",
 					Area: "shared",
 				},
-				Resources: limes.DomainResourceReports{
-					"things": &limes.DomainResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.DomainResourceReports{
+					"things": &limesresources.DomainResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
 						DomainQuota:   p2ui64(10),
@@ -328,8 +341,8 @@ func TestGetDomainFiltered(t *testing.T) {
 						Usage:         2,
 					},
 				},
-				MaxScrapedAt: p2i64(22),
-				MinScrapedAt: p2i64(22),
+				MaxScrapedAt: p2time(22),
+				MinScrapedAt: p2time(22),
 			},
 		},
 	}
@@ -342,10 +355,11 @@ func TestUpdateDomain(t *testing.T) {
 	HandleUpdateDomainSuccessfully(t)
 
 	opts := domains.UpdateOpts{
-		Services: limes.QuotaRequest{
-			"shared": limes.ServiceQuotaRequest{
-				Resources: limes.ResourceQuotaRequest{
-					"things": limes.ValueWithUnit{Value: 99, Unit: limes.UnitNone},
+		Services: limesresources.QuotaRequest{
+			"shared": limesresources.ServiceQuotaRequest{
+				"things": limesresources.ResourceQuotaRequest{
+					Value: 99,
+					Unit:  limes.UnitNone,
 				},
 			},
 		},
@@ -356,8 +370,9 @@ func TestUpdateDomain(t *testing.T) {
 	th.AssertNoErr(t, err)
 }
 
-func p2i64(x int64) *int64 {
-	return &x
+func p2time(timestamp int64) *limes.UnixEncodedTime {
+	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
+	return &t
 }
 
 func p2ui64(x uint64) *uint64 {

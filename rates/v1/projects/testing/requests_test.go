@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//nolint:dupl
 package testing
 
 import (
 	"testing"
+	"time"
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
+	limesrates "github.com/sapcc/go-api-declarations/limes/rates"
 
 	"github.com/sapcc/gophercloud-sapcc/rates/v1/projects"
 )
@@ -33,23 +34,24 @@ func TestListProjectsRates(t *testing.T) {
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ReadOpts{}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
-	rateWindow := 2 * limes.WindowMinutes
-	expected := []limes.ProjectReport{
+	rateWindow := 2 * limesrates.WindowMinutes
+	expected := []limesrates.ProjectReport{
 		{
-			UUID:       "uuid-for-berlin",
-			Name:       "berlin",
-			ParentUUID: "uuid-for-germany",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-berlin",
+				Name:       "berlin",
+				ParentUUID: "uuid-for-germany",
+			},
+			Services: limesrates.ProjectServiceReports{
+				"shared": &limesrates.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{},
-					Rates: limes.ProjectRateLimitReports{
-						"some_action": &limes.ProjectRateLimitReport{
-							RateInfo: limes.RateInfo{
+					Rates: limesrates.ProjectRateReports{
+						"some_action": &limesrates.ProjectRateReport{
+							RateInfo: limesrates.RateInfo{
 								Name: "some_action",
 								Unit: limes.UnitBytes,
 							},
@@ -58,67 +60,66 @@ func TestListProjectsRates(t *testing.T) {
 							UsageAsBigint: "1069298",
 						},
 					},
-					RatesScrapedAt: p2i64(24),
+					ScrapedAt: p2time(24),
 				},
-				"unshared": &limes.ProjectServiceReport{
+				"unshared": &limesrates.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "unshared",
 						Area:        "unshared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{},
-					Rates: limes.ProjectRateLimitReports{
-						"service/something/action:update/removeFloatingIp": &limes.ProjectRateLimitReport{
-							RateInfo: limes.RateInfo{
+					Rates: limesrates.ProjectRateReports{
+						"service/something/action:update/removeFloatingIp": &limesrates.ProjectRateReport{
+							RateInfo: limesrates.RateInfo{
 								Name: "service/something/action:update/removeFloatingIp",
 							},
 							Limit:  2,
 							Window: &rateWindow,
 						},
 					},
-					RatesScrapedAt: p2i64(24),
+					ScrapedAt: p2time(24),
 				},
 			},
 		},
 		{
-			UUID:       "uuid-for-dresden",
-			Name:       "dresden",
-			ParentUUID: "uuid-for-berlin",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-dresden",
+				Name:       "dresden",
+				ParentUUID: "uuid-for-berlin",
+			},
+			Services: limesrates.ProjectServiceReports{
+				"shared": &limesrates.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{},
-					Rates:     limes.ProjectRateLimitReports{},
+					Rates: limesrates.ProjectRateReports{},
 				},
-				"unshared": &limes.ProjectServiceReport{
+				"unshared": &limesrates.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "unshared",
 						Area:        "unshared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{},
-					Rates: limes.ProjectRateLimitReports{
-						"service/something:create": &limes.ProjectRateLimitReport{
-							RateInfo: limes.RateInfo{
+					Rates: limesrates.ProjectRateReports{
+						"service/something:create": &limesrates.ProjectRateReport{
+							RateInfo: limesrates.RateInfo{
 								Name: "service/something:create",
 							},
 							Limit:         5,
 							Window:        &rateWindow,
 							UsageAsBigint: "1069298",
 						},
-						"service/something/action:update/addFloatingIp": &limes.ProjectRateLimitReport{
-							RateInfo: limes.RateInfo{
+						"service/something/action:update/addFloatingIp": &limesrates.ProjectRateReport{
+							RateInfo: limesrates.RateInfo{
 								Name: "service/something/action:update/addFloatingIp",
 							},
 							Limit:  2,
 							Window: &rateWindow,
 						},
 					},
-					RatesScrapedAt: p2i64(24),
+					ScrapedAt: p2time(35),
 				},
 			},
 		},
@@ -136,31 +137,24 @@ func TestListProjectsFilteredRates(t *testing.T) {
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
-	rateWindow := 2 * limes.WindowMinutes
-	expected := []limes.ProjectReport{
+	rateWindow := 2 * limesrates.WindowMinutes
+	expected := []limesrates.ProjectReport{
 		{
-			UUID:       "uuid-for-berlin",
-			Name:       "berlin",
-			ParentUUID: "uuid-for-germany",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-berlin",
+				Name:       "berlin",
+				ParentUUID: "uuid-for-germany",
+			},
+			Services: limesrates.ProjectServiceReports{
+				"shared": &limesrates.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "things",
-							},
-							Quota: p2ui64(10),
-							Usage: 2,
-						},
-					},
-					Rates: limes.ProjectRateLimitReports{
-						"some_action": &limes.ProjectRateLimitReport{
-							RateInfo: limes.RateInfo{
+					Rates: limesrates.ProjectRateReports{
+						"some_action": &limesrates.ProjectRateReport{
+							RateInfo: limesrates.RateInfo{
 								Name: "some_action",
 								Unit: limes.UnitBytes,
 							},
@@ -169,33 +163,24 @@ func TestListProjectsFilteredRates(t *testing.T) {
 							UsageAsBigint: "1069298",
 						},
 					},
-					ScrapedAt:      p2i64(22),
-					RatesScrapedAt: p2i64(24),
+					ScrapedAt: p2time(24),
 				},
 			},
 		},
 		{
-			UUID:       "uuid-for-dresden",
-			Name:       "dresden",
-			ParentUUID: "uuid-for-berlin",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-dresden",
+				Name:       "dresden",
+				ParentUUID: "uuid-for-berlin",
+			},
+			Services: limesrates.ProjectServiceReports{
+				"shared": &limesrates.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
-								Name: "things",
-							},
-							Quota: p2ui64(10),
-							Usage: 2,
-						},
-					},
-					Rates:     limes.ProjectRateLimitReports{},
-					ScrapedAt: p2i64(44),
+					Rates: limesrates.ProjectRateReports{},
 				},
 			},
 		},
@@ -211,22 +196,23 @@ func TestGetProjectRates(t *testing.T) {
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
-	rateWindow := 2 * limes.WindowMinutes
-	expected := &limes.ProjectReport{
-		UUID:       "uuid-for-berlin",
-		Name:       "berlin",
-		ParentUUID: "uuid-for-germany",
-		Services: limes.ProjectServiceReports{
-			"shared": &limes.ProjectServiceReport{
+	rateWindow := 2 * limesrates.WindowMinutes
+	expected := &limesrates.ProjectReport{
+		ProjectInfo: limes.ProjectInfo{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+		},
+		Services: limesrates.ProjectServiceReports{
+			"shared": &limesrates.ProjectServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type:        "shared",
 					Area:        "shared",
 					ProductName: "",
 				},
-				Resources: limes.ProjectResourceReports{},
-				Rates: limes.ProjectRateLimitReports{
-					"some_action": &limes.ProjectRateLimitReport{
-						RateInfo: limes.RateInfo{
+				Rates: limesrates.ProjectRateReports{
+					"some_action": &limesrates.ProjectRateReport{
+						RateInfo: limesrates.RateInfo{
 							Name: "some_action",
 							Unit: limes.UnitBytes,
 						},
@@ -235,7 +221,7 @@ func TestGetProjectRates(t *testing.T) {
 						UsageAsBigint: "1069298",
 					},
 				},
-				RatesScrapedAt: p2i64(24),
+				ScrapedAt: p2time(24),
 			},
 		},
 	}
@@ -252,30 +238,23 @@ func TestGetProjectFilteredRates(t *testing.T) {
 	}).Extract()
 	th.AssertNoErr(t, err)
 
-	rateWindow := 2 * limes.WindowMinutes
-	expected := &limes.ProjectReport{
-		UUID:       "uuid-for-berlin",
-		Name:       "berlin",
-		ParentUUID: "uuid-for-germany",
-		Services: limes.ProjectServiceReports{
-			"shared": &limes.ProjectServiceReport{
+	rateWindow := 2 * limesrates.WindowMinutes
+	expected := &limesrates.ProjectReport{
+		ProjectInfo: limes.ProjectInfo{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+		},
+		Services: limesrates.ProjectServiceReports{
+			"shared": &limesrates.ProjectServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type:        "shared",
 					Area:        "shared",
 					ProductName: "",
 				},
-				Resources: limes.ProjectResourceReports{
-					"things": &limes.ProjectResourceReport{
-						ResourceInfo: limes.ResourceInfo{
-							Name: "things",
-						},
-						Quota: p2ui64(10),
-						Usage: 2,
-					},
-				},
-				Rates: limes.ProjectRateLimitReports{
-					"some_action": &limes.ProjectRateLimitReport{
-						RateInfo: limes.RateInfo{
+				Rates: limesrates.ProjectRateReports{
+					"some_action": &limesrates.ProjectRateReport{
+						RateInfo: limesrates.RateInfo{
 							Name: "some_action",
 							Unit: limes.UnitBytes,
 						},
@@ -284,18 +263,14 @@ func TestGetProjectFilteredRates(t *testing.T) {
 						UsageAsBigint: "1069298",
 					},
 				},
-				ScrapedAt:      p2i64(22),
-				RatesScrapedAt: p2i64(24),
+				ScrapedAt: p2time(24),
 			},
 		},
 	}
 	th.CheckDeepEquals(t, expected, actual)
 }
 
-func p2i64(x int64) *int64 {
-	return &x
-}
-
-func p2ui64(x uint64) *uint64 {
-	return &x
+func p2time(timestamp int64) *limes.UnixEncodedTime {
+	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
+	return &t
 }

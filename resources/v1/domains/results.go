@@ -16,7 +16,7 @@ package domains
 
 import (
 	"github.com/gophercloud/gophercloud"
-	"github.com/sapcc/go-api-declarations/limes"
+	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 )
 
 // CommonResult is the result of a Get/List operation. Call its appropriate
@@ -32,9 +32,9 @@ type UpdateResult struct {
 }
 
 // ExtractDomains interprets a CommonResult as a slice of Domains.
-func (r CommonResult) ExtractDomains() ([]limes.DomainReport, error) {
+func (r CommonResult) ExtractDomains() ([]limesresources.DomainReport, error) {
 	var s struct {
-		Domains []limes.DomainReport `json:"domains"`
+		Domains []limesresources.DomainReport `json:"domains"`
 	}
 
 	err := r.ExtractInto(&s)
@@ -42,9 +42,9 @@ func (r CommonResult) ExtractDomains() ([]limes.DomainReport, error) {
 }
 
 // Extract interprets a CommonResult as a Domain.
-func (r CommonResult) Extract() (*limes.DomainReport, error) {
+func (r CommonResult) Extract() (*limesresources.DomainReport, error) {
 	var s struct {
-		Domain *limes.DomainReport `json:"domain"`
+		Domain *limesresources.DomainReport `json:"domain"`
 	}
 	err := r.ExtractInto(&s)
 	return s.Domain, err

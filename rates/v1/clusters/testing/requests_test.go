@@ -16,12 +16,14 @@ package testing
 
 import (
 	"testing"
+	"time"
 
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
+	limesrates "github.com/sapcc/go-api-declarations/limes/rates"
 
-	"github.com/sapcc/gophercloud-sapcc/resources/v1/clusters"
+	"github.com/sapcc/gophercloud-sapcc/rates/v1/clusters"
 )
 
 func TestGetClusterRates(t *testing.T) {
@@ -32,35 +34,35 @@ func TestGetClusterRates(t *testing.T) {
 	actual, err := clusters.Get(fake.ServiceClient(), clusters.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
-	expected := &limes.ClusterReport{
-		ID: "current",
-		Services: limes.ClusterServiceReports{
-			"shared": &limes.ClusterServiceReport{
+	expected := &limesrates.ClusterReport{
+		ClusterInfo: limes.ClusterInfo{
+			ID: "current",
+		},
+		Services: limesrates.ClusterServiceReports{
+			"shared": &limesrates.ClusterServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "shared",
 					Area: "shared",
 				},
-				Resources: limes.ClusterResourceReports{},
-				Rates: limes.ClusterRateLimitReports{
-					"service/shared/objects:create": &limes.ClusterRateLimitReport{
-						RateInfo: limes.RateInfo{
+				Rates: limesrates.ClusterRateReports{
+					"service/shared/objects:create": &limesrates.ClusterRateReport{
+						RateInfo: limesrates.RateInfo{
 							Name: "service/shared/objects:create",
 						},
 						Limit:  5000,
-						Window: limes.MustParseWindow("1s"),
+						Window: limesrates.MustParseWindow("1s"),
 					},
 				},
-				MaxRatesScrapedAt: p2i64(45),
-				MinRatesScrapedAt: p2i64(23),
+				MaxScrapedAt: p2time(45),
+				MinScrapedAt: p2time(23),
 			},
-			"unshared": &limes.ClusterServiceReport{
+			"unshared": &limesrates.ClusterServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "unshared",
 					Area: "unshared",
 				},
-				Resources:         limes.ClusterResourceReports{},
-				MaxRatesScrapedAt: p2i64(34),
-				MinRatesScrapedAt: p2i64(12),
+				MaxScrapedAt: p2time(34),
+				MinScrapedAt: p2time(12),
 			},
 		},
 	}
@@ -77,32 +79,34 @@ func TestGetFilteredClusterRates(t *testing.T) {
 	}).Extract()
 	th.AssertNoErr(t, err)
 
-	expected := &limes.ClusterReport{
-		ID: "current",
-		Services: limes.ClusterServiceReports{
-			"shared": &limes.ClusterServiceReport{
+	expected := &limesrates.ClusterReport{
+		ClusterInfo: limes.ClusterInfo{
+			ID: "current",
+		},
+		Services: limesrates.ClusterServiceReports{
+			"shared": &limesrates.ClusterServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type: "shared",
 					Area: "shared",
 				},
-				Resources: limes.ClusterResourceReports{},
-				Rates: limes.ClusterRateLimitReports{
-					"service/shared/objects:create": &limes.ClusterRateLimitReport{
-						RateInfo: limes.RateInfo{
+				Rates: limesrates.ClusterRateReports{
+					"service/shared/objects:create": &limesrates.ClusterRateReport{
+						RateInfo: limesrates.RateInfo{
 							Name: "service/shared/objects:create",
 						},
 						Limit:  5000,
-						Window: limes.MustParseWindow("1s"),
+						Window: limesrates.MustParseWindow("1s"),
 					},
 				},
-				MaxRatesScrapedAt: p2i64(45),
-				MinRatesScrapedAt: p2i64(23),
+				MaxScrapedAt: p2time(45),
+				MinScrapedAt: p2time(23),
 			},
 		},
 	}
 	th.CheckDeepEquals(t, expected, actual)
 }
 
-func p2i64(x int64) *int64 {
-	return &x
+func p2time(timestamp int64) *limes.UnixEncodedTime {
+	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
+	return &t
 }

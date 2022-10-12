@@ -8,7 +8,6 @@
         {
           "type": "shared",
           "area": "shared",
-          "resources": [],
           "rates": [
             {
               "name": "some_action",
@@ -18,12 +17,11 @@
               "usage_as_bigint": "1069298"
             }
           ],
-          "rates_scraped_at": 24
+          "scraped_at": 24
         },
         {
           "type": "unshared",
           "area": "unshared",
-          "resources": [],
           "rates": [
             {
               "name": "service/something/action:update/removeFloatingIp",
@@ -31,7 +29,7 @@
               "window": "2m"
             }
           ],
-          "rates_scraped_at": 24
+          "scraped_at": 24
         }
       ]
     },
@@ -43,13 +41,11 @@
         {
           "type": "shared",
           "area": "shared",
-          "resources": [],
           "rates": []
         },
         {
           "type": "unshared",
           "area": "unshared",
-          "resources": [],
           "rates": [
             {
               "name": "service/something:create",
@@ -63,7 +59,7 @@
               "window": "2m"
             }
           ],
-          "rates_scraped_at": 24
+          "scraped_at": 35
         }
       ]
     }

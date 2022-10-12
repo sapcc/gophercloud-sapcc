@@ -7,13 +7,6 @@
       {
         "type": "shared",
         "area": "shared",
-        "resources": [
-          {
-            "name": "things",
-            "quota": 10,
-            "usage": 2
-          }
-        ],
         "rates": [
           {
             "name": "some_action",
@@ -23,8 +16,7 @@
             "usage_as_bigint": "1069298"
           }
         ],
-        "scraped_at": 22,
-        "rates_scraped_at": 24
+        "scraped_at": 24
       }
     ]
   }

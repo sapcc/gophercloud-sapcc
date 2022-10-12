@@ -7,7 +7,6 @@
       {
         "type": "shared",
         "area": "shared",
-        "resources": [],
         "rates": [
           {
             "name": "some_action",
@@ -17,7 +16,7 @@
             "usage_as_bigint": "1069298"
           }
         ],
-        "rates_scraped_at": 24
+        "scraped_at": 24
       }
     ]
   }

@@ -88,7 +88,6 @@
             },
             {
               "name": "things",
-              "externally_managed": true,
               "quota": 55,
               "projects_quota": 25,
               "usage": 10

@@ -19,7 +19,7 @@ import (
 	"net/http"
 
 	"github.com/gophercloud/gophercloud"
-	"github.com/sapcc/go-api-declarations/limes"
+	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the List request.
@@ -125,7 +125,7 @@ type UpdateOptsBuilder interface {
 
 // UpdateOpts contains parameters to update a domain.
 type UpdateOpts struct {
-	Services limes.QuotaRequest `json:"services"`
+	Services limesresources.QuotaRequest `json:"services"`
 }
 
 // ToDomainUpdateMap formats a UpdateOpts into a map of headers and a request body.

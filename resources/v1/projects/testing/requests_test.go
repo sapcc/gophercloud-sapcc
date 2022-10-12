@@ -17,11 +17,13 @@ package testing
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/gophercloud/gophercloud"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
+	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
 	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
 )
@@ -35,78 +37,82 @@ func TestListProjects(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	backendQuota := int64(100)
-	expected := []limes.ProjectReport{
+	expected := []limesresources.ProjectReport{
 		{
-			UUID:       "uuid-for-berlin",
-			Name:       "berlin",
-			ParentUUID: "uuid-for-germany",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-berlin",
+				Name:       "berlin",
+				ParentUUID: "uuid-for-germany",
+			},
+			Services: limesresources.ProjectServiceReports{
+				"shared": &limesresources.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"capacity": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.ProjectResourceReports{
+						"capacity": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+						"things": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
-					ScrapedAt: p2i64(22),
+					ScrapedAt: p2time(22),
 				},
-				"unshared": &limes.ProjectServiceReport{
+				"unshared": &limesresources.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "unshared",
 						Area:        "unshared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"capacity": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.ProjectResourceReports{
+						"capacity": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+						"things": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
-					ScrapedAt: p2i64(11),
+					ScrapedAt: p2time(11),
 				},
 			},
 		},
 		{
-			UUID:       "uuid-for-dresden",
-			Name:       "dresden",
-			ParentUUID: "uuid-for-berlin",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-dresden",
+				Name:       "dresden",
+				ParentUUID: "uuid-for-berlin",
+			},
+			Services: limesresources.ProjectServiceReports{
+				"shared": &limesresources.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"capacity": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.ProjectResourceReports{
+						"capacity": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
@@ -114,40 +120,40 @@ func TestListProjects(t *testing.T) {
 							Usage:        2,
 							BackendQuota: &backendQuota,
 						},
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+						"things": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
-					ScrapedAt: p2i64(44),
+					ScrapedAt: p2time(44),
 				},
-				"unshared": &limes.ProjectServiceReport{
+				"unshared": &limesresources.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "unshared",
 						Area:        "unshared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"capacity": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.ProjectResourceReports{
+						"capacity": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+						"things": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
-					ScrapedAt: p2i64(33),
+					ScrapedAt: p2time(33),
 				},
 			},
 		},
@@ -163,29 +169,31 @@ func TestListProjectsDetailed(t *testing.T) {
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Detail: true}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
-	expected := []limes.ProjectReport{
+	expected := []limesresources.ProjectReport{
 		{
-			UUID:       "uuid-for-berlin",
-			Name:       "berlin",
-			ParentUUID: "uuid-for-germany",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-berlin",
+				Name:       "berlin",
+				ParentUUID: "uuid-for-germany",
+			},
+			Services: limesresources.ProjectServiceReports{
+				"shared": &limesresources.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"capacity": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.ProjectResourceReports{
+						"capacity": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+						"things": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							Quota:        p2ui64(10),
@@ -193,7 +201,7 @@ func TestListProjectsDetailed(t *testing.T) {
 							Subresources: json.RawMessage(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
 						},
 					},
-					ScrapedAt: p2i64(22),
+					ScrapedAt: p2time(22),
 				},
 			},
 		},
@@ -212,52 +220,56 @@ func TestListProjectsFiltered(t *testing.T) {
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
-	expected := []limes.ProjectReport{
+	expected := []limesresources.ProjectReport{
 		{
-			UUID:       "uuid-for-berlin",
-			Name:       "berlin",
-			ParentUUID: "uuid-for-germany",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-berlin",
+				Name:       "berlin",
+				ParentUUID: "uuid-for-germany",
+			},
+			Services: limesresources.ProjectServiceReports{
+				"shared": &limesresources.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.ProjectResourceReports{
+						"things": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
-					ScrapedAt: p2i64(22),
+					ScrapedAt: p2time(22),
 				},
 			},
 		},
 		{
-			UUID:       "uuid-for-dresden",
-			Name:       "dresden",
-			ParentUUID: "uuid-for-berlin",
-			Services: limes.ProjectServiceReports{
-				"shared": &limes.ProjectServiceReport{
+			ProjectInfo: limes.ProjectInfo{
+				UUID:       "uuid-for-dresden",
+				Name:       "dresden",
+				ParentUUID: "uuid-for-berlin",
+			},
+			Services: limesresources.ProjectServiceReports{
+				"shared": &limesresources.ProjectServiceReport{
 					ServiceInfo: limes.ServiceInfo{
 						Type:        "shared",
 						Area:        "shared",
 						ProductName: "",
 					},
-					Resources: limes.ProjectResourceReports{
-						"things": &limes.ProjectResourceReport{
-							ResourceInfo: limes.ResourceInfo{
+					Resources: limesresources.ProjectResourceReports{
+						"things": &limesresources.ProjectResourceReport{
+							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
 							Quota: p2ui64(10),
 							Usage: 2,
 						},
 					},
-					ScrapedAt: p2i64(44),
+					ScrapedAt: p2time(44),
 				},
 			},
 		},
@@ -273,35 +285,37 @@ func TestGetProject(t *testing.T) {
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
-	expected := &limes.ProjectReport{
-		UUID:       "uuid-for-berlin",
-		Name:       "berlin",
-		ParentUUID: "uuid-for-germany",
-		Services: limes.ProjectServiceReports{
-			"shared": &limes.ProjectServiceReport{
+	expected := &limesresources.ProjectReport{
+		ProjectInfo: limes.ProjectInfo{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+		},
+		Services: limesresources.ProjectServiceReports{
+			"shared": &limesresources.ProjectServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type:        "shared",
 					Area:        "shared",
 					ProductName: "",
 				},
-				Resources: limes.ProjectResourceReports{
-					"capacity": &limes.ProjectResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.ProjectResourceReports{
+					"capacity": &limesresources.ProjectResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
 						Quota: p2ui64(10),
 						Usage: 2,
 					},
-					"things": &limes.ProjectResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+					"things": &limesresources.ProjectResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
 						Quota: p2ui64(10),
 						Usage: 2,
 					},
 				},
-				ScrapedAt: p2i64(22),
+				ScrapedAt: p2time(22),
 			},
 		},
 	}
@@ -316,28 +330,30 @@ func TestGetProjectDetailed(t *testing.T) {
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{Detail: true}).Extract()
 	th.AssertNoErr(t, err)
 
-	expected := &limes.ProjectReport{
-		UUID:       "uuid-for-berlin",
-		Name:       "berlin",
-		ParentUUID: "uuid-for-germany",
-		Services: limes.ProjectServiceReports{
-			"shared": &limes.ProjectServiceReport{
+	expected := &limesresources.ProjectReport{
+		ProjectInfo: limes.ProjectInfo{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+		},
+		Services: limesresources.ProjectServiceReports{
+			"shared": &limesresources.ProjectServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type:        "shared",
 					Area:        "shared",
 					ProductName: "",
 				},
-				Resources: limes.ProjectResourceReports{
-					"capacity": &limes.ProjectResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.ProjectResourceReports{
+					"capacity": &limesresources.ProjectResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
 						Quota: p2ui64(10),
 						Usage: 2,
 					},
-					"things": &limes.ProjectResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+					"things": &limesresources.ProjectResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
 						Quota:        p2ui64(10),
@@ -345,7 +361,7 @@ func TestGetProjectDetailed(t *testing.T) {
 						Subresources: json.RawMessage(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
 					},
 				},
-				ScrapedAt: p2i64(22),
+				ScrapedAt: p2time(22),
 			},
 		},
 	}
@@ -363,27 +379,29 @@ func TestGetProjectFiltered(t *testing.T) {
 	}).Extract()
 	th.AssertNoErr(t, err)
 
-	expected := &limes.ProjectReport{
-		UUID:       "uuid-for-berlin",
-		Name:       "berlin",
-		ParentUUID: "uuid-for-germany",
-		Services: limes.ProjectServiceReports{
-			"shared": &limes.ProjectServiceReport{
+	expected := &limesresources.ProjectReport{
+		ProjectInfo: limes.ProjectInfo{
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
+		},
+		Services: limesresources.ProjectServiceReports{
+			"shared": &limesresources.ProjectServiceReport{
 				ServiceInfo: limes.ServiceInfo{
 					Type:        "shared",
 					Area:        "shared",
 					ProductName: "",
 				},
-				Resources: limes.ProjectResourceReports{
-					"things": &limes.ProjectResourceReport{
-						ResourceInfo: limes.ResourceInfo{
+				Resources: limesresources.ProjectResourceReports{
+					"things": &limesresources.ProjectResourceReport{
+						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
 						Quota: p2ui64(10),
 						Usage: 2,
 					},
 				},
-				ScrapedAt: p2i64(22),
+				ScrapedAt: p2time(22),
 			},
 		},
 	}
@@ -396,10 +414,11 @@ func TestUpdateProject(t *testing.T) {
 	HandleUpdateProjectSuccessfully(t)
 
 	opts := projects.UpdateOpts{
-		Services: limes.QuotaRequest{
-			"compute": limes.ServiceQuotaRequest{
-				Resources: limes.ResourceQuotaRequest{
-					"cores": limes.ValueWithUnit{Value: 42, Unit: limes.UnitNone},
+		Services: limesresources.QuotaRequest{
+			"compute": limesresources.ServiceQuotaRequest{
+				"cores": limesresources.ResourceQuotaRequest{
+					Value: 42,
+					Unit:  limes.UnitNone,
 				},
 			},
 		},
@@ -448,8 +467,9 @@ func TestSyncProject(t *testing.T) {
 	th.AssertNoErr(t, err)
 }
 
-func p2i64(x int64) *int64 {
-	return &x
+func p2time(timestamp int64) *limes.UnixEncodedTime {
+	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
+	return &t
 }
 
 func p2ui64(x uint64) *uint64 {
