@@ -51,6 +51,10 @@ func UpdateProjectField(t *testing.T, client *gophercloud.ServiceClient, project
 	opts := projects.UpdateOpts{
 		ResponsiblePrimaryContactID:    project.ResponsiblePrimaryContactID,
 		ResponsiblePrimaryContactEmail: project.ResponsiblePrimaryContactEmail,
+		ResponsibleOperatorID:          project.ResponsiblePrimaryContactID,
+		ResponsibleOperatorEmail:       project.ResponsiblePrimaryContactEmail,
+		ResponsibleInventoryRoleID:     project.ResponsiblePrimaryContactID,
+		ResponsibleInventoryRoleEmail:  project.ResponsiblePrimaryContactEmail,
 		CostObject:                     project.CostObject,
 	}
 

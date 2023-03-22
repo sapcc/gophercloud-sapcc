@@ -64,10 +64,6 @@ type Domain struct {
 	ResponsiblePrimaryContactID string `json:"responsible_primary_contact_id"`
 	// Email-address of primary contact for the domain
 	ResponsiblePrimaryContactEmail string `json:"responsible_primary_contact_email"`
-	// SAP-User-Id of the controller who is responsible for the domain / the costobject
-	ResponsibleControllerID string `json:"responsible_controller_id"`
-	// Email-address or DL of the person/group who is controlling the domain / the costobject
-	ResponsibleControllerEmail string `json:"responsible_controller_email"`
 	// Freetext field for additional information for domain
 	AdditionalInformation string `json:"additional_information"`
 	// The cost object structure

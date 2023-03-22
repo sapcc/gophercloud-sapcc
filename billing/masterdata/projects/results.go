@@ -74,18 +74,14 @@ type Project struct {
 	ResponsibleOperatorID string `json:"responsible_operator_id"`
 	// Email-address or DL of the person/group who is operating the project
 	ResponsibleOperatorEmail string `json:"responsible_operator_email"`
-	// SAP-User-Id of the person who is responsible for the security of the project
-	ResponsibleSecurityExpertID string `json:"responsible_security_expert_id"`
-	// Email-address or DL of the person/group who is responsible for the security of the project
-	ResponsibleSecurityExpertEmail string `json:"responsible_security_expert_email"`
-	// SAP-User-Id of the product owner
-	ResponsibleProductOwnerID string `json:"responsible_product_owner_id"`
-	// Email-address or DL of the product owner
-	ResponsibleProductOwnerEmail string `json:"responsible_product_owner_email"`
-	// SAP-User-Id of the controller who is responsible for the project / the costobject
-	ResponsibleControllerID string `json:"responsible_controller_id"`
-	// Email-address or DL of the person/group who is controlling the project / the costobject
-	ResponsibleControllerEmail string `json:"responsible_controller_email"`
+	// ID of the Person/entity responsible to correctly maintain assets in SAP's Global DC HW asset inventory SISM/CCIR
+	ResponsibleInventoryRoleID string `json:"responsible_inventory_role_id"`
+	// Email of the Person/entity responsible to correctly maintain assets in SAP's Global DC HW asset inventory SISM/CCIR
+	ResponsibleInventoryRoleEmail string `json:"responsible_inventory_role_email"`
+	// ID of the infrastructure coordinator
+	ResponsibleInfrastructureCoordinatorID string `json:"responsible_infrastructure_coordinator_id"`
+	// Email address of the infrastructure coordinator
+	ResponsibleInfrastructureCoordinatorEmail string `json:"responsible_infrastructure_coordinator_email"`
 	// Indicating if the project is directly or indirectly creating revenue
 	// Allowed values: [generating, enabling, other]
 	RevenueRelevance string `json:"revenue_relevance"`
@@ -94,10 +90,29 @@ type Project struct {
 	BusinessCriticality string `json:"business_criticality"`
 	// If the number is unclear, always provide the lower end --> means always > number_of_endusers (-1 indicates that it is infinite)
 	NumberOfEndusers int `json:"number_of_endusers"`
+	// Name of the Customer (CCIR/BPD Key)
+	Customer string `json:"customer"`
 	// Freetext field for additional information for project
 	AdditionalInformation string `json:"additional_information"`
 	// The cost object structure
 	CostObject CostObject `json:"cost_object"`
+	// Build environment of the project
+	// Allowed values: [Prod,QA,Admin,DEV,Demo,Train,Sandbox,Lab,Test]
+	Environment string `json:"environment"`
+	// Software License Mode
+	// Allowed values: [Revenue Generating,Training & Demo,Development,Test & QS,Administration,Make,Virtualization-Host,Productive]
+	SoftLicenseMode string `json:"soft_license_mode"`
+	// Input parameter for KRITIS flag in CCIR
+	// Allowed values: [SAP Business Process,Customer Cloud Service,Customer Business Process,Training & Demo Cloud]
+	TypeOfData string `json:"type_of_data"`
+	// Uses GPUs
+	GPUEnabled bool `json:"-"`
+	// Required to harmonize with CALM and for further calculation of CIA
+	ContainsPIIDPPHR bool `json:"-"`
+	// Required to harmonize with CALM and for further calculation of CIA
+	ContainsExternalCustomerData bool `json:"-"`
+	// Information about whether there is any external certification present in this project
+	ExtCertification *ExtCertification `json:"ext_certification,omitempty"`
 	// The date, when the project was created.
 	CreatedAt time.Time `json:"-"`
 	// The date, when the project was updated.
@@ -125,12 +140,72 @@ type CostObject struct {
 	Type string `json:"type,omitempty"`
 }
 
+type ExtCertification struct {
+	// C5 is a government-backed verification framework implemented by the German Federal Office for Information Security (BSI)
+	C5 bool `json:"-"`
+	// An ISO certification describes the process that confirms that ISO standards are being followed
+	ISO bool `json:"-"`
+	// PCI certification ensures the security of card data at your business through a set of requirements established by the PCI SSC
+	PCI bool `json:"-"`
+	// SOCx is a type of audit report that attests to the trustworthiness of services provided by a service organization
+	SOC1 bool `json:"-"`
+	SOC2 bool `json:"-"`
+	// The law mandates strict reforms to improve financial disclosures from corporations and prevent accounting fraud
+	SOX bool `json:"-"`
+}
+
+func (r *ExtCertification) UnmarshalJSON(b []byte) error {
+	var s struct {
+		C5   int `json:"c5"`
+		ISO  int `json:"iso"`
+		PCI  int `json:"pci"`
+		SOC1 int `json:"soc1"`
+		SOC2 int `json:"soc2"`
+		SOX  int `json:"sox"`
+	}
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return err
+	}
+
+	r.C5 = s.C5 != 0
+	r.ISO = s.ISO != 0
+	r.PCI = s.PCI != 0
+	r.SOC1 = s.SOC1 != 0
+	r.SOC2 = s.SOC2 != 0
+	r.SOX = s.SOX != 0
+
+	return nil
+}
+
+func (r ExtCertification) MarshalJSON() ([]byte, error) {
+	res := struct {
+		C5   int `json:"c5"`
+		ISO  int `json:"iso"`
+		PCI  int `json:"pci"`
+		SOC1 int `json:"soc1"`
+		SOC2 int `json:"soc2"`
+		SOX  int `json:"sox"`
+	}{
+		C5:   b2i(r.C5),
+		ISO:  b2i(r.ISO),
+		PCI:  b2i(r.PCI),
+		SOC1: b2i(r.SOC1),
+		SOC2: b2i(r.SOC2),
+		SOX:  b2i(r.SOX),
+	}
+	return json.Marshal(res)
+}
+
 func (r *Project) UnmarshalJSON(b []byte) error {
 	type tmp Project
 	var s struct {
 		tmp
-		CreatedAt gophercloud.JSONRFC3339MilliNoZ `json:"created_at"`
-		ChangedAt gophercloud.JSONRFC3339MilliNoZ `json:"changed_at"`
+		CreatedAt                    gophercloud.JSONRFC3339MilliNoZ `json:"created_at"`
+		ChangedAt                    gophercloud.JSONRFC3339MilliNoZ `json:"changed_at"`
+		GPUEnabled                   int                             `json:"gpu_enabled"`
+		ContainsPIIDPPHR             int                             `json:"contains_pii_dpp_hr"`
+		ContainsExternalCustomerData int                             `json:"contains_external_customer_data"`
 	}
 	err := json.Unmarshal(b, &s)
 	if err != nil {
@@ -140,6 +215,9 @@ func (r *Project) UnmarshalJSON(b []byte) error {
 
 	r.CreatedAt = time.Time(s.CreatedAt)
 	r.ChangedAt = time.Time(s.ChangedAt)
+	r.GPUEnabled = s.GPUEnabled != 0
+	r.ContainsPIIDPPHR = s.ContainsPIIDPPHR != 0
+	r.ContainsExternalCustomerData = s.ContainsExternalCustomerData != 0
 
 	return nil
 }

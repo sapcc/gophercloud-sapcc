@@ -15,6 +15,8 @@
 package projects
 
 import (
+	"encoding/json"
+
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
 )
@@ -46,43 +48,54 @@ type UpdateOptsBuilder interface {
 // project.
 type UpdateOpts struct {
 	// Description of the project
-	Description string `json:"description,omitempty"`
-
+	Description string `json:"description"`
 	// SAP-User-Id of primary contact for the project
-	ResponsiblePrimaryContactID string `json:"responsible_primary_contact_id" required:"true"`
+	ResponsiblePrimaryContactID string `json:"responsible_primary_contact_id"`
 	// Email-address of primary contact for the project
-	ResponsiblePrimaryContactEmail string `json:"responsible_primary_contact_email" required:"true"`
-
+	ResponsiblePrimaryContactEmail string `json:"responsible_primary_contact_email"`
 	// SAP-User-Id of the person who is responsible for operating the project
-	ResponsibleOperatorID string `json:"responsible_operator_id,omitempty"`
+	ResponsibleOperatorID string `json:"responsible_operator_id"`
 	// Email-address or DL of the person/group who is operating the project
-	ResponsibleOperatorEmail string `json:"responsible_operator_email,omitempty"`
-	// SAP-User-Id of the person who is responsible for the security of the project
-	ResponsibleSecurityExpertID string `json:"responsible_security_expert_id,omitempty"`
-	// Email-address or DL of the person/group who is responsible for the security of the project
-	ResponsibleSecurityExpertEmail string `json:"responsible_security_expert_email,omitempty"`
-	// SAP-User-Id of the product owner
-	ResponsibleProductOwnerID string `json:"responsible_product_owner_id,omitempty"`
-	// Email-address or DL of the product owner
-	ResponsibleProductOwnerEmail string `json:"responsible_product_owner_email,omitempty"`
-	// SAP-User-Id of the controller who is responsible for the project / the costobject
-	ResponsibleControllerID string `json:"responsible_controller_id,omitempty"`
-	// Email-address or DL of the person/group who is controlling the project / the costobject
-	ResponsibleControllerEmail string `json:"responsible_controller_email,omitempty"`
+	ResponsibleOperatorEmail string `json:"responsible_operator_email"`
+	// ID of the Person/entity responsible to correctly maintain assets in SAP's Global DC HW asset inventory SISM/CCIR
+	ResponsibleInventoryRoleID string `json:"responsible_inventory_role_id"`
+	// Email of the Person/entity responsible to correctly maintain assets in SAP's Global DC HW asset inventory SISM/CCIR
+	ResponsibleInventoryRoleEmail string `json:"responsible_inventory_role_email"`
+	// ID of the infrastructure coordinator
+	ResponsibleInfrastructureCoordinatorID string `json:"responsible_infrastructure_coordinator_id"`
+	// Email address of the infrastructure coordinator
+	ResponsibleInfrastructureCoordinatorEmail string `json:"responsible_infrastructure_coordinator_email"`
 	// Indicating if the project is directly or indirectly creating revenue
 	// Allowed values: [generating, enabling, other]
-	RevenueRelevance string `json:"revenue_relevance,omitempty"`
+	RevenueRelevance string `json:"revenue_relevance"`
 	// Indicates how important the project for the business is. Possible values: [dev,test,prod]
 	// Allowed values: [dev, test, prod]
-	BusinessCriticality string `json:"business_criticality,omitempty"`
+	BusinessCriticality string `json:"business_criticality"`
 	// If the number is unclear, always provide the lower end --> means always > number_of_endusers (-1 indicates that it is infinite)
 	NumberOfEndusers int `json:"number_of_endusers"`
+	// Name of the Customer (CCIR/BPD Key)
+	Customer string `json:"customer"`
 	// Freetext field for additional information for project
-	AdditionalInformation string `json:"additional_information,omitempty"`
-
+	AdditionalInformation string `json:"additional_information"`
 	// The cost object structure
 	CostObject CostObject `json:"cost_object" required:"true"`
-
+	// Build environment of the project
+	// Allowed values: [Prod,QA,Admin,DEV,Demo,Train,Sandbox,Lab,Test]
+	Environment string `json:"environment"`
+	// Software License Mode
+	// Allowed values: [Revenue Generating,Training & Demo,Development,Test & QS,Administration,Make,Virtualization-Host,Productive]
+	SoftLicenseMode string `json:"soft_license_mode"`
+	// Input parameter for KRITIS flag in CCIR
+	// Allowed values: [SAP Business Process,Customer Cloud Service,Customer Business Process,Training & Demo Cloud]
+	TypeOfData string `json:"type_of_data"`
+	// Uses GPUs
+	GPUEnabled bool `json:"-"`
+	// Required to harmonize with CALM and for further calculation of CIA
+	ContainsPIIDPPHR bool `json:"-"`
+	// Required to harmonize with CALM and for further calculation of CIA
+	ContainsExternalCustomerData bool `json:"-"`
+	// Information about whether there is any external certification present in this project
+	ExtCertification *ExtCertification `json:"ext_certification,omitempty"`
 	// when the token is not scoped
 	// A project ID
 	ProjectID string `json:"project_id,omitempty"`
@@ -96,6 +109,43 @@ type UpdateOpts struct {
 	ParentID string `json:"parent_id,omitempty"`
 	// A project type
 	ProjectType string `json:"project_type,omitempty"`
+}
+
+func (opts *UpdateOpts) UnmarshalJSON(b []byte) error {
+	type tmp UpdateOpts
+	var s struct {
+		tmp
+		GPUEnabled                   int `json:"gpu_enabled"`
+		ContainsPIIDPPHR             int `json:"contains_pii_dpp_hr"`
+		ContainsExternalCustomerData int `json:"contains_external_customer_data"`
+	}
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return err
+	}
+
+	*opts = UpdateOpts(s.tmp)
+	opts.GPUEnabled = s.GPUEnabled != 0
+	opts.ContainsPIIDPPHR = s.ContainsPIIDPPHR != 0
+	opts.ContainsExternalCustomerData = s.ContainsExternalCustomerData != 0
+
+	return nil
+}
+
+func (opts UpdateOpts) MarshalJSON() ([]byte, error) {
+	type tmp UpdateOpts
+	res := struct {
+		tmp
+		GPUEnabled                   int `json:"gpu_enabled"`
+		ContainsPIIDPPHR             int `json:"contains_pii_dpp_hr"`
+		ContainsExternalCustomerData int `json:"contains_external_customer_data"`
+	}{
+		tmp:                          tmp(opts),
+		GPUEnabled:                   b2i(opts.GPUEnabled),
+		ContainsPIIDPPHR:             b2i(opts.ContainsPIIDPPHR),
+		ContainsExternalCustomerData: b2i(opts.ContainsExternalCustomerData),
+	}
+	return json.Marshal(res)
 }
 
 // ToProjectUpdateMap builds a request body from UpdateOpts.
@@ -120,22 +170,28 @@ func Update(c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r 
 
 func ProjectToUpdateOpts(project *Project) UpdateOpts {
 	return UpdateOpts{
-		Description:                    project.Description,
-		ResponsiblePrimaryContactID:    project.ResponsiblePrimaryContactID,
-		ResponsiblePrimaryContactEmail: project.ResponsiblePrimaryContactEmail,
-		ResponsibleOperatorID:          project.ResponsibleOperatorID,
-		ResponsibleOperatorEmail:       project.ResponsibleOperatorEmail,
-		ResponsibleSecurityExpertID:    project.ResponsibleSecurityExpertID,
-		ResponsibleSecurityExpertEmail: project.ResponsibleSecurityExpertEmail,
-		ResponsibleProductOwnerID:      project.ResponsibleProductOwnerID,
-		ResponsibleProductOwnerEmail:   project.ResponsibleProductOwnerEmail,
-		ResponsibleControllerID:        project.ResponsibleControllerID,
-		ResponsibleControllerEmail:     project.ResponsibleControllerEmail,
-		RevenueRelevance:               project.RevenueRelevance,
-		BusinessCriticality:            project.BusinessCriticality,
-		NumberOfEndusers:               project.NumberOfEndusers,
-		AdditionalInformation:          project.AdditionalInformation,
-		CostObject:                     project.CostObject,
+		Description:                               project.Description,
+		ResponsiblePrimaryContactID:               project.ResponsiblePrimaryContactID,
+		ResponsiblePrimaryContactEmail:            project.ResponsiblePrimaryContactEmail,
+		ResponsibleOperatorID:                     project.ResponsibleOperatorID,
+		ResponsibleOperatorEmail:                  project.ResponsibleOperatorEmail,
+		ResponsibleInventoryRoleID:                project.ResponsibleInventoryRoleID,
+		ResponsibleInventoryRoleEmail:             project.ResponsibleInventoryRoleEmail,
+		ResponsibleInfrastructureCoordinatorID:    project.ResponsibleInfrastructureCoordinatorID,
+		ResponsibleInfrastructureCoordinatorEmail: project.ResponsibleInfrastructureCoordinatorEmail,
+		RevenueRelevance:                          project.RevenueRelevance,
+		BusinessCriticality:                       project.BusinessCriticality,
+		NumberOfEndusers:                          project.NumberOfEndusers,
+		Customer:                                  project.Customer,
+		AdditionalInformation:                     project.AdditionalInformation,
+		CostObject:                                project.CostObject,
+		Environment:                               project.Environment,
+		SoftLicenseMode:                           project.SoftLicenseMode,
+		TypeOfData:                                project.TypeOfData,
+		GPUEnabled:                                project.GPUEnabled,
+		ContainsPIIDPPHR:                          project.ContainsPIIDPPHR,
+		ContainsExternalCustomerData:              project.ContainsExternalCustomerData,
+		ExtCertification:                          project.ExtCertification,
 		// unscoped tokens
 		ProjectID:   project.ProjectID,
 		ProjectName: project.ProjectName,

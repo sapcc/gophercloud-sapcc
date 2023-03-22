@@ -27,8 +27,6 @@ const GetResponse = `
   },
   "responsible_primary_contact_id": null,
   "responsible_primary_contact_email": null,
-  "responsible_controller_id": "D123456",
-  "responsible_controller_email": "example@mail.com",
   "additional_information": null,
   "changed_by": "c48b0ce218848fd0bc78c8367ae9c40512024e2fc39451f47d9a62ad3ff41c26",
   "changed_at": "2019-01-29T09:37:58.792",
@@ -53,8 +51,6 @@ const ListResponse = `
     },
     "responsible_primary_contact_id": null,
     "responsible_primary_contact_email": null,
-    "responsible_controller_id": "D123456",
-    "responsible_controller_email": "example@mail.com",
     "additional_information": null,
     "changed_by": "c48b0ce218848fd0bc78c8367ae9c40512024e2fc39451f47d9a62ad3ff41c26",
     "changed_at": "2019-01-29T09:37:58.792",
@@ -69,6 +65,7 @@ const ListResponse = `
 const UpdateRequest = `
 {
   "description" : "new example domain",
+  "additional_information": "",
   "responsible_primary_contact_email" : "example@mail.com",
   "cost_object" : {
      "projects_can_inherit" : true
@@ -92,8 +89,6 @@ const UpdateResponse = `
   },
   "responsible_primary_contact_id": "D123456",
   "responsible_primary_contact_email": null,
-  "responsible_controller_id": null,
-  "responsible_controller_email": null,
   "additional_information": null,
   "changed_by": "c48b0ce218848fd0bc78c8367ae9c40512024e2fc39451f47d9a62ad3ff41c26",
   "changed_at": "2019-01-29T09:37:58.792",
