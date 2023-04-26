@@ -27,7 +27,7 @@ type ListOptsBuilder interface {
 	ToDomainListQuery() (string, error)
 }
 
-// ListOpts is a structure that holds options for listing project masterdata.
+// ListOpts is a structure that holds options for listing domain masterdata.
 type ListOpts struct {
 	CheckCOValidity bool      `q:"checkCOValidity"`
 	ExcludeDeleted  bool      `q:"excludeDeleted"`
