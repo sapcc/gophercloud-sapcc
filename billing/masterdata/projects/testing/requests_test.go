@@ -108,7 +108,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allProjects, err := projects.List(fake.ServiceClient()).AllPages()
+	allProjects, err := projects.List(fake.ServiceClient(), projects.ListOpts{}).AllPages()
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)
@@ -141,7 +141,7 @@ func TestListOpts(t *testing.T) {
 		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
 	}
 
-	allProjects, err := projects.ListWithOpts(fake.ServiceClient(), listOpts).AllPages()
+	allProjects, err := projects.List(fake.ServiceClient(), listOpts).AllPages()
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)

@@ -23,6 +23,12 @@ import (
 	"github.com/gophercloud/gophercloud/pagination"
 )
 
+// ListOptsBuilder allows extensions to add additional parameters to the List
+// request.
+type ListOptsBuilder interface {
+	ToProjectListQuery() (string, error)
+}
+
 // ListOpts is a structure that holds options for listing project masterdata.
 type ListOpts struct {
 	CheckCOValidity bool      `q:"checkCOValidity"`
@@ -48,14 +54,8 @@ func (opts ListOpts) ToProjectListQuery() (string, error) {
 }
 
 // List returns a Pager which allows you to iterate over a collection of
-// projects.
-func List(c *gophercloud.ServiceClient) pagination.Pager {
-	return ListWithOpts(c, ListOpts{})
-}
-
-// List returns a Pager which allows you to iterate over a collection of
-// projects optionally filtered by ListOpts
-func ListWithOpts(c *gophercloud.ServiceClient, opts ListOpts) pagination.Pager {
+// projects
+func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	serviceURL := listURL(c)
 	if opts != (ListOpts{}) {
 		query, err := opts.ToProjectListQuery()
