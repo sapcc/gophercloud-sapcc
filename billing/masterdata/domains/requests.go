@@ -15,14 +15,54 @@
 package domains
 
 import (
+	"net/url"
+	"time"
+
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
 )
 
+// ListOptsBuilder allows extensions to add additional parameters to the List request
+type ListOptsBuilder interface {
+	ToDomainListQuery() (string, error)
+}
+
+// ListOpts is a structure that holds options for listing project masterdata.
+type ListOpts struct {
+	CheckCOValidity bool      `q:"checkCOValidity"`
+	ExcludeDeleted  bool      `q:"excludeDeleted"`
+	From            time.Time `q:"-"`
+}
+
+// ToDomainListQuery formats a ListOpts into a query string.
+func (opts ListOpts) ToDomainListQuery() (string, error) {
+	q, err := gophercloud.BuildQueryString(opts)
+	if err != nil {
+		return "", err
+	}
+	params := q.Query()
+
+	if opts.From != (time.Time{}) {
+		params.Add("from", opts.From.Format(gophercloud.RFC3339MilliNoZ))
+	}
+
+	q = &url.URL{RawQuery: params.Encode()}
+
+	return q.String(), nil
+}
+
 // List returns a Pager which allows you to iterate over a collection of
 // domains.
-func List(c *gophercloud.ServiceClient) pagination.Pager {
-	return pagination.NewPager(c, listURL(c), func(r pagination.PageResult) pagination.Page {
+func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
+	serviceURL := listURL(c)
+	if opts != (ListOpts{}) {
+		query, err := opts.ToDomainListQuery()
+		if err != nil {
+			return pagination.Pager{Err: err}
+		}
+		serviceURL += query
+	}
+	return pagination.NewPager(c, serviceURL, func(r pagination.PageResult) pagination.Page {
 		return DomainPage{pagination.SinglePageBase(r)}
 	})
 }

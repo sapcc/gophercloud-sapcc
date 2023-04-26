@@ -76,7 +76,40 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allDomains, err := domains.List(fake.ServiceClient()).AllPages()
+	allDomains, err := domains.List(fake.ServiceClient(), domains.ListOpts{}).AllPages()
+	th.AssertNoErr(t, err)
+
+	actual, err := domains.ExtractDomains(allDomains)
+	th.AssertNoErr(t, err)
+
+	th.CheckDeepEquals(t, domainsList, actual)
+}
+
+func TestListOpts(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
+	th.Mux.HandleFunc("/masterdata/domains", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+
+		th.CheckEquals(t, "true", r.URL.Query().Get("checkCOValidity"))
+		th.CheckEquals(t, "true", r.URL.Query().Get("excludeDeleted"))
+		th.CheckEquals(t, "2023-04-26T12:31:42.1337", r.URL.Query().Get("from"))
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprint(w, ListResponse)
+	})
+
+	listOpts := domains.ListOpts{
+		CheckCOValidity: true,
+		ExcludeDeleted:  true,
+		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
+	}
+
+	allDomains, err := domains.List(fake.ServiceClient(), listOpts).AllPages()
 	th.AssertNoErr(t, err)
 
 	actual, err := domains.ExtractDomains(allDomains)
