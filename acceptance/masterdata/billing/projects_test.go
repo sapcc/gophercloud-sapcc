@@ -55,7 +55,7 @@ func TestProjectList(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	// Get projects
-	allPages, err := projects.List(client).AllPages()
+	allPages, err := projects.List(client, projects.ListOpts{}).AllPages()
 	th.AssertNoErr(t, err)
 
 	allProjects, err := projects.ExtractProjects(allPages)

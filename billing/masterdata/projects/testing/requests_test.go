@@ -108,7 +108,40 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allProjects, err := projects.List(fake.ServiceClient()).AllPages()
+	allProjects, err := projects.List(fake.ServiceClient(), projects.ListOpts{}).AllPages()
+	th.AssertNoErr(t, err)
+
+	actual, err := projects.ExtractProjects(allProjects)
+	th.AssertNoErr(t, err)
+
+	th.CheckDeepEquals(t, projectsList, actual)
+}
+
+func TestListOpts(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
+	th.Mux.HandleFunc("/masterdata/projects", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+
+		th.CheckEquals(t, r.URL.Query().Get("checkCOValidity"), "true")
+		th.CheckEquals(t, r.URL.Query().Get("excludeDeleted"), "true")
+		th.CheckEquals(t, r.URL.Query().Get("from"), "2023-04-26T12:31:42.1337")
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprint(w, ListResponse)
+	})
+
+	listOpts := projects.ListOpts{
+		CheckCOValidity: true,
+		ExcludeDeleted:  true,
+		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
+	}
+
+	allProjects, err := projects.List(fake.ServiceClient(), listOpts).AllPages()
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)
