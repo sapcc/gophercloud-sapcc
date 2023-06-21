@@ -3,9 +3,9 @@ module github.com/sapcc/gophercloud-sapcc
 go 1.20
 
 require (
-	github.com/gophercloud/gophercloud v1.4.0
+	github.com/gophercloud/gophercloud v1.5.0
 	github.com/gophercloud/utils v0.0.0-20230523080330-de873b9cf00d
-	github.com/sapcc/go-api-declarations v1.5.1
+	github.com/sapcc/go-api-declarations v1.6.0
 )
 
 require (
