@@ -6,7 +6,7 @@ require (
 	github.com/gophercloud/gophercloud v1.5.0
 	github.com/gophercloud/utils v0.0.0-20230523080330-de873b9cf00d
 	github.com/sapcc/go-api-declarations v1.8.0
-	github.com/sapcc/go-bits v0.0.0-20230816124253-7ed3dcbc093f
+	github.com/sapcc/go-bits v0.0.0-20230817142210-d6d2e72f3d0a
 )
 
 require (
