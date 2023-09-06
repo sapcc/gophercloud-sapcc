@@ -1,5 +1,8 @@
 # Configuration file for <https://github.com/sapcc/go-makefile-maker>
 
+metadata:
+  url: https://github.com/sapcc/gophercloud-sapcc
+
 testPackages:
   # Tests under the `acceptance` directory require OpenStack therefore we don't
   # run them when `make check` is invoked as this would result in a non-zero
