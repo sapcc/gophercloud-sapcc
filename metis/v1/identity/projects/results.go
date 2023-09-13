@@ -21,41 +21,65 @@ import (
 	v1 "github.com/sapcc/gophercloud-sapcc/metis/v1"
 )
 
-// ProjectPage
-type ProjectPage struct {
-	pagination.LinkedPageBase
+// Project represents a Keystone project.
+type Project struct {
+	Name          string        `json:"name,omitempty"`
+	UUID          string        `json:"uuid"`
+	Description   string        `json:"description,omitempty"`
+	DomainName    string        `json:"domainName,omitempty"`
+	DomainUUID    string        `json:"domainUUID,omitempty"`
+	CBRMasterdata CBRMasterdata `json:"cbrMasterdata,omitempty"`
+	Users         []User        `json:"users"`
 }
 
-// IsEmpty determines whether or not a page of projects contains any results.
-func (r ProjectPage) IsEmpty() (bool, error) {
-	projects, err := ExtractProjects(r)
-	if err != nil {
-		return true, err
-	}
-	return len(projects) == 0, nil
+// CBRMasterdata represents the CBR masterdata of a Keystone project.
+type CBRMasterdata struct {
+	CostObjectName                  string                 `json:"costObjectName,omitempty"`
+	CostObjectType                  string                 `json:"costObjectType,omitempty"`
+	CostObjectInherited             bool                   `json:"costObjectInherited,omitempty"`
+	BusinessCriticality             string                 `json:"businessCriticality,omitempty"`
+	RevenueRelevance                string                 `json:"revenueRelevance,omitempty"`
+	NumberOfEndusers                int                    `json:"numberOfEndusers,omitempty"`
+	PrimaryContactUserID            string                 `json:"primaryContactUserID,omitempty"`
+	PrimaryContactEmail             string                 `json:"primaryContactEmail,omitempty"`
+	OperatorUserID                  string                 `json:"operatorUserID,omitempty"`
+	OperatorEmail                   string                 `json:"operatorEmail,omitempty"`
+	InventoryRoleUserID             string                 `json:"inventoryRoleUserID,omitempty"`
+	InventoryRoleEmail              string                 `json:"inventoryRoleEmail,omitempty"`
+	InfrastructureCoordinatorUserID string                 `json:"infrastructureCoordinatorUserID,omitempty"`
+	InfrastructureCoordinatorEmail  string                 `json:"infrastructureCoordinatorEmail,omitempty"`
+	ExternalCertifications          ExternalCertifications `json:"externalCertifications,omitempty"`
+	GPUEnabled                      bool                   `json:"gpuEnabled,omitempty"`
+	ContainsPIIDPPHR                bool                   `json:"containsPIIDPPHR,omitempty"`
+	ContainsExternalCustomerData    bool                   `json:"containsExternalCustomerData,omitempty"`
 }
 
-// NextPageURL extracts the "next" link from the response.
-func (r ProjectPage) NextPageURL() (string, error) {
-	var s struct {
-		Next string `json:"next"`
-	}
-
-	err := r.ExtractInto(&s)
-	if err != nil {
-		return "", err
-	}
-	return s.Next, err
+// ExternalCertifications represents the external certifications of a Keystone project.
+type ExternalCertifications struct {
+	ISO  bool `json:"ISO,omitempty"`
+	PCI  bool `json:"PCI,omitempty"`
+	SOC1 bool `json:"SOC1,omitempty"`
+	SOC2 bool `json:"SOC2,omitempty"`
+	C5   bool `json:"C5,omitempty"`
+	SOX  bool `json:"SOX,omitempty"`
 }
 
-// ExtractProjects accepts a Page struct, specifically an ProjectsPage struct,
+// User represents a Keystone user.
+type User struct {
+	UUID        string `json:"uuid"`
+	Name        string `json:"name,omitempty"`
+	Email       string `json:"email,omitempty"`
+	Description string `json:"description,omitempty"`
+}
+
+// Extract accepts a Page struct, specifically an v1.CommonPage struct,
 // and extracts the elements into a slice of Projects structs.
-func ExtractProjects(r pagination.Page) ([]Project, error) {
+func Extract(r pagination.Page) ([]Project, error) {
 	var s struct {
 		Projects []Project `json:"items"`
 	}
 	if err := (r.(v1.CommonPage)).ExtractInto(&s); err != nil {
-		return []Project{}, err
+		return nil, err
 	}
 	return s.Projects, nil
 }
@@ -71,17 +95,14 @@ type GetResult struct {
 func (r GetResult) Extract() (*Project, error) {
 	var s struct {
 		Data struct {
-			Items []Project `json:"items"`
+			Item Project `json:"item"`
 		} `json:"data"`
 	}
 	err := r.ExtractInto(&s)
 	if err != nil {
 		return nil, err
 	}
-	if s.Data.Items == nil {
-		return nil, nil
-	}
-	return &s.Data.Items[0], nil
+	return &s.Data.Item, nil
 }
 
 func (r GetResult) ExtractInto(v interface{}) error {

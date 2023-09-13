@@ -87,7 +87,7 @@ func TestListProjects(t *testing.T) {
 
 	p, err := projects.List(fakeclient.ServiceClient(), opts).AllPages()
 	th.AssertNoErr(t, err)
-	actual, err := projects.ExtractProjects(p)
+	actual, err := projects.Extract(p)
 	th.AssertNoErr(t, err)
 
 	expected := []projects.Project{

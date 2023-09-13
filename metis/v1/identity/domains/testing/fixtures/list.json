@@ -1,0 +1,22 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "kind": "domain",
+    "region": "germany",
+    "items": [
+      {
+        "name": "domain2",
+        "uuid": "domain-2",
+        "description": "domain2 descr",
+        "cbrMasterdata": {
+          "primaryContactUserID": "i000042",
+          "primaryContactEmail": "dies.das@sample.com",
+          "additionalInformation": "",
+          "costObjectName": "my-internal-order",
+          "costObjectType": "IO",
+          "projectsCanInherit": false
+        }
+      }
+    ]
+  }
+}
