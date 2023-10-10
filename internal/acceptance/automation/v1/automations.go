@@ -17,8 +17,9 @@ package v1
 import (
 	"testing"
 
+	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
+
 	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/acceptance/tools"
 	th "github.com/gophercloud/gophercloud/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/automation/v1/automations"

@@ -17,7 +17,8 @@ package billing
 import (
 	"testing"
 
-	"github.com/gophercloud/gophercloud/acceptance/tools"
+	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
+
 	th "github.com/gophercloud/gophercloud/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/projects"

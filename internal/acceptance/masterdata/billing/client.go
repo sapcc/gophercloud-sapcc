@@ -18,8 +18,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/clients"
+
 	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/acceptance/clients"
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/utils/openstack/clientconfig"
 

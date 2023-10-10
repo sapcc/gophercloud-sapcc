@@ -16,6 +16,10 @@ coverageTest:
 
 golangciLint:
   createConfig: true
+  skipDirs:
+    # copied from upstream
+    - acceptance/clients
+    - acceptance/tools
 
 githubWorkflow:
   ci:
