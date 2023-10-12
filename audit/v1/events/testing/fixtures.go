@@ -15,11 +15,11 @@
 package testing
 
 const ListResponse = `
-{ 
+{
   "next": "http://hermes-host:8788/v1/events?limit=2&offset=1",
   "previous": "http://hermes-host:8788/v1/events?limit=2&offset=0",
   "events": [
-    { 
+    {
       "id": "d3f6695e-8a55-5db1-895c-9f7f0910b7a5",
       "eventTime": "2017-11-01T12:28:58.660965+00:00",
       "action": "create/role_assignment",

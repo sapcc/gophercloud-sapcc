@@ -16,6 +16,10 @@ coverageTest:
 
 golangciLint:
   createConfig: true
+  skipDirs:
+    # copied from upstream
+    - acceptance/clients
+    - acceptance/tools
 
 githubWorkflow:
   ci:
@@ -24,6 +28,10 @@ githubWorkflow:
     ignorePaths: [ "**.md" ] # all Markdown files
   license:
     enabled: true
+    ignorePatterns:
+      # vendored copies from upstream
+      - internal/acceptance/clients/http.go
+      - internal/acceptance/tools/tools.go
   securityChecks:
     enabled: true
   spellCheck:

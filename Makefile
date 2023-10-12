@@ -61,7 +61,7 @@ tidy-deps: FORCE
 
 license-headers: FORCE
 	@if ! hash addlicense 2>/dev/null; then printf "\e[1;36m>> Installing addlicense...\e[0m\n"; go install github.com/google/addlicense@latest; fi
-	find * \( -name vendor -type d -prune \) -o \( -name \*.go -exec addlicense -c "SAP SE" -- {} + \)
+	find * \( -name vendor -type d -prune \) -o \( -wholename internal/acceptance/clients/http.go -prune \) -o \( -wholename internal/acceptance/tools/tools.go -prune \) -o \( -name \*.go -exec addlicense -c "SAP SE" -- {} + \)
 
 clean: FORCE
 	git clean -dxf build

@@ -19,7 +19,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gophercloud/gophercloud/acceptance/tools"
+	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
+
 	"github.com/gophercloud/gophercloud/pagination"
 	th "github.com/gophercloud/gophercloud/testhelper"
 
