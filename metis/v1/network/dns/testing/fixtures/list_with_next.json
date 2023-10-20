@@ -1,0 +1,32 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "kind": "zone",
+    "region": "germany",
+    "items": [
+      {
+        "uuid": "004321e142604754a789dd9b23db3242",
+        "name": "test-regression.germany.cloud.de.",
+        "email": "test.user@cloud.de",
+        "serial": 1680176469,
+        "parentZoneId": "831905c1640146358f69d58437a2a042",
+        "parentZoneName": "germany.cloud.de.",
+        "pool": "default",
+        "poolDescription": "Bind9 Pool",
+        "ttl": 7200,
+        "status": "ACTIVE",
+        "action": "NONE",
+        "type": "PRIMARY",
+        "attributes": {
+          "pool_id": "794ccc2c-d75e-1337-b57f-8894c9f5c842"
+        },
+        "projectId": "97a92f9cea4644c8a3c3bbe01caa842e",
+        "projectName": "regression",
+        "domainId": "8395b48e21337b8a827cc76b5fcf1c8",
+        "domainName": "test",
+        "createdAt": "2022-04-04 07:41:42",
+        "updatedAt": "2023-03-30 11:41:41"
+      }
+    ]
+  }
+}

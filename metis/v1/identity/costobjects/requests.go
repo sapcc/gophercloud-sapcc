@@ -33,7 +33,7 @@ type ListOpts struct {
 	Project string `q:"project"`
 	// Domain will only return costobjects for the specified domain uuid.
 	Domain string `q:"domain"`
-	// Limit will limit the number of results returned.
+	// Limit will limit the number of results returned per page.
 	Limit int `q:"limit"`
 	// UUIDs will only return costobjects with the specified UUIDs.
 	UUIDs []string `q:"uuids"`

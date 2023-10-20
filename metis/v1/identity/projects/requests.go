@@ -29,7 +29,7 @@ type ListOptsBuilder interface {
 
 // ListOpts is a structure that holds options for listing project masterdata.
 type ListOpts struct {
-	// Limit will limit the number of results returned.
+	// Limit will limit the number of results returned per page.
 	Limit int `q:"limit"`
 	// UUIDs will only return projects with the specified UUIDs.
 	UUIDs []string `q:"uuids"`
