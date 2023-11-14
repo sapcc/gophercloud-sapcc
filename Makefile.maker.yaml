@@ -34,9 +34,6 @@ githubWorkflow:
       - internal/acceptance/tools/tools.go
   securityChecks:
     enabled: true
-  spellCheck:
-    enabled: true
-
 renovate:
   enabled: true
   assignees:
