@@ -5,8 +5,8 @@ go 1.21
 require (
 	github.com/gophercloud/gophercloud v1.8.0
 	github.com/gophercloud/utils v0.0.0-20231010081019-80377eca5d56
-	github.com/sapcc/go-api-declarations v1.10.3
-	github.com/sapcc/go-bits v0.0.0-20231130134726-6ee9377708fc
+	github.com/sapcc/go-api-declarations v1.10.4
+	github.com/sapcc/go-bits v0.0.0-20231207031921-c96e6a5833c8
 )
 
 require (
