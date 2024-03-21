@@ -44,7 +44,7 @@ func TestProjectReadUpdate(t *testing.T) {
 	UpdateProjectField(t, client, project, "NumberOfEndusers")
 
 	// valid project is required
-	//UpdateProjectField(t, client, project, "CostObject")
+	// UpdateProjectField(t, client, project, "CostObject")
 }
 
 func TestProjectList(t *testing.T) {
