@@ -6,9 +6,6 @@
 run:
   timeout: 3m # 1m by default
   modules-download-mode: readonly
-  skip-dirs:
-    - acceptance/clients
-    - acceptance/tools
 
 output:
   # Do not print lines of code with issue.
@@ -19,6 +16,9 @@ issues:
     # It is idiomatic Go to reuse the name 'err' with ':=' for subsequent errors.
     # Ref: https://go.dev/doc/effective_go#redeclaration
     - 'declaration of "err" shadows declaration at'
+  exclude-dirs:
+    - acceptance/clients
+    - acceptance/tools
   exclude-rules:
     - path: _test\.go
       linters:
