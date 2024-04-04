@@ -174,8 +174,8 @@ func TestListFilteredDomain(t *testing.T) {
 	HandleListDomainsSuccessfully(t)
 
 	actual, err := domains.List(fake.ServiceClient(), domains.ListOpts{
-		Services:  []string{"shared"},
-		Resources: []string{"things"},
+		Services:  []limes.ServiceType{"shared"},
+		Resources: []limesresources.ResourceName{"things"},
 	}).ExtractDomains()
 	th.AssertNoErr(t, err)
 
@@ -315,8 +315,8 @@ func TestGetDomainFiltered(t *testing.T) {
 	HandleGetDomainSuccessfully(t)
 
 	actual, err := domains.Get(fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{
-		Services:  []string{"shared"},
-		Resources: []string{"things"},
+		Services:  []limes.ServiceType{"shared"},
+		Resources: []limesresources.ResourceName{"things"},
 	}).Extract()
 	th.AssertNoErr(t, err)
 

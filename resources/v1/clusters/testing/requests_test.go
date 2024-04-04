@@ -110,8 +110,8 @@ func TestGetFilteredCluster(t *testing.T) {
 
 	actual, err := clusters.Get(fake.ServiceClient(), clusters.GetOpts{
 		Detail:    true,
-		Services:  []string{"unshared"},
-		Resources: []string{"stuff"},
+		Services:  []limes.ServiceType{"unshared"},
+		Resources: []limesresources.ResourceName{"stuff"},
 	}).Extract()
 	th.AssertNoErr(t, err)
 

@@ -216,8 +216,8 @@ func TestListProjectsFiltered(t *testing.T) {
 	HandleListProjectsSuccessfully(t)
 
 	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
-		Services:  []string{"shared"},
-		Resources: []string{"things"},
+		Services:  []limes.ServiceType{"shared"},
+		Resources: []limesresources.ResourceName{"things"},
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
@@ -375,8 +375,8 @@ func TestGetProjectFiltered(t *testing.T) {
 	HandleGetProjectSuccessfully(t)
 
 	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
-		Services:  []string{"shared"},
-		Resources: []string{"things"},
+		Services:  []limes.ServiceType{"shared"},
+		Resources: []limesresources.ResourceName{"things"},
 	}).Extract()
 	th.AssertNoErr(t, err)
 
