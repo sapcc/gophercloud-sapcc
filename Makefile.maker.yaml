@@ -25,15 +25,12 @@ githubWorkflow:
   ci:
     enabled: true
     coveralls: true
-    ignorePaths: [ "**.md" ] # all Markdown files
   license:
-    enabled: true
     ignorePatterns:
       # vendored copies from upstream
       - "./internal/acceptance/clients/http.go"
       - "./internal/acceptance/tools/tools.go"
-  securityChecks:
-    enabled: true
+
 renovate:
   enabled: true
   assignees:
