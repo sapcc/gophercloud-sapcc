@@ -75,7 +75,7 @@ func TestGetFilteredClusterRates(t *testing.T) {
 	HandleGetClusterSuccessfully(t)
 
 	actual, err := clusters.Get(fake.ServiceClient(), clusters.GetOpts{
-		Services: []string{"shared"},
+		Services: []limes.ServiceType{"shared"},
 	}).Extract()
 	th.AssertNoErr(t, err)
 
