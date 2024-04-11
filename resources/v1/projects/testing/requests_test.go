@@ -16,6 +16,7 @@ package testing
 
 import (
 	"encoding/json"
+	"errors"
 	"testing"
 	"time"
 
@@ -24,7 +25,6 @@ import (
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
-	"github.com/sapcc/go-bits/errext"
 
 	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
 )
@@ -451,7 +451,8 @@ func TestUpdateProjectError(t *testing.T) {
 	warn, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.UpdateOpts{}).Extract()
 	th.AssertErr(t, err)
 	th.AssertDeepEquals(t, []byte(nil), warn)
-	if gerr, ok := errext.As[gophercloud.ErrDefault400](err); ok {
+	var gerr gophercloud.ErrDefault400
+	if ok := errors.As(err, &gerr); ok {
 		th.AssertDeepEquals(t, gerr.Body, []byte("it is currently not allowed to set bursting.enabled and quotas in the same request"))
 	} else {
 		t.Fatalf("Unexpected error response")
