@@ -16,11 +16,9 @@ package testing
 
 import (
 	"encoding/json"
-	"errors"
 	"testing"
 	"time"
 
-	"github.com/gophercloud/gophercloud"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
@@ -407,56 +405,6 @@ func TestGetProjectFiltered(t *testing.T) {
 		},
 	}
 	th.CheckDeepEquals(t, expected, actual)
-}
-
-func TestUpdateProject(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleUpdateProjectSuccessfully(t)
-
-	opts := projects.UpdateOpts{
-		Services: limesresources.QuotaRequest{
-			"compute": limesresources.ServiceQuotaRequest{
-				"cores": limesresources.ResourceQuotaRequest{
-					Value: 42,
-					Unit:  limes.UnitNone,
-				},
-			},
-		},
-	}
-
-	// if update succeeds then a 202 (no error) is returned.
-	warn, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", opts).Extract()
-	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, []byte{}, warn)
-}
-
-func TestUpdateProjectWarning(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleUpdateProjectPartly(t)
-
-	// expecting to get 202 response code with a warning
-	body, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.UpdateOpts{}).Extract()
-	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, body, []byte("it is currently not allowed to set bursting.enabled and quotas in the same request"))
-}
-
-func TestUpdateProjectError(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleUpdateProjectUnsuccessfully(t)
-
-	// expecting to get 400 response code
-	warn, err := projects.Update(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.UpdateOpts{}).Extract()
-	th.AssertErr(t, err)
-	th.AssertDeepEquals(t, []byte(nil), warn)
-	var gerr gophercloud.ErrDefault400
-	if ok := errors.As(err, &gerr); ok {
-		th.AssertDeepEquals(t, gerr.Body, []byte("it is currently not allowed to set bursting.enabled and quotas in the same request"))
-	} else {
-		t.Fatalf("Unexpected error response")
-	}
 }
 
 func TestSyncProject(t *testing.T) {

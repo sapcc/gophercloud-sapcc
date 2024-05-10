@@ -68,14 +68,3 @@ func HandleGetDomainSuccessfully(t *testing.T) {
 		w.Write(jsonBytes) //nolint:errcheck
 	})
 }
-
-// HandleUpdateDomainSuccessfully creates an HTTP handler at `/v1/domains/:domain_id` on the
-// test handler mux that tests domain update.
-func HandleUpdateDomainSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/domains/uuid-for-karachi", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "PUT")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-
-		w.WriteHeader(http.StatusAccepted)
-	})
-}

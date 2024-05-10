@@ -16,7 +16,6 @@
 package testing
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -80,17 +79,6 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 	})
 }
 
-// HandleUpdateProjectSuccessfully creates an HTTP handler at `/domains/:domain_id/projects/:project_id` on the
-// test handler mux that tests project updates.
-func HandleUpdateProjectSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "PUT")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-
-		w.WriteHeader(http.StatusAccepted)
-	})
-}
-
 // HandleSyncProjectSuccessfully creates an HTTP handler at `/domains/:domain_id/projects/:project_id/sync` on the
 // test handler mux that syncs a project.
 func HandleSyncProjectSuccessfully(t *testing.T) {
@@ -99,29 +87,5 @@ func HandleSyncProjectSuccessfully(t *testing.T) {
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.WriteHeader(http.StatusAccepted)
-	})
-}
-
-// HandleUpdateProjectPartly creates an HTTP handler at `/domains/:domain_id/projects/:project_id` on the
-// test handler mux that tests partly project updates.
-func HandleUpdateProjectPartly(t *testing.T) {
-	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "PUT")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-
-		w.WriteHeader(http.StatusAccepted)
-		fmt.Fprint(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
-	})
-}
-
-// HandleUpdateProjectUnsuccessfully creates an HTTP handler at `/domains/:domain_id/projects/:project_id` on the
-// test handler mux that tests an unsuccessful project updates.
-func HandleUpdateProjectUnsuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "PUT")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprint(w, `it is currently not allowed to set bursting.enabled and quotas in the same request`)
 	})
 }

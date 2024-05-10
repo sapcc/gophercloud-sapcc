@@ -348,27 +348,6 @@ func TestGetDomainFiltered(t *testing.T) {
 	th.CheckDeepEquals(t, expected, actual)
 }
 
-func TestUpdateDomain(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleUpdateDomainSuccessfully(t)
-
-	opts := domains.UpdateOpts{
-		Services: limesresources.QuotaRequest{
-			"shared": limesresources.ServiceQuotaRequest{
-				"things": limesresources.ResourceQuotaRequest{
-					Value: 99,
-					Unit:  limes.UnitNone,
-				},
-			},
-		},
-	}
-
-	// if update succeeds then a 202 (no error) is returned.
-	err := domains.Update(fake.ServiceClient(), "uuid-for-karachi", opts).ExtractErr()
-	th.AssertNoErr(t, err)
-}
-
 func p2time(timestamp int64) *limes.UnixEncodedTime {
 	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
 	return &t
