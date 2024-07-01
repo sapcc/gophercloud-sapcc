@@ -15,11 +15,13 @@
 package domains
 
 import (
+	"context"
+	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the List request
@@ -68,9 +70,10 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 }
 
 // Get retrieves a specific domain based on its unique ID.
-func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Get(ctx, getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
@@ -112,14 +115,15 @@ func (opts UpdateOpts) ToDomainUpdateMap() (map[string]interface{}, error) {
 
 // Update accepts a UpdateOpts struct and updates an existing domain using
 // the values provided.
-func Update(c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
+func Update(ctx context.Context, c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
 	b, err := opts.ToDomainUpdateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
-	resp, err := c.Put(updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Put(ctx, updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return

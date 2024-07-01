@@ -21,15 +21,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleGetDNSZoneSuccessfully creates an HTTP handler at `/network/dns/zone/:zone_id` on the
 // test handler mux that responds with a single DNS zone.
 func HandleGetDNSZoneSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/network/dns/zone/004321e142604754a789dd9b23db3242", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
@@ -45,7 +45,7 @@ func HandleGetDNSZoneSuccessfully(t *testing.T) {
 // test handler mux that responds with a list of DNS zones.
 func HandleListDNSZonesSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/network/dns/zone", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")

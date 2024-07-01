@@ -14,7 +14,7 @@
 
 package attributes
 
-import "github.com/gophercloud/gophercloud"
+import "github.com/gophercloud/gophercloud/v2"
 
 func listURL(c *gophercloud.ServiceClient, name string) string {
 	return c.ServiceURL("attributes", name)

@@ -1,5 +1,5 @@
 // copied from upstream to bypass internal package
-// https://github.com/gophercloud/gophercloud/blob/v1.7.0/github.com/sapcc/gophercloud-sapcc/internal/acceptance/clients/http.go
+// https://github.com/gophercloud/gophercloud/v2/blob/v1.7.0/github.com/sapcc/gophercloud-sapcc/internal/acceptance/clients/http.go
 package clients
 
 import (

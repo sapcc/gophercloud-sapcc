@@ -15,13 +15,14 @@
 package testing
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
 	"time"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/billing/services/costing"
 )
@@ -74,7 +75,7 @@ func TestList(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/services/costing/objects", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -83,7 +84,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allCostings, err := costing.ListObjects(fake.ServiceClient(), nil).AllPages()
+	allCostings, err := costing.ListObjects(fake.ServiceClient(), nil).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := costing.ExtractCostings(allCostings)
@@ -97,7 +98,7 @@ func TestListOpts(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/services/costing/objects", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		th.CheckEquals(t, r.URL.Query().Get("exclude_internal_co"), "true")
@@ -118,7 +119,7 @@ func TestListOpts(t *testing.T) {
 		End:               time.Date(2019, time.August, 20, 14, 39, 39, 786000000, time.UTC),
 	}
 
-	allCostings, err := costing.ListObjects(fake.ServiceClient(), listOpts).AllPages()
+	allCostings, err := costing.ListObjects(fake.ServiceClient(), listOpts).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := costing.ExtractCostings(allCostings)

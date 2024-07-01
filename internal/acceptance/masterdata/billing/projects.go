@@ -15,12 +15,13 @@
 package billing
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"testing"
 
-	"github.com/gophercloud/gophercloud"
-	th "github.com/gophercloud/gophercloud/testhelper"
+	"github.com/gophercloud/gophercloud/v2"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/projects"
 )
@@ -91,12 +92,12 @@ func UpdateProjectField(t *testing.T, client *gophercloud.ServiceClient, project
 }
 
 func UpdateProject(t *testing.T, client *gophercloud.ServiceClient, id string, opts projects.UpdateOpts) {
-	res := projects.Update(client, id, opts)
+	res := projects.Update(context.TODO(), client, id, opts)
 	th.AssertNoErr(t, res.Err)
 }
 
 func update(t *testing.T, client *gophercloud.ServiceClient, id string, opts projects.UpdateOpts) *projects.Project {
-	data, err := projects.Update(client, id, opts).Extract()
+	data, err := projects.Update(context.TODO(), client, id, opts).Extract()
 	th.AssertNoErr(t, err)
 	return data
 }

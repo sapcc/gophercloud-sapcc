@@ -15,8 +15,11 @@
 package costobjects
 
 import (
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"context"
+	"net/http"
+
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 
 	v1 "github.com/sapcc/gophercloud-sapcc/metis/v1"
 )
@@ -60,9 +63,10 @@ func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pa
 }
 
 // Get retrieves a specific costobject based on its unique ID.
-func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Get(ctx, getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return

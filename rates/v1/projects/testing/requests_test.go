@@ -15,11 +15,12 @@
 package testing
 
 import (
+	"context"
 	"testing"
 	"time"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesrates "github.com/sapcc/go-api-declarations/limes/rates"
 
@@ -31,7 +32,7 @@ func TestListProjectsRates(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ReadOpts{}).ExtractProjects()
+	actual, err := projects.List(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ReadOpts{}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	rateWindow := 2 * limesrates.WindowMinutes
@@ -132,7 +133,7 @@ func TestListProjectsFilteredRates(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	actual, err := projects.List(fakeclient.ServiceClient(), "uuid-for-germany", projects.ReadOpts{
+	actual, err := projects.List(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ReadOpts{
 		Services: []limes.ServiceType{"shared"},
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
@@ -193,7 +194,7 @@ func TestGetProjectRates(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetProjectSuccessfully(t)
 
-	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{}).Extract()
+	actual, err := projects.Get(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	rateWindow := 2 * limesrates.WindowMinutes
@@ -233,7 +234,7 @@ func TestGetProjectFilteredRates(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetProjectSuccessfully(t)
 
-	actual, err := projects.Get(fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{
+	actual, err := projects.Get(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{
 		Services: []limes.ServiceType{"shared"},
 	}).Extract()
 	th.AssertNoErr(t, err)

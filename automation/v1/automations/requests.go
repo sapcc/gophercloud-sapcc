@@ -15,8 +15,11 @@
 package automations
 
 import (
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"context"
+	"net/http"
+
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the
@@ -57,9 +60,10 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 }
 
 // Get retrieves a specific automation based on its unique ID.
-func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Get(ctx, getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
@@ -111,13 +115,14 @@ func (opts CreateOpts) ToAutomationCreateMap() (map[string]interface{}, error) {
 
 // Create accepts a CreateOpts struct and creates a new automation using the
 // values provided.
-func Create(c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
+func Create(ctx context.Context, c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToAutomationCreateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
-	resp, err := c.Post(createURL(c), b, &r.Body, &gophercloud.RequestOpts{
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Post(ctx, createURL(c), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{201},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -190,23 +195,25 @@ func (opts UpdateOpts) ToAutomationUpdateMap() (map[string]interface{}, error) {
 
 // Update accepts a UpdateOpts struct and updates an existing automation using
 // the values provided.
-func Update(c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
+func Update(ctx context.Context, c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
 	b, err := opts.ToAutomationUpdateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
-	resp, err := c.Put(updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Put(ctx, updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
 // Delete accepts a unique ID and deletes the automation associated with it.
-func Delete(c *gophercloud.ServiceClient, id string) (r DeleteResult) {
-	resp, err := c.Delete(deleteURL(c, id), &gophercloud.RequestOpts{
-		OkCodes: []int{204},
+func Delete(ctx context.Context, c *gophercloud.ServiceClient, id string) (r DeleteResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Delete(ctx, deleteURL(c, id), &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusNoContent},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return

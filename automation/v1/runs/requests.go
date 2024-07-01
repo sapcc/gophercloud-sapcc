@@ -15,8 +15,11 @@
 package runs
 
 import (
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"context"
+	"net/http"
+
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the
@@ -57,9 +60,10 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 }
 
 // Get retrieves a specific run based on its unique ID.
-func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Get(ctx, getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
@@ -84,13 +88,14 @@ func (opts CreateOpts) ToRunCreateMap() (map[string]interface{}, error) {
 
 // Create accepts a CreateOpts struct and creates a new run using the values
 // provided.
-func Create(c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
+func Create(ctx context.Context, c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToRunCreateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
-	resp, err := c.Post(createURL(c), b, &r.Body, &gophercloud.RequestOpts{
+	//nolint:bodyclose // already handled by gophercloud//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Post(ctx, createURL(c), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{201},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
