@@ -15,13 +15,14 @@
 package testing
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
 	"time"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/price"
 )
@@ -58,7 +59,7 @@ func TestList(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/pricelist", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -67,7 +68,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allPrices, err := price.List(fake.ServiceClient(), price.ListOpts{}).AllPages()
+	allPrices, err := price.List(fake.ServiceClient(), price.ListOpts{}).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := price.ExtractPrices(allPrices)
@@ -81,7 +82,7 @@ func TestListOpts(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/pricelist", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		th.CheckEquals(t, r.URL.Query().Get("onlyActive"), "true")
@@ -98,7 +99,7 @@ func TestListOpts(t *testing.T) {
 		MetricType: "foo",
 	}
 
-	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages()
+	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := price.ExtractPrices(allPrices)
@@ -112,7 +113,7 @@ func TestDateListOpts(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/price/region/foo/2018-08-20T14:39:39/2019-08-20T14:39:39", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -128,7 +129,7 @@ func TestDateListOpts(t *testing.T) {
 		To:         time.Date(2019, time.August, 20, 14, 39, 39, 786000000, time.UTC),
 	}
 
-	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages()
+	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := price.ExtractPrices(allPrices)
@@ -142,7 +143,7 @@ func TestRegionListOptsNoDate(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/price/region/foo/0001-01-01T00:00:00/9999-12-31T00:00:00", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -156,7 +157,7 @@ func TestRegionListOptsNoDate(t *testing.T) {
 		MetricType: "foo",
 	}
 
-	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages()
+	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := price.ExtractPrices(allPrices)

@@ -20,15 +20,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleGetClusterSuccessfully creates an HTTP handler at `/v1/clusters/:cluster_id` on the
 // test handler mux that responds with a single cluster.
 func HandleGetClusterSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/clusters/current", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")

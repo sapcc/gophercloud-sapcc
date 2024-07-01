@@ -21,15 +21,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleGetCostObjectSuccessfully creates an HTTP handler at `/identity/costobject/:costobject_id` on the
 // test handler mux that responds with a single costobject.
 func HandleGetCostObjectSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/identity/costobject/costobject-1", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
@@ -45,7 +45,7 @@ func HandleGetCostObjectSuccessfully(t *testing.T) {
 // test handler mux that responds with a list of costobjects.
 func HandleListCostObjectsSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/identity/costobject", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")

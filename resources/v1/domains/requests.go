@@ -16,7 +16,9 @@
 package domains
 
 import (
-	"github.com/gophercloud/gophercloud"
+	"context"
+
+	"github.com/gophercloud/gophercloud/v2"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 )
@@ -49,7 +51,7 @@ func (opts ListOpts) ToDomainListParams() (headers map[string]string, queryStrin
 }
 
 // List enumerates the domains to which the current token has access.
-func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) (r CommonResult) {
+func List(ctx context.Context, c *gophercloud.ServiceClient, opts ListOptsBuilder) (r CommonResult) {
 	url := listURL(c)
 	headers := make(map[string]string)
 	if opts != nil {
@@ -62,7 +64,7 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) (r CommonResult) {
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(ctx, url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -97,7 +99,7 @@ func (opts GetOpts) ToDomainGetParams() (headers map[string]string, quersString 
 }
 
 // Get retrieves details on a single domain, by ID.
-func Get(c *gophercloud.ServiceClient, domainID string, opts GetOptsBuilder) (r CommonResult) {
+func Get(ctx context.Context, c *gophercloud.ServiceClient, domainID string, opts GetOptsBuilder) (r CommonResult) {
 	url := getURL(c, domainID)
 	headers := make(map[string]string)
 	if opts != nil {
@@ -110,7 +112,7 @@ func Get(c *gophercloud.ServiceClient, domainID string, opts GetOptsBuilder) (r 
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(ctx, url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)

@@ -17,7 +17,7 @@ package util
 import (
 	"strconv"
 
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // GetCurrentAndTotalPages is a helper function that is used within the

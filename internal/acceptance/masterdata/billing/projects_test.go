@@ -15,11 +15,12 @@
 package billing
 
 import (
+	"context"
 	"testing"
 
 	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/projects"
 )
@@ -27,11 +28,11 @@ import (
 var projectID = "3e0fd3f8e9ec449686ef26a16a284265"
 
 func TestProjectReadUpdate(t *testing.T) {
-	client, err := NewBillingClient()
+	client, err := NewBillingClient(context.TODO())
 	th.AssertNoErr(t, err)
 
 	// Get project
-	project, err := projects.Get(client, projectID).Extract()
+	project, err := projects.Get(context.TODO(), client, projectID).Extract()
 	th.AssertNoErr(t, err)
 
 	// restore initial project data
@@ -48,15 +49,15 @@ func TestProjectReadUpdate(t *testing.T) {
 }
 
 func TestProjectList(t *testing.T) {
-	client, err := NewBillingClient()
+	client, err := NewBillingClient(context.TODO())
 	th.AssertNoErr(t, err)
 
 	// Get project
-	project, err := projects.Get(client, projectID).Extract()
+	project, err := projects.Get(context.TODO(), client, projectID).Extract()
 	th.AssertNoErr(t, err)
 
 	// Get projects
-	allPages, err := projects.List(client, projects.ListOpts{}).AllPages()
+	allPages, err := projects.List(client, projects.ListOpts{}).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	allProjects, err := projects.ExtractProjects(allPages)

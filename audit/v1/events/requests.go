@@ -15,13 +15,15 @@
 package events
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // DateFilter represents a valid filter to use for filtering
@@ -144,7 +146,7 @@ func (opts GetOpts) ToEventsQuery() (string, error) {
 }
 
 // Get retrieves a specific event based on its unique ID.
-func Get(c *gophercloud.ServiceClient, id string, opts GetOptsBuilder) (r GetResult) {
+func Get(ctx context.Context, c *gophercloud.ServiceClient, id string, opts GetOptsBuilder) (r GetResult) {
 	serviceURL := getURL(c, id)
 	if opts != nil {
 		query, err := opts.ToEventsQuery()
@@ -155,8 +157,8 @@ func Get(c *gophercloud.ServiceClient, id string, opts GetOptsBuilder) (r GetRes
 		serviceURL += query
 	}
 
-	resp, err := c.Get(serviceURL, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+	resp, err := c.Get(ctx, serviceURL, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return

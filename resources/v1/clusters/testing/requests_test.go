@@ -15,12 +15,13 @@
 package testing
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 	"time"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
@@ -32,7 +33,7 @@ func TestGetCluster(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetClusterSuccessfully(t)
 
-	actual, err := clusters.Get(fake.ServiceClient(), clusters.GetOpts{}).Extract()
+	actual, err := clusters.Get(context.TODO(), fake.ServiceClient(), clusters.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	var capacity uint64 = 10
@@ -108,7 +109,7 @@ func TestGetFilteredCluster(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetClusterSuccessfully(t)
 
-	actual, err := clusters.Get(fake.ServiceClient(), clusters.GetOpts{
+	actual, err := clusters.Get(context.TODO(), fake.ServiceClient(), clusters.GetOpts{
 		Detail:    true,
 		Services:  []limes.ServiceType{"unshared"},
 		Resources: []limesresources.ResourceName{"stuff"},

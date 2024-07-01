@@ -15,10 +15,11 @@
 package v1
 
 import (
+	"context"
 	"testing"
 
-	"github.com/gophercloud/gophercloud/pagination"
-	th "github.com/gophercloud/gophercloud/testhelper"
+	"github.com/gophercloud/gophercloud/v2/pagination"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
 
@@ -27,14 +28,14 @@ import (
 )
 
 func TestRunCR(t *testing.T) {
-	client, err := NewAutomationV1Client()
+	client, err := NewAutomationV1Client(context.TODO())
 	th.AssertNoErr(t, err)
 
 	// Create Chef and Script automations
 	runList := []string{"foo"}
 	chefAutomation, err := CreateChefAutomation(t, client, runList)
 	th.AssertNoErr(t, err)
-	defer automations.Delete(client, chefAutomation.ID)
+	defer automations.Delete(context.TODO(), client, chefAutomation.ID)
 
 	tools.PrintResource(t, chefAutomation)
 
@@ -48,7 +49,7 @@ func TestRunCR(t *testing.T) {
 	tools.PrintResource(t, run)
 
 	// Read the run
-	newRun, err := runs.Get(client, run.ID).Extract()
+	newRun, err := runs.Get(context.TODO(), client, run.ID).Extract()
 	th.AssertNoErr(t, err)
 
 	tools.PrintResource(t, newRun)
@@ -57,14 +58,14 @@ func TestRunCR(t *testing.T) {
 }
 
 func TestRunList(t *testing.T) {
-	client, err := NewAutomationV1Client()
+	client, err := NewAutomationV1Client(context.TODO())
 	th.AssertNoErr(t, err)
 
 	count := 0
 	var allRuns []runs.Run
 
 	//nolint:errcheck
-	runs.List(client, runs.ListOpts{PerPage: 1}).EachPage(func(page pagination.Page) (bool, error) {
+	runs.List(client, runs.ListOpts{PerPage: 1}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		tmp, err := runs.ExtractRuns(page)
 		if err != nil {

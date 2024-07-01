@@ -17,7 +17,7 @@
 package clients
 
 import (
-	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/v2"
 )
 
 // NewLimesV1 creates a ServiceClient that may be used to interact with Limes' API

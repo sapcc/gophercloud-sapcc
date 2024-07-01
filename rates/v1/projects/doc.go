@@ -22,9 +22,9 @@
 //	  "fmt"
 //	  "log"
 //
-//	  "github.com/gophercloud/gophercloud"
-//	  "github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
-//	  "github.com/gophercloud/utils/openstack/clientconfig"
+//	  "github.com/gophercloud/gophercloud/v2"
+//	  "github.com/gophercloud/gophercloud/v2/openstack/identity/v3/tokens"
+//	  "github.com/gophercloud/utils/v2/openstack/clientconfig"
 //
 //	  "github.com/sapcc/gophercloud-sapcc/clients"
 //	  "github.com/sapcc/gophercloud-sapcc/rates/v1/projects"

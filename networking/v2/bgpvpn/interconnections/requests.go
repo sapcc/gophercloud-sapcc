@@ -15,10 +15,11 @@
 package interconnections
 
 import (
+	"context"
 	"net/http"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the List
@@ -72,9 +73,9 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 }
 
 // Get retrieves a specific interconnection based on its ID.
-func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
+func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
 	//nolint:bodyclose // already handled by gophercloud
-	resp, err := c.Get(getURL(c, id), &r.Body, nil)
+	resp, err := c.Get(ctx, getURL(c, id), &r.Body, nil)
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
@@ -102,22 +103,22 @@ func (opts CreateOpts) ToInterconnectionCreateMap() (map[string]any, error) {
 }
 
 // Create creates a new interconnection.
-func Create(c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
+func Create(ctx context.Context, c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToInterconnectionCreateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
 	//nolint:bodyclose // already handled by gophercloud
-	resp, err := c.Post(createURL(c), b, &r.Body, nil)
+	resp, err := c.Post(ctx, createURL(c), b, &r.Body, nil)
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
 // Delete deletes an interconnection.
-func Delete(c *gophercloud.ServiceClient, id string) (r DeleteResult) {
+func Delete(ctx context.Context, c *gophercloud.ServiceClient, id string) (r DeleteResult) {
 	//nolint:bodyclose // already handled by gophercloud
-	resp, err := c.Delete(deleteURL(c, id), nil)
+	resp, err := c.Delete(ctx, deleteURL(c, id), nil)
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
@@ -140,14 +141,14 @@ func (opts UpdateOpts) ToInterconnectionUpdateMap() (map[string]any, error) {
 }
 
 // Update allows interconnections to be updated.
-func Update(c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
+func Update(ctx context.Context, c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
 	b, err := opts.ToInterconnectionUpdateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
 	//nolint:bodyclose // already handled by gophercloud
-	resp, err := c.Put(updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Put(ctx, updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)

@@ -15,13 +15,14 @@
 package testing
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
 	"time"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/domains"
 )
@@ -67,7 +68,7 @@ func TestList(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/domains", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -76,7 +77,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allDomains, err := domains.List(fake.ServiceClient(), domains.ListOpts{}).AllPages()
+	allDomains, err := domains.List(fake.ServiceClient(), domains.ListOpts{}).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := domains.ExtractDomains(allDomains)
@@ -90,7 +91,7 @@ func TestListOpts(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/domains", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		th.CheckEquals(t, "true", r.URL.Query().Get("checkCOValidity"))
@@ -109,7 +110,7 @@ func TestListOpts(t *testing.T) {
 		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
 	}
 
-	allDomains, err := domains.List(fake.ServiceClient(), listOpts).AllPages()
+	allDomains, err := domains.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := domains.ExtractDomains(allDomains)
@@ -123,7 +124,7 @@ func TestGet(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -132,7 +133,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := domains.Get(fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285").Extract()
+	n, err := domains.Get(context.TODO(), fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, domainsList[0])
@@ -168,7 +169,7 @@ func TestUpdate(t *testing.T) {
 		Region:                      "region",
 	}
 
-	s, err := domains.Update(fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285", options).Extract()
+	s, err := domains.Update(context.TODO(), fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285", options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *s, updateResponse)

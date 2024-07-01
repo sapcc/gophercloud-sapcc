@@ -15,7 +15,7 @@
 package domains
 
 import (
-	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/v2"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 )
 

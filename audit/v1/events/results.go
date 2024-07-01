@@ -15,8 +15,8 @@
 package events
 
 import (
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 	"github.com/sapcc/go-api-declarations/cadf"
 )
 

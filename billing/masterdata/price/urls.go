@@ -17,7 +17,7 @@ package price
 import (
 	"time"
 
-	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/v2"
 )
 
 func listURL(c *gophercloud.ServiceClient, opts ListOpts) string {

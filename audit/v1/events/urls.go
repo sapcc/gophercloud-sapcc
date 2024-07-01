@@ -14,7 +14,7 @@
 
 package events
 
-import "github.com/gophercloud/gophercloud"
+import "github.com/gophercloud/gophercloud/v2"
 
 func eventURL(c *gophercloud.ServiceClient, id string) string {
 	return c.ServiceURL("events", id)
