@@ -66,6 +66,7 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 
 // Get retrieves a specific job based on its unique ID.
 func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := c.Get(ctx, getURL(c, id), &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusOK},
 	})
@@ -105,6 +106,7 @@ func Create(ctx context.Context, c *gophercloud.ServiceClient, opts CreateOptsBu
 		r.Err = err
 		return
 	}
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := c.Post(ctx, createURL(c), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusOK},
 	})

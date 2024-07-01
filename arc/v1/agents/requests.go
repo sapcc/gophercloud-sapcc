@@ -69,6 +69,7 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 
 // Get retrieves a specific agent based on its unique ID.
 func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := c.Get(ctx, getURL(c, id), &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusOK},
 	})
@@ -122,6 +123,7 @@ func Init(ctx context.Context, c *gophercloud.ServiceClient, opts InitOptsBuilde
 
 // Delete accepts a unique ID and deletes the agent associated with it.
 func Delete(ctx context.Context, c *gophercloud.ServiceClient, id string) (r DeleteResult) {
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := c.Delete(ctx, deleteURL(c, id), &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusNoContent},
 	})
@@ -147,6 +149,7 @@ func CreateTags(ctx context.Context, client *gophercloud.ServiceClient, agentID 
 		r.Err = err
 		return
 	}
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := client.Post(ctx, tagsURL(client, agentID), b, nil, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusNoContent},
 	})
@@ -156,6 +159,7 @@ func CreateTags(ctx context.Context, client *gophercloud.ServiceClient, agentID 
 
 // GetTags lists tags for a given agent.
 func GetTags(ctx context.Context, client *gophercloud.ServiceClient, agentID string) (r TagsResult) {
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := client.Get(ctx, tagsURL(client, agentID), &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusOK},
 	})
@@ -165,6 +169,7 @@ func GetTags(ctx context.Context, client *gophercloud.ServiceClient, agentID str
 
 // DeleteTag deletes an individual tag from an agent.
 func DeleteTag(ctx context.Context, client *gophercloud.ServiceClient, agentID, key string) (r TagsErrResult) {
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := client.Delete(ctx, deleteTagURL(client, agentID, key), &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusNoContent},
 	})
@@ -174,6 +179,7 @@ func DeleteTag(ctx context.Context, client *gophercloud.ServiceClient, agentID, 
 
 // GetFacts lists tags for a given agent.
 func GetFacts(ctx context.Context, client *gophercloud.ServiceClient, agentID string) (r FactsResult) {
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := client.Get(ctx, factsURL(client, agentID), &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusOK},
 	})

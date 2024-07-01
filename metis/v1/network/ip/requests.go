@@ -65,6 +65,7 @@ func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pa
 
 // Get retrieves a specific ipaddress.
 func Get(ctx context.Context, c *gophercloud.ServiceClient, ipaddress string) (r GetResult) {
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := c.Get(ctx, getURL(c, ipaddress), &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusOK},
 	})
