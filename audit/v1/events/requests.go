@@ -157,6 +157,7 @@ func Get(ctx context.Context, c *gophercloud.ServiceClient, id string, opts GetO
 		serviceURL += query
 	}
 
+	//nolint:bodyclose // already handled by gophercloud
 	resp, err := c.Get(ctx, serviceURL, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{http.StatusOK},
 	})
