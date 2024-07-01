@@ -15,15 +15,16 @@
 package testing
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/gophercloud/gophercloud/pagination"
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/pagination"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/automation/v1/automations"
 )
@@ -65,7 +66,7 @@ func TestList(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/automations", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -77,7 +78,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	automations.List(fake.ServiceClient(), automations.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
+	automations.List(fake.ServiceClient(), automations.ListOpts{}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := automations.ExtractAutomations(page)
 		if err != nil {
@@ -100,7 +101,7 @@ func TestGet(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/automations/2", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -109,7 +110,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := automations.Get(fake.ServiceClient(), "2").Extract()
+	n, err := automations.Get(context.TODO(), fake.ServiceClient(), "2").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, automationsList[1])
@@ -120,7 +121,7 @@ func TestCreate(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/automations", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "POST")
+		th.TestMethod(t, r, http.MethodPost)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
 		th.TestHeader(t, r, "Accept", "application/json")
@@ -144,7 +145,7 @@ func TestCreate(t *testing.T) {
 		Debug:       true,
 		ChefVersion: "12.22.5",
 	}
-	n, err := automations.Create(fake.ServiceClient(), options).Extract()
+	n, err := automations.Create(context.TODO(), fake.ServiceClient(), options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, automationsList[1])
@@ -154,7 +155,7 @@ func TestRequiredCreateOpts(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	res := automations.Create(fake.ServiceClient(), automations.CreateOpts{})
+	res := automations.Create(context.TODO(), fake.ServiceClient(), automations.CreateOpts{})
 	if res.Err == nil || !strings.Contains(res.Err.Error(), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
 	}
@@ -179,7 +180,7 @@ func TestUpdate(t *testing.T) {
 
 	options := automations.UpdateOpts{Debug: new(bool)}
 
-	s, err := automations.Update(fake.ServiceClient(), "2", options).Extract()
+	s, err := automations.Update(context.TODO(), fake.ServiceClient(), "2", options).Extract()
 	th.AssertNoErr(t, err)
 
 	tmp := automationsList[1]
@@ -207,7 +208,7 @@ func TestUpdateCreds(t *testing.T) {
 	creds := "foobar"
 	options := automations.UpdateOpts{RepositoryCredentials: &creds}
 
-	s, err := automations.Update(fake.ServiceClient(), "2", options).Extract()
+	s, err := automations.Update(context.TODO(), fake.ServiceClient(), "2", options).Extract()
 	th.AssertNoErr(t, err)
 
 	tmp := automationsList[1]
@@ -237,7 +238,7 @@ func TestRemoveRunList(t *testing.T) {
 		RunList: []string{},
 	}
 
-	s, err := automations.Update(fake.ServiceClient(), "2", options).Extract()
+	s, err := automations.Update(context.TODO(), fake.ServiceClient(), "2", options).Extract()
 	th.AssertNoErr(t, err)
 
 	tmp := automationsList[1]
@@ -255,6 +256,6 @@ func TestDelete(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	res := automations.Delete(fake.ServiceClient(), "2")
+	res := automations.Delete(context.TODO(), fake.ServiceClient(), "2")
 	th.AssertNoErr(t, res.Err)
 }

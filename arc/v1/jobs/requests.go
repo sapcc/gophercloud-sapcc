@@ -15,10 +15,12 @@
 package jobs
 
 import (
+	"context"
 	"io"
+	"net/http"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the
@@ -63,9 +65,9 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 }
 
 // Get retrieves a specific job based on its unique ID.
-func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
+	resp, err := c.Get(ctx, getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
@@ -97,23 +99,23 @@ func (opts CreateOpts) ToJobCreateMap() (map[string]interface{}, error) {
 
 // Create accepts a CreateOpts struct and creates a new job using the values
 // provided.
-func Create(c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
+func Create(ctx context.Context, c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToJobCreateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
-	resp, err := c.Post(createURL(c), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+	resp, err := c.Post(ctx, createURL(c), b, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
 // GetLog retrieves a log for a Job ID.
-func GetLog(c *gophercloud.ServiceClient, id string) (r GetLogResult) {
-	resp, err := c.Request("GET", getLogURL(c, id), &gophercloud.RequestOpts{
-		OkCodes:          []int{200},
+func GetLog(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetLogResult) {
+	resp, err := c.Request(ctx, http.MethodGet, getLogURL(c, id), &gophercloud.RequestOpts{
+		OkCodes:          []int{http.StatusOK},
 		KeepResponseBody: true,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)

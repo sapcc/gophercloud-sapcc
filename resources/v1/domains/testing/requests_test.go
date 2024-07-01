@@ -15,11 +15,12 @@
 package testing
 
 import (
+	"context"
 	"testing"
 	"time"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
@@ -31,7 +32,7 @@ func TestListDomain(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListDomainsSuccessfully(t)
 
-	actual, err := domains.List(fake.ServiceClient(), domains.ListOpts{}).ExtractDomains()
+	actual, err := domains.List(context.TODO(), fake.ServiceClient(), domains.ListOpts{}).ExtractDomains()
 	th.AssertNoErr(t, err)
 
 	var backendQ uint64
@@ -172,7 +173,7 @@ func TestListFilteredDomain(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListDomainsSuccessfully(t)
 
-	actual, err := domains.List(fake.ServiceClient(), domains.ListOpts{
+	actual, err := domains.List(context.TODO(), fake.ServiceClient(), domains.ListOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).ExtractDomains()
@@ -240,7 +241,7 @@ func TestGetDomain(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetDomainSuccessfully(t)
 
-	actual, err := domains.Get(fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{}).Extract()
+	actual, err := domains.Get(context.TODO(), fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesresources.DomainReport{
@@ -313,7 +314,7 @@ func TestGetDomainFiltered(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetDomainSuccessfully(t)
 
-	actual, err := domains.Get(fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{
+	actual, err := domains.Get(context.TODO(), fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).Extract()

@@ -15,7 +15,9 @@
 package projects
 
 import (
-	"github.com/gophercloud/gophercloud"
+	"context"
+
+	"github.com/gophercloud/gophercloud/v2"
 	"github.com/sapcc/go-api-declarations/limes"
 )
 
@@ -44,7 +46,7 @@ func (opts ReadOpts) ToProjectReadParams() (headers map[string]string, queryStri
 }
 
 // List enumerates the projects in a specific domain.
-func List(c *gophercloud.ServiceClient, domainID string, opts ReadOptsBuilder) (r CommonResult) {
+func List(ctx context.Context, c *gophercloud.ServiceClient, domainID string, opts ReadOptsBuilder) (r CommonResult) {
 	url := listURL(c, domainID)
 	headers := make(map[string]string)
 	if opts != nil {
@@ -57,7 +59,7 @@ func List(c *gophercloud.ServiceClient, domainID string, opts ReadOptsBuilder) (
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(ctx, url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -65,7 +67,7 @@ func List(c *gophercloud.ServiceClient, domainID string, opts ReadOptsBuilder) (
 }
 
 // Get retrieves details on a single project, by ID.
-func Get(c *gophercloud.ServiceClient, domainID, projectID string, opts ReadOptsBuilder) (r CommonResult) {
+func Get(ctx context.Context, c *gophercloud.ServiceClient, domainID, projectID string, opts ReadOptsBuilder) (r CommonResult) {
 	url := getURL(c, domainID, projectID)
 	headers := make(map[string]string)
 	if opts != nil {
@@ -78,7 +80,7 @@ func Get(c *gophercloud.ServiceClient, domainID, projectID string, opts ReadOpts
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{
+	resp, err := c.Get(ctx, url, &r.Body, &gophercloud.RequestOpts{
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)

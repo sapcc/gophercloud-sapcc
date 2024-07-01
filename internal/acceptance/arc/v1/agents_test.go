@@ -15,20 +15,21 @@
 package v1
 
 import (
+	"context"
 	"encoding/json"
 	"strings"
 	"testing"
 
 	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
 
-	"github.com/gophercloud/gophercloud/pagination"
-	th "github.com/gophercloud/gophercloud/testhelper"
+	"github.com/gophercloud/gophercloud/v2/pagination"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/arc/v1/agents"
 )
 
 func TestAgentInit(t *testing.T) {
-	client, err := NewArcV1Client()
+	client, err := NewArcV1Client(context.TODO())
 	th.AssertNoErr(t, err)
 
 	cloudConfig, err := InitAgent(t, client, "text/cloud-config")
@@ -50,14 +51,14 @@ func TestAgentInit(t *testing.T) {
 }
 
 func TestAgentList(t *testing.T) {
-	client, err := NewArcV1Client()
+	client, err := NewArcV1Client(context.TODO())
 	th.AssertNoErr(t, err)
 
 	var count int
 	var allAgents []agents.Agent
 
 	//nolint:errcheck
-	agents.List(client, agents.ListOpts{PerPage: 1}).EachPage(func(page pagination.Page) (bool, error) {
+	agents.List(client, agents.ListOpts{PerPage: 1}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		tmp, err := agents.ExtractAgents(page)
 		if err != nil {

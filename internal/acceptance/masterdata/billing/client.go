@@ -15,14 +15,15 @@
 package billing
 
 import (
+	"context"
 	"net/http"
 	"os"
 
 	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/clients"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/openstack"
-	"github.com/gophercloud/utils/openstack/clientconfig"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/openstack"
+	"github.com/gophercloud/utils/v2/openstack/clientconfig"
 
 	cc_clients "github.com/sapcc/gophercloud-sapcc/clients"
 )
@@ -44,13 +45,13 @@ func configureDebug(client *gophercloud.ProviderClient) *gophercloud.ProviderCli
 // NewBillingClient returns a *ServiceClient for making calls
 // to the OpenStack Billing API. An error will be returned if
 // authentication or client creation was not possible.
-func NewBillingClient() (*gophercloud.ServiceClient, error) {
+func NewBillingClient(ctx context.Context) (*gophercloud.ServiceClient, error) {
 	ao, err := clientconfig.AuthOptions(nil)
 	if err != nil {
 		return nil, err
 	}
 
-	client, err := openstack.AuthenticatedClient(*ao)
+	client, err := openstack.AuthenticatedClient(ctx, *ao)
 	if err != nil {
 		return nil, err
 	}

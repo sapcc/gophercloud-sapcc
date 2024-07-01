@@ -15,10 +15,11 @@
 package testing
 
 import (
+	"context"
 	"testing"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/metis/v1/identity/projects"
 )
@@ -28,7 +29,7 @@ func TestGetProject(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetProjectSuccessfully(t)
 
-	actual, err := projects.Get(fakeclient.ServiceClient(), "project-1").Extract()
+	actual, err := projects.Get(context.TODO(), fakeclient.ServiceClient(), "project-1").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &projects.Project{
@@ -85,7 +86,7 @@ func TestListProjects(t *testing.T) {
 		Limit: 1,
 	}
 
-	p, err := projects.List(fakeclient.ServiceClient(), opts).AllPages()
+	p, err := projects.List(fakeclient.ServiceClient(), opts).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 	actual, err := projects.Extract(p)
 	th.AssertNoErr(t, err)

@@ -15,8 +15,8 @@
 package costobjects
 
 import (
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 
 	v1 "github.com/sapcc/gophercloud-sapcc/metis/v1"
 )

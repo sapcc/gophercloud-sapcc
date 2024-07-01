@@ -15,13 +15,14 @@
 package testing
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
 	"time"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/projects"
 )
@@ -99,7 +100,7 @@ func TestList(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/projects", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -108,7 +109,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allProjects, err := projects.List(fake.ServiceClient(), projects.ListOpts{}).AllPages()
+	allProjects, err := projects.List(fake.ServiceClient(), projects.ListOpts{}).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)
@@ -122,7 +123,7 @@ func TestListOpts(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/projects", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		th.CheckEquals(t, r.URL.Query().Get("checkCOValidity"), "true")
@@ -141,7 +142,7 @@ func TestListOpts(t *testing.T) {
 		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
 	}
 
-	allProjects, err := projects.List(fake.ServiceClient(), listOpts).AllPages()
+	allProjects, err := projects.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)
@@ -155,7 +156,7 @@ func TestGet(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/masterdata/projects/e9141fb24eee4b3e9f25ae69cda31132", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -164,7 +165,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := projects.Get(fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132").Extract()
+	n, err := projects.Get(context.TODO(), fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, projectsList[0])
@@ -215,7 +216,7 @@ func TestUpdate(t *testing.T) {
 		BusinessCriticality: "dev",
 	}
 
-	s, err := projects.Update(fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132", options).Extract()
+	s, err := projects.Update(context.TODO(), fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132", options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *s, updateResponse)

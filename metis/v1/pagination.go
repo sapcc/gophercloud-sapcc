@@ -14,7 +14,7 @@
 
 package v1
 
-import "github.com/gophercloud/gophercloud/pagination"
+import "github.com/gophercloud/gophercloud/v2/pagination"
 
 // CommonPage is the common base type for all pagination pages used by Metis V1 endpoints.
 type CommonPage struct {
