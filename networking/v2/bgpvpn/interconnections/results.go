@@ -38,7 +38,7 @@ func (r commonResult) Extract() (*Interconnection, error) {
 	return &s, err
 }
 
-func (r commonResult) ExtractInto(v interface{}) error {
+func (r commonResult) ExtractInto(v any) error {
 	return r.Result.ExtractIntoStructPtr(v, "interconnection")
 }
 
@@ -151,6 +151,6 @@ func ExtractInterconnections(r pagination.Page) ([]Interconnection, error) {
 	return s, err
 }
 
-func ExtractInterconnectionssInto(r pagination.Page, v interface{}) error {
+func ExtractInterconnectionssInto(r pagination.Page, v any) error {
 	return r.(InterconnectionPage).Result.ExtractIntoSlicePtr(v, "interconnections")
 }

@@ -36,7 +36,7 @@ func TestList(t *testing.T) {
 	}
 	th.Mux.HandleFunc("/v2.0/interconnection/interconnections",
 		func(w http.ResponseWriter, r *http.Request) {
-			th.TestMethod(t, r, "GET")
+			th.TestMethod(t, r, http.MethodGet)
 			th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 			err := r.ParseForm()
@@ -71,7 +71,7 @@ func TestGet(t *testing.T) {
 
 	id := "a943ab0b-8b32-47dd-805b-4d17b7e15359"
 	th.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -88,7 +88,7 @@ func TestCreate(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/v2.0/interconnection/interconnections", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "POST")
+		th.TestMethod(t, r, http.MethodPost)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
 		th.TestHeader(t, r, "Accept", "application/json")
@@ -109,7 +109,7 @@ func TestDelete(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "DELETE")
+		th.TestMethod(t, r, http.MethodDelete)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Accept", "application/json")
 
@@ -127,7 +127,7 @@ func TestUpdate(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "PUT")
+		th.TestMethod(t, r, http.MethodPut)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
 		th.TestHeader(t, r, "Accept", "application/json")

@@ -15,6 +15,8 @@
 package interconnections
 
 import (
+	"net/http"
+
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
 )
@@ -80,7 +82,7 @@ func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
 // CreateOptsBuilder allows extensions to add additional parameters to the
 // Create request.
 type CreateOptsBuilder interface {
-	ToInterconnectionCreateMap() (map[string]interface{}, error)
+	ToInterconnectionCreateMap() (map[string]any, error)
 }
 
 // CreateOpts represents options used to create an interconnection.
@@ -95,7 +97,7 @@ type CreateOpts struct {
 }
 
 // ToInterconnectionCreateMap formats a CreateOpts into a map.
-func (opts CreateOpts) ToInterconnectionCreateMap() (map[string]interface{}, error) {
+func (opts CreateOpts) ToInterconnectionCreateMap() (map[string]any, error) {
 	return gophercloud.BuildRequestBody(opts, "interconnection")
 }
 
@@ -123,7 +125,7 @@ func Delete(c *gophercloud.ServiceClient, id string) (r DeleteResult) {
 // UpdateOptsBuilder allows extensions to add additional parameters to the
 // Update request.
 type UpdateOptsBuilder interface {
-	ToInterconnectionUpdateMap() (map[string]interface{}, error)
+	ToInterconnectionUpdateMap() (map[string]any, error)
 }
 
 // UpdateOpts represents options used to update an interconnection.
@@ -133,7 +135,7 @@ type UpdateOpts struct {
 }
 
 // ToInterconnectionUpdateMap formats an UpdateOpts into a map.
-func (opts UpdateOpts) ToInterconnectionUpdateMap() (map[string]interface{}, error) {
+func (opts UpdateOpts) ToInterconnectionUpdateMap() (map[string]any, error) {
 	return gophercloud.BuildRequestBody(opts, "interconnection")
 }
 
@@ -146,7 +148,7 @@ func Update(c *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r 
 	}
 	//nolint:bodyclose // already handled by gophercloud
 	resp, err := c.Put(updateURL(c, id), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
