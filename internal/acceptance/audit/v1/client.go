@@ -15,13 +15,14 @@
 package v1
 
 import (
+	"context"
 	"net/http"
 	"os"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/openstack"
-	"github.com/gophercloud/utils/client"
-	"github.com/gophercloud/utils/openstack/clientconfig"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/openstack"
+	"github.com/gophercloud/utils/v2/client"
+	"github.com/gophercloud/utils/v2/openstack/clientconfig"
 
 	"github.com/sapcc/gophercloud-sapcc/clients"
 )
@@ -44,7 +45,7 @@ func configureDebug(provider *gophercloud.ProviderClient) *gophercloud.ProviderC
 // NewHermesV1Client returns a *ServiceClient for making calls
 // to the OpenStack Hermes v1 API. An error will be returned if
 // authentication or client creation was not possible.
-func NewHermesV1Client() (*gophercloud.ServiceClient, error) {
+func NewHermesV1Client(ctx context.Context) (*gophercloud.ServiceClient, error) {
 	ao, err := clientconfig.AuthOptions(nil)
 	if err != nil {
 		return nil, err
@@ -57,7 +58,7 @@ func NewHermesV1Client() (*gophercloud.ServiceClient, error) {
 
 	provider = configureDebug(provider)
 
-	err = openstack.Authenticate(provider, *ao)
+	err = openstack.Authenticate(ctx, provider, *ao)
 	if err != nil {
 		return nil, err
 	}

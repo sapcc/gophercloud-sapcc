@@ -15,7 +15,7 @@
 package billing
 
 import (
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // Bool allows 0/1 to also become boolean.

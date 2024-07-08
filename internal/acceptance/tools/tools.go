@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// copied from https://github.com/gophercloud/gophercloud/blob/v1.7.0/github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools/tools.go#L48-L60
+// copied from https://github.com/gophercloud/gophercloud/v2/blob/v1.7.0/github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools/tools.go#L48-L60
 // RandomString generates a string of given length, but random content.
 // All content will be within the ASCII graphic character set.
 // (Implementation from Even Shaw's contribution on
@@ -22,7 +22,7 @@ func RandomString(prefix string, n int) string {
 	return prefix + string(bytes)
 }
 
-// copied from https://github.com/gophercloud/gophercloud/blob/v1.7.0/github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools/tools.go#L77-L81
+// copied from https://github.com/gophercloud/gophercloud/v2/blob/v1.7.0/github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools/tools.go#L77-L81
 // PrintResource returns a resource as a readable structure
 func PrintResource(t *testing.T, resource interface{}) {
 	b, _ := json.MarshalIndent(resource, "", "  ")

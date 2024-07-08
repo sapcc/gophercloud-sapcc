@@ -15,13 +15,14 @@
 package testing
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
 
-	fake "github.com/gophercloud/gophercloud/openstack/networking/v2/common"
-	"github.com/gophercloud/gophercloud/pagination"
-	th "github.com/gophercloud/gophercloud/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/openstack/networking/v2/common"
+	"github.com/gophercloud/gophercloud/v2/pagination"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/networking/v2/bgpvpn/interconnections"
 )
@@ -50,7 +51,8 @@ func TestList(t *testing.T) {
 	count := 0
 
 	err := interconnections.List(fake.ServiceClient(), listOpts).EachPage(
-		func(page pagination.Page) (bool, error) {
+		context.TODO(),
+		func(ctx context.Context, page pagination.Page) (bool, error) {
 			count++
 			actual, err := interconnections.ExtractInterconnections(page)
 			if err != nil {
@@ -78,7 +80,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetInterconnectionResponse)
 	})
 
-	s, err := interconnections.Get(fake.ServiceClient(), id).Extract()
+	s, err := interconnections.Get(context.TODO(), fake.ServiceClient(), id).Extract()
 	th.AssertNoErr(t, err)
 	th.CheckDeepEquals(t, *s, interconnectionGet)
 }
@@ -98,7 +100,7 @@ func TestCreate(t *testing.T) {
 		fmt.Fprint(w, GetInterconnectionResponse)
 	})
 
-	r, err := interconnections.Create(fake.ServiceClient(), interconnectionCreate).Extract()
+	r, err := interconnections.Create(context.TODO(), fake.ServiceClient(), interconnectionCreate).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, *r, interconnectionGet)
 }
@@ -117,7 +119,7 @@ func TestDelete(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := interconnections.Delete(fake.ServiceClient(), id).ExtractErr()
+	err := interconnections.Delete(context.TODO(), fake.ServiceClient(), id).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
@@ -146,7 +148,7 @@ func TestUpdate(t *testing.T) {
 		State: &state,
 	}
 
-	r, err := interconnections.Update(fake.ServiceClient(), id, opts).Extract()
+	r, err := interconnections.Update(context.TODO(), fake.ServiceClient(), id, opts).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, r.Name, name)
 	th.AssertDeepEquals(t, r.State, state)

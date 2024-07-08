@@ -15,9 +15,10 @@
 package projects
 
 import (
+	"context"
 	"net/http"
 
-	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/v2"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 )
@@ -51,7 +52,7 @@ func (opts ListOpts) ToProjectListParams() (headers map[string]string, queryStri
 }
 
 // List enumerates the projects in a specific domain.
-func List(c *gophercloud.ServiceClient, domainID string, opts ListOptsBuilder) (r CommonResult) {
+func List(ctx context.Context, c *gophercloud.ServiceClient, domainID string, opts ListOptsBuilder) (r CommonResult) {
 	url := listURL(c, domainID)
 	headers := make(map[string]string)
 	if opts != nil {
@@ -64,7 +65,7 @@ func List(c *gophercloud.ServiceClient, domainID string, opts ListOptsBuilder) (
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
+	resp, err := c.Get(ctx, url, &r.Body, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -100,7 +101,7 @@ func (opts GetOpts) ToProjectGetParams() (headers map[string]string, queryString
 }
 
 // Get retrieves details on a single project, by ID.
-func Get(c *gophercloud.ServiceClient, domainID, projectID string, opts GetOptsBuilder) (r CommonResult) {
+func Get(ctx context.Context, c *gophercloud.ServiceClient, domainID, projectID string, opts GetOptsBuilder) (r CommonResult) {
 	url := getURL(c, domainID, projectID)
 	headers := make(map[string]string)
 	if opts != nil {
@@ -113,7 +114,7 @@ func Get(c *gophercloud.ServiceClient, domainID, projectID string, opts GetOptsB
 		url += q
 	}
 
-	resp, err := c.Get(url, &r.Body, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
+	resp, err := c.Get(ctx, url, &r.Body, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
 		MoreHeaders: headers,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -122,9 +123,9 @@ func Get(c *gophercloud.ServiceClient, domainID, projectID string, opts GetOptsB
 
 // Sync schedules a sync task that pulls a project's data from the backing services
 // into Limes' local database.
-func Sync(c *gophercloud.ServiceClient, domainID, projectID string) (r SyncResult) {
+func Sync(ctx context.Context, c *gophercloud.ServiceClient, domainID, projectID string) (r SyncResult) {
 	url := syncURL(c, domainID, projectID)
-	resp, err := c.Post(url, nil, nil, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
+	resp, err := c.Post(ctx, url, nil, nil, &gophercloud.RequestOpts{ //nolint:bodyclose // already closed by gophercloud
 		OkCodes: []int{http.StatusAccepted},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)

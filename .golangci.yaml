@@ -130,7 +130,6 @@ linters:
     - errcheck
     - errname
     - errorlint
-    - exportloopref
     - forbidigo
     - ginkgolinter
     - gocheckcompilerdirectives

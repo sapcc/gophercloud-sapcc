@@ -15,10 +15,12 @@
 package agents
 
 import (
+	"context"
 	"io"
+	"net/http"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/pagination"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the
@@ -66,9 +68,10 @@ func List(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 }
 
 // Get retrieves a specific agent based on its unique ID.
-func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
-	resp, err := c.Get(getURL(c, id), &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Get(ctx, getURL(c, id), &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
@@ -97,16 +100,16 @@ func (opts InitOpts) ToAgentInitMap() (map[string]string, error) {
 
 // Init accepts an InitOpts struct and initializes a new agent using the values
 // provided.
-func Init(c *gophercloud.ServiceClient, opts InitOptsBuilder) (r InitResult) {
+func Init(ctx context.Context, c *gophercloud.ServiceClient, opts InitOptsBuilder) (r InitResult) {
 	h, err := opts.ToAgentInitMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
 
-	resp, err := c.Request("POST", initURL(c), &gophercloud.RequestOpts{
+	resp, err := c.Request(ctx, http.MethodPost, initURL(c), &gophercloud.RequestOpts{
 		MoreHeaders:      h,
-		OkCodes:          []int{200},
+		OkCodes:          []int{http.StatusOK},
 		KeepResponseBody: true,
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
@@ -119,9 +122,10 @@ func Init(c *gophercloud.ServiceClient, opts InitOptsBuilder) (r InitResult) {
 }
 
 // Delete accepts a unique ID and deletes the agent associated with it.
-func Delete(c *gophercloud.ServiceClient, id string) (r DeleteResult) {
-	resp, err := c.Delete(deleteURL(c, id), &gophercloud.RequestOpts{
-		OkCodes: []int{204},
+func Delete(ctx context.Context, c *gophercloud.ServiceClient, id string) (r DeleteResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := c.Delete(ctx, deleteURL(c, id), &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusNoContent},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
@@ -139,41 +143,45 @@ func (opts Tags) ToTagsCreateMap() (map[string]string, error) {
 }
 
 // CreateTags adds/updates tags for a given agent.
-func CreateTags(client *gophercloud.ServiceClient, agentID string, opts Tags) (r TagsErrResult) {
+func CreateTags(ctx context.Context, client *gophercloud.ServiceClient, agentID string, opts Tags) (r TagsErrResult) {
 	b, err := opts.ToTagsCreateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
-	resp, err := client.Post(tagsURL(client, agentID), b, nil, &gophercloud.RequestOpts{
-		OkCodes: []int{204},
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := client.Post(ctx, tagsURL(client, agentID), b, nil, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusNoContent},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
 // GetTags lists tags for a given agent.
-func GetTags(client *gophercloud.ServiceClient, agentID string) (r TagsResult) {
-	resp, err := client.Get(tagsURL(client, agentID), &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+func GetTags(ctx context.Context, client *gophercloud.ServiceClient, agentID string) (r TagsResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := client.Get(ctx, tagsURL(client, agentID), &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
 // DeleteTag deletes an individual tag from an agent.
-func DeleteTag(client *gophercloud.ServiceClient, agentID, key string) (r TagsErrResult) {
-	resp, err := client.Delete(deleteTagURL(client, agentID, key), &gophercloud.RequestOpts{
-		OkCodes: []int{204},
+func DeleteTag(ctx context.Context, client *gophercloud.ServiceClient, agentID, key string) (r TagsErrResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := client.Delete(ctx, deleteTagURL(client, agentID, key), &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusNoContent},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
 
 // GetFacts lists tags for a given agent.
-func GetFacts(client *gophercloud.ServiceClient, agentID string) (r FactsResult) {
-	resp, err := client.Get(factsURL(client, agentID), &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+func GetFacts(ctx context.Context, client *gophercloud.ServiceClient, agentID string) (r FactsResult) {
+	//nolint:bodyclose // already handled by gophercloud
+	resp, err := client.Get(ctx, factsURL(client, agentID), &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{http.StatusOK},
 	})
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return

@@ -21,15 +21,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleListProjectsSuccessfully creates an HTTP handler at `/domains/:domain_id/projects` on the
 // test handler mux that responds with a list of (two) projects.
 func HandleListProjectsSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-germany/projects", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
@@ -50,7 +50,7 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 // test handler mux that responds with a single project.
 func HandleGetProjectSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc("/domains/uuid-for-germany/projects/uuid-for-berlin", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")

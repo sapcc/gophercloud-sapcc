@@ -15,10 +15,11 @@
 package testing
 
 import (
+	"context"
 	"testing"
 
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/testhelper/client"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/metis/v1/network/ip"
 )
@@ -28,7 +29,7 @@ func TestGetProject(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetIPAddressSuccessfully(t)
 
-	actual, err := ip.Get(fakeclient.ServiceClient(), "10.216.24.194").Extract()
+	actual, err := ip.Get(context.TODO(), fakeclient.ServiceClient(), "10.216.24.194").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &ip.IPAddress{
@@ -60,7 +61,7 @@ func TestListProjects(t *testing.T) {
 
 	opts := ip.ListOpts{Limit: 1}
 
-	p, err := ip.List(fakeclient.ServiceClient(), opts).AllPages()
+	p, err := ip.List(fakeclient.ServiceClient(), opts).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 	actual, err := ip.Extract(p)
 	th.AssertNoErr(t, err)

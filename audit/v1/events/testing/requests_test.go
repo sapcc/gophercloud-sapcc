@@ -15,13 +15,14 @@
 package testing
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
 
-	"github.com/gophercloud/gophercloud/pagination"
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/pagination"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/cadf"
 
 	"github.com/sapcc/gophercloud-sapcc/audit/v1/events"
@@ -88,7 +89,7 @@ func TestList(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/events", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -100,7 +101,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	events.List(fake.ServiceClient(), events.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
+	events.List(fake.ServiceClient(), events.ListOpts{}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := events.ExtractEvents(page)
 		if err != nil {
@@ -136,7 +137,7 @@ func TestGet(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/events/7189ce80-6e73-5ad9-bdc5-dcc47f176378", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
+		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
@@ -145,7 +146,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := events.Get(fake.ServiceClient(), "7189ce80-6e73-5ad9-bdc5-dcc47f176378", nil).Extract()
+	n, err := events.Get(context.TODO(), fake.ServiceClient(), "7189ce80-6e73-5ad9-bdc5-dcc47f176378", nil).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, event)

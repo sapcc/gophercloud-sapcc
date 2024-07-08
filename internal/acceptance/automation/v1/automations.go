@@ -15,12 +15,13 @@
 package v1
 
 import (
+	"context"
 	"testing"
 
 	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
 
-	"github.com/gophercloud/gophercloud"
-	th "github.com/gophercloud/gophercloud/testhelper"
+	"github.com/gophercloud/gophercloud/v2"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/automation/v1/automations"
 )
@@ -40,7 +41,7 @@ func CreateChefAutomation(t *testing.T, client *gophercloud.ServiceClient, runLi
 		RunList:    runList,
 	}
 
-	s, err := automations.Create(client, createOpts).Extract()
+	s, err := automations.Create(context.TODO(), client, createOpts).Extract()
 	if err != nil {
 		return s, err
 	}
@@ -70,7 +71,7 @@ func CreateScriptAutomation(t *testing.T, client *gophercloud.ServiceClient, pat
 		Path:       path,
 	}
 
-	s, err := automations.Create(client, createOpts).Extract()
+	s, err := automations.Create(context.TODO(), client, createOpts).Extract()
 	if err != nil {
 		return s, err
 	}

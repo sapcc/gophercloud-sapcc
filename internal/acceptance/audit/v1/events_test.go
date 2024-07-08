@@ -15,25 +15,26 @@
 package v1
 
 import (
+	"context"
 	"testing"
 
 	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
 
-	"github.com/gophercloud/gophercloud/pagination"
-	th "github.com/gophercloud/gophercloud/testhelper"
+	"github.com/gophercloud/gophercloud/v2/pagination"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
 	"github.com/sapcc/gophercloud-sapcc/audit/v1/events"
 )
 
 func TestEventList(t *testing.T) {
-	client, err := NewHermesV1Client()
+	client, err := NewHermesV1Client(context.TODO())
 	th.AssertNoErr(t, err)
 
 	var count int
 	var allEvents []events.Event
 
 	//nolint:errcheck
-	events.List(client, events.ListOpts{Limit: 5000}).EachPage(func(page pagination.Page) (bool, error) {
+	events.List(client, events.ListOpts{Limit: 5000}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		tmp, err := events.ExtractEvents(page)
 		if err != nil {

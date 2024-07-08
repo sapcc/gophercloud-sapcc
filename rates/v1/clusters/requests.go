@@ -16,7 +16,9 @@
 package clusters
 
 import (
-	"github.com/gophercloud/gophercloud"
+	"context"
+
+	"github.com/gophercloud/gophercloud/v2"
 	"github.com/sapcc/go-api-declarations/limes"
 )
 
@@ -38,7 +40,7 @@ func (opts GetOpts) ToClusterGetQuery() (string, error) {
 }
 
 // Get retrieves details on a single cluster, by ID.
-func Get(c *gophercloud.ServiceClient, opts GetOptsBuilder) (r CommonResult) {
+func Get(ctx context.Context, c *gophercloud.ServiceClient, opts GetOptsBuilder) (r CommonResult) {
 	url := getURL(c)
 	if opts != nil {
 		query, err := opts.ToClusterGetQuery()
@@ -48,7 +50,7 @@ func Get(c *gophercloud.ServiceClient, opts GetOptsBuilder) (r CommonResult) {
 		}
 		url += query
 	}
-	resp, err := c.Get(url, &r.Body, nil)
+	resp, err := c.Get(ctx, url, &r.Body, nil)
 	_, r.Header, r.Err = gophercloud.ParseResponse(resp, err)
 	return
 }
