@@ -1,4 +1,4 @@
-module github.com/sapcc/gophercloud-sapcc
+module github.com/sapcc/gophercloud-sapcc/v2
 
 go 1.22
 
