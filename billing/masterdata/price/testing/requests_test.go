@@ -24,7 +24,7 @@ import (
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
-	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/price"
+	"github.com/sapcc/gophercloud-sapcc/v2/billing/masterdata/price"
 )
 
 var priceList = []price.Price{

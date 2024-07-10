@@ -23,7 +23,7 @@ import (
 	"github.com/gophercloud/gophercloud/v2"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/projects"
+	"github.com/sapcc/gophercloud-sapcc/v2/billing/masterdata/projects"
 )
 
 func getIntField(v interface{}, field string) int {

@@ -24,7 +24,7 @@ import (
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
-	"github.com/sapcc/gophercloud-sapcc/billing/services/billing"
+	"github.com/sapcc/gophercloud-sapcc/v2/billing/services/billing"
 )
 
 var billingList = []billing.Billing{

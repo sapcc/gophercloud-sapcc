@@ -26,7 +26,7 @@ import (
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
-	"github.com/sapcc/gophercloud-sapcc/automation/v1/automations"
+	"github.com/sapcc/gophercloud-sapcc/v2/automation/v1/automations"
 )
 
 var automationsList = []automations.Automation{

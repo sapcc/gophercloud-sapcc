@@ -24,7 +24,7 @@ import (
 	"github.com/sapcc/go-api-declarations/limes"
 	limesrates "github.com/sapcc/go-api-declarations/limes/rates"
 
-	"github.com/sapcc/gophercloud-sapcc/rates/v1/projects"
+	"github.com/sapcc/gophercloud-sapcc/v2/rates/v1/projects"
 )
 
 func TestListProjectsRates(t *testing.T) {

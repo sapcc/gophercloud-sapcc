@@ -18,11 +18,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
+	"github.com/sapcc/gophercloud-sapcc/v2/internal/acceptance/tools"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/billing/masterdata/projects"
+	"github.com/sapcc/gophercloud-sapcc/v2/billing/masterdata/projects"
 )
 
 var projectID = "3e0fd3f8e9ec449686ef26a16a284265"

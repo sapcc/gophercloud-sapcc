@@ -18,12 +18,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
+	"github.com/sapcc/gophercloud-sapcc/v2/internal/acceptance/tools"
 
 	"github.com/gophercloud/gophercloud/v2"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/automation/v1/automations"
+	"github.com/sapcc/gophercloud-sapcc/v2/automation/v1/automations"
 )
 
 // CreateChefAutomation will create a Chef automation. An error will be

@@ -18,12 +18,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
+	"github.com/sapcc/gophercloud-sapcc/v2/internal/acceptance/tools"
 
 	"github.com/gophercloud/gophercloud/v2/pagination"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/audit/v1/events"
+	"github.com/sapcc/gophercloud-sapcc/v2/audit/v1/events"
 )
 
 func TestEventList(t *testing.T) {

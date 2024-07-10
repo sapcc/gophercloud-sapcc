@@ -19,12 +19,12 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/clients"
+	"github.com/sapcc/gophercloud-sapcc/v2/internal/acceptance/clients"
 
 	"github.com/gophercloud/gophercloud/v2"
 	"github.com/gophercloud/gophercloud/v2/openstack"
 
-	cc_clients "github.com/sapcc/gophercloud-sapcc/clients"
+	cc_clients "github.com/sapcc/gophercloud-sapcc/v2/clients"
 )
 
 // configureDebug will configure the provider client to print the API

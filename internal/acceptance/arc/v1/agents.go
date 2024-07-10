@@ -21,7 +21,7 @@ import (
 	"github.com/gophercloud/gophercloud/v2"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/arc/v1/agents"
+	"github.com/sapcc/gophercloud-sapcc/v2/arc/v1/agents"
 )
 
 // CreateAgent will bootstrap an arc agent. An error will be returned if the
