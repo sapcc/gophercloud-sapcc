@@ -26,7 +26,7 @@ import (
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
-	"github.com/sapcc/gophercloud-sapcc/arc/v1/agents"
+	"github.com/sapcc/gophercloud-sapcc/v2/arc/v1/agents"
 )
 
 var agentTags = map[string]string{

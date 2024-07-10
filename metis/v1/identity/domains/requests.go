@@ -21,7 +21,7 @@ import (
 	"github.com/gophercloud/gophercloud/v2"
 	"github.com/gophercloud/gophercloud/v2/pagination"
 
-	v1 "github.com/sapcc/gophercloud-sapcc/metis/v1"
+	v1 "github.com/sapcc/gophercloud-sapcc/v2/metis/v1"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the

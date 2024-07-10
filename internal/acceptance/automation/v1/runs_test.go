@@ -21,10 +21,10 @@ import (
 	"github.com/gophercloud/gophercloud/v2/pagination"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
+	"github.com/sapcc/gophercloud-sapcc/v2/internal/acceptance/tools"
 
-	"github.com/sapcc/gophercloud-sapcc/automation/v1/automations"
-	"github.com/sapcc/gophercloud-sapcc/automation/v1/runs"
+	"github.com/sapcc/gophercloud-sapcc/v2/automation/v1/automations"
+	"github.com/sapcc/gophercloud-sapcc/v2/automation/v1/runs"
 )
 
 func TestRunCR(t *testing.T) {

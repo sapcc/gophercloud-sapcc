@@ -24,7 +24,7 @@ import (
 	"github.com/gophercloud/gophercloud/v2/pagination"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/networking/v2/bgpvpn/interconnections"
+	"github.com/sapcc/gophercloud-sapcc/v2/networking/v2/bgpvpn/interconnections"
 )
 
 func TestList(t *testing.T) {

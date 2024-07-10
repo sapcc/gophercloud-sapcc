@@ -14,7 +14,7 @@
 
 package testing
 
-import "github.com/sapcc/gophercloud-sapcc/networking/v2/bgpvpn/interconnections"
+import "github.com/sapcc/gophercloud-sapcc/v2/networking/v2/bgpvpn/interconnections"
 
 const ListInterconnectionsResponse = `
 {

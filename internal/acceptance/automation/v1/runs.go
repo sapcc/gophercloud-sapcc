@@ -21,7 +21,7 @@ import (
 	"github.com/gophercloud/gophercloud/v2"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/automation/v1/runs"
+	"github.com/sapcc/gophercloud-sapcc/v2/automation/v1/runs"
 )
 
 // CreateRun will create an automation run. An error will be

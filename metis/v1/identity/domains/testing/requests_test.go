@@ -21,7 +21,7 @@ import (
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
 
-	"github.com/sapcc/gophercloud-sapcc/metis/v1/identity/domains"
+	"github.com/sapcc/gophercloud-sapcc/v2/metis/v1/identity/domains"
 )
 
 func TestGetDomain(t *testing.T) {

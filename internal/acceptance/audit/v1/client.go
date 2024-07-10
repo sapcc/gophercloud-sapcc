@@ -24,7 +24,7 @@ import (
 	"github.com/gophercloud/utils/v2/client"
 	"github.com/gophercloud/utils/v2/openstack/clientconfig"
 
-	"github.com/sapcc/gophercloud-sapcc/clients"
+	"github.com/sapcc/gophercloud-sapcc/v2/clients"
 )
 
 // configureDebug will configure the provider client to print the API

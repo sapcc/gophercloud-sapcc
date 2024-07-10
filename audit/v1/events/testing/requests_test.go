@@ -25,7 +25,7 @@ import (
 	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/cadf"
 
-	"github.com/sapcc/gophercloud-sapcc/audit/v1/events"
+	"github.com/sapcc/gophercloud-sapcc/v2/audit/v1/events"
 )
 
 var eventsList = []events.Event{

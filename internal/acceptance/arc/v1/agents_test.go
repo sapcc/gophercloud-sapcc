@@ -20,12 +20,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sapcc/gophercloud-sapcc/internal/acceptance/tools"
+	"github.com/sapcc/gophercloud-sapcc/v2/internal/acceptance/tools"
 
 	"github.com/gophercloud/gophercloud/v2/pagination"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 
-	"github.com/sapcc/gophercloud-sapcc/arc/v1/agents"
+	"github.com/sapcc/gophercloud-sapcc/v2/arc/v1/agents"
 )
 
 func TestAgentInit(t *testing.T) {

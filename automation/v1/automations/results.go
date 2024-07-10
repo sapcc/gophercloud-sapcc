@@ -22,7 +22,7 @@ import (
 	"github.com/gophercloud/gophercloud/v2"
 	"github.com/gophercloud/gophercloud/v2/pagination"
 
-	"github.com/sapcc/gophercloud-sapcc/util"
+	"github.com/sapcc/gophercloud-sapcc/v2/util"
 )
 
 const (

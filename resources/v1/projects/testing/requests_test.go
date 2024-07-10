@@ -25,7 +25,7 @@ import (
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
-	"github.com/sapcc/gophercloud-sapcc/resources/v1/projects"
+	"github.com/sapcc/gophercloud-sapcc/v2/resources/v1/projects"
 )
 
 func TestListProjects(t *testing.T) {
