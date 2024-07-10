@@ -130,8 +130,9 @@ type UpdateOptsBuilder interface {
 
 // UpdateOpts represents options used to update an interconnection.
 type UpdateOpts struct {
-	Name  *string `json:"name,omitempty"`
-	State *string `json:"state,omitempty"`
+	Name                    *string `json:"name,omitempty"`
+	State                   *string `json:"state,omitempty"`
+	RemoteInterconnectionID *string `json:"remote_interconnection_id,omitempty"`
 }
 
 // ToInterconnectionUpdateMap formats an UpdateOpts into a map.
