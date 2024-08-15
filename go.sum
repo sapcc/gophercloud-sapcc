@@ -6,8 +6,8 @@ github.com/gophercloud/utils/v2 v2.0.0-20240807081201-990d90b23c70 h1:UFRmN3w9eS
 github.com/gophercloud/utils/v2 v2.0.0-20240807081201-990d90b23c70/go.mod h1:ZNbSKwPYzyQ7PKmlCvVdI2JvwVHsl/ZVVXnpJRNkLrQ=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
 github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
-github.com/sapcc/go-api-declarations v1.12.1 h1:1/QfRD7D4OGfZv3F1HGFwwAJtiuYUvjqE/XhE4UnpCc=
-github.com/sapcc/go-api-declarations v1.12.1/go.mod h1:83R3hTANhuRXt/pXDby37IJetw8l7DG41s33Tp9NXxI=
+github.com/sapcc/go-api-declarations v1.12.3 h1:BlAavGQJiv1PqAiIaGXg8jqsCk/kB7lNTOxk0l0eyn8=
+github.com/sapcc/go-api-declarations v1.12.3/go.mod h1:83R3hTANhuRXt/pXDby37IJetw8l7DG41s33Tp9NXxI=
 golang.org/x/sys v0.23.0 h1:YfKFowiIMvtgl1UERQoTPPToxltDeZfbj4H7dVUCwmM=
 golang.org/x/sys v0.23.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
 golang.org/x/text v0.17.0 h1:XtiM5bkSOt+ewxlOE/aE/AKEHibwj/6gvWMl9Rsh0Qc=
