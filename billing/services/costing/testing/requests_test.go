@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -84,7 +83,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allCostings, err := costing.ListObjects(fake.ServiceClient(), nil).AllPages(context.TODO())
+	allCostings, err := costing.ListObjects(fake.ServiceClient(), nil).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := costing.ExtractCostings(allCostings)
@@ -119,7 +118,7 @@ func TestListOpts(t *testing.T) {
 		End:               time.Date(2019, time.August, 20, 14, 39, 39, 786000000, time.UTC),
 	}
 
-	allCostings, err := costing.ListObjects(fake.ServiceClient(), listOpts).AllPages(context.TODO())
+	allCostings, err := costing.ListObjects(fake.ServiceClient(), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := costing.ExtractCostings(allCostings)

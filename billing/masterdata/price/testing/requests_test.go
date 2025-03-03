@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -68,7 +67,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allPrices, err := price.List(fake.ServiceClient(), price.ListOpts{}).AllPages(context.TODO())
+	allPrices, err := price.List(fake.ServiceClient(), price.ListOpts{}).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := price.ExtractPrices(allPrices)
@@ -99,7 +98,7 @@ func TestListOpts(t *testing.T) {
 		MetricType: "foo",
 	}
 
-	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
+	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := price.ExtractPrices(allPrices)
@@ -129,7 +128,7 @@ func TestDateListOpts(t *testing.T) {
 		To:         time.Date(2019, time.August, 20, 14, 39, 39, 786000000, time.UTC),
 	}
 
-	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
+	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := price.ExtractPrices(allPrices)
@@ -157,7 +156,7 @@ func TestRegionListOptsNoDate(t *testing.T) {
 		MetricType: "foo",
 	}
 
-	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
+	allPrices, err := price.List(fake.ServiceClient(), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := price.ExtractPrices(allPrices)

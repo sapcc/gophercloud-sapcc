@@ -15,7 +15,6 @@
 package billing
 
 import (
-	"context"
 	"fmt"
 	"reflect"
 	"testing"
@@ -92,12 +91,12 @@ func UpdateProjectField(t *testing.T, client *gophercloud.ServiceClient, project
 }
 
 func UpdateProject(t *testing.T, client *gophercloud.ServiceClient, id string, opts projects.UpdateOpts) {
-	res := projects.Update(context.TODO(), client, id, opts)
+	res := projects.Update(t.Context(), client, id, opts)
 	th.AssertNoErr(t, res.Err)
 }
 
 func update(t *testing.T, client *gophercloud.ServiceClient, id string, opts projects.UpdateOpts) *projects.Project {
-	data, err := projects.Update(context.TODO(), client, id, opts).Extract()
+	data, err := projects.Update(t.Context(), client, id, opts).Extract()
 	th.AssertNoErr(t, err)
 	return data
 }

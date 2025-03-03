@@ -78,7 +78,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	automations.List(fake.ServiceClient(), automations.ListOpts{}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	automations.List(fake.ServiceClient(), automations.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := automations.ExtractAutomations(page)
 		if err != nil {
@@ -110,7 +110,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := automations.Get(context.TODO(), fake.ServiceClient(), "2").Extract()
+	n, err := automations.Get(t.Context(), fake.ServiceClient(), "2").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, automationsList[1])
@@ -145,7 +145,7 @@ func TestCreate(t *testing.T) {
 		Debug:       true,
 		ChefVersion: "12.22.5",
 	}
-	n, err := automations.Create(context.TODO(), fake.ServiceClient(), options).Extract()
+	n, err := automations.Create(t.Context(), fake.ServiceClient(), options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, automationsList[1])
@@ -155,7 +155,7 @@ func TestRequiredCreateOpts(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	res := automations.Create(context.TODO(), fake.ServiceClient(), automations.CreateOpts{})
+	res := automations.Create(t.Context(), fake.ServiceClient(), automations.CreateOpts{})
 	if res.Err == nil || !strings.Contains(res.Err.Error(), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
 	}
@@ -180,7 +180,7 @@ func TestUpdate(t *testing.T) {
 
 	options := automations.UpdateOpts{Debug: new(bool)}
 
-	s, err := automations.Update(context.TODO(), fake.ServiceClient(), "2", options).Extract()
+	s, err := automations.Update(t.Context(), fake.ServiceClient(), "2", options).Extract()
 	th.AssertNoErr(t, err)
 
 	tmp := automationsList[1]
@@ -208,7 +208,7 @@ func TestUpdateCreds(t *testing.T) {
 	creds := "foobar"
 	options := automations.UpdateOpts{RepositoryCredentials: &creds}
 
-	s, err := automations.Update(context.TODO(), fake.ServiceClient(), "2", options).Extract()
+	s, err := automations.Update(t.Context(), fake.ServiceClient(), "2", options).Extract()
 	th.AssertNoErr(t, err)
 
 	tmp := automationsList[1]
@@ -238,7 +238,7 @@ func TestRemoveRunList(t *testing.T) {
 		RunList: []string{},
 	}
 
-	s, err := automations.Update(context.TODO(), fake.ServiceClient(), "2", options).Extract()
+	s, err := automations.Update(t.Context(), fake.ServiceClient(), "2", options).Extract()
 	th.AssertNoErr(t, err)
 
 	tmp := automationsList[1]
@@ -256,6 +256,6 @@ func TestDelete(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	res := automations.Delete(context.TODO(), fake.ServiceClient(), "2")
+	res := automations.Delete(t.Context(), fake.ServiceClient(), "2")
 	th.AssertNoErr(t, res.Err)
 }

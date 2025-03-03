@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"testing"
 	"time"
 
@@ -32,7 +31,7 @@ func TestGetClusterRates(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetClusterSuccessfully(t)
 
-	actual, err := clusters.Get(context.TODO(), fake.ServiceClient(), clusters.GetOpts{}).Extract()
+	actual, err := clusters.Get(t.Context(), fake.ServiceClient(), clusters.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesrates.ClusterReport{
@@ -75,7 +74,7 @@ func TestGetFilteredClusterRates(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetClusterSuccessfully(t)
 
-	actual, err := clusters.Get(context.TODO(), fake.ServiceClient(), clusters.GetOpts{
+	actual, err := clusters.Get(t.Context(), fake.ServiceClient(), clusters.GetOpts{
 		Services: []limes.ServiceType{"shared"},
 	}).Extract()
 	th.AssertNoErr(t, err)

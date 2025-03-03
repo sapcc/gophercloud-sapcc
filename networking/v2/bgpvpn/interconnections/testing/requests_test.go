@@ -51,7 +51,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	err := interconnections.List(fake.ServiceClient(), listOpts).EachPage(
-		context.TODO(),
+		t.Context(),
 		func(ctx context.Context, page pagination.Page) (bool, error) {
 			count++
 			actual, err := interconnections.ExtractInterconnections(page)
@@ -80,7 +80,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetInterconnectionResponse)
 	})
 
-	s, err := interconnections.Get(context.TODO(), fake.ServiceClient(), id).Extract()
+	s, err := interconnections.Get(t.Context(), fake.ServiceClient(), id).Extract()
 	th.AssertNoErr(t, err)
 	th.CheckDeepEquals(t, *s, interconnectionGet)
 }
@@ -100,7 +100,7 @@ func TestCreate(t *testing.T) {
 		fmt.Fprint(w, GetInterconnectionResponse)
 	})
 
-	r, err := interconnections.Create(context.TODO(), fake.ServiceClient(), interconnectionCreate).Extract()
+	r, err := interconnections.Create(t.Context(), fake.ServiceClient(), interconnectionCreate).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, *r, interconnectionGet)
 }
@@ -119,7 +119,7 @@ func TestDelete(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := interconnections.Delete(context.TODO(), fake.ServiceClient(), id).ExtractErr()
+	err := interconnections.Delete(t.Context(), fake.ServiceClient(), id).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
@@ -148,7 +148,7 @@ func TestUpdate(t *testing.T) {
 		State: &state,
 	}
 
-	r, err := interconnections.Update(context.TODO(), fake.ServiceClient(), id, opts).Extract()
+	r, err := interconnections.Update(t.Context(), fake.ServiceClient(), id, opts).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, r.Name, name)
 	th.AssertDeepEquals(t, r.State, state)

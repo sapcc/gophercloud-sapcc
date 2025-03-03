@@ -27,14 +27,14 @@ import (
 )
 
 func TestEventList(t *testing.T) {
-	client, err := NewHermesV1Client(context.TODO())
+	client, err := NewHermesV1Client(t.Context())
 	th.AssertNoErr(t, err)
 
 	var count int
 	var allEvents []events.Event
 
 	//nolint:errcheck
-	events.List(client, events.ListOpts{Limit: 5000}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	events.List(client, events.ListOpts{Limit: 5000}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		tmp, err := events.ExtractEvents(page)
 		if err != nil {

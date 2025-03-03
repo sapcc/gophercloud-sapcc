@@ -91,7 +91,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	jobs.List(fake.ServiceClient(), jobs.ListOpts{}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	jobs.List(fake.ServiceClient(), jobs.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := jobs.ExtractJobs(page)
 		if err != nil {
@@ -123,7 +123,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := jobs.Get(context.TODO(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
+	n, err := jobs.Get(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, jobsList[1])
@@ -153,7 +153,7 @@ func TestCreate(t *testing.T) {
 		Action:  "script",
 		Payload: "echo \"Script start\"\n\nfor i in {1..10}\ndo\n\techo $i\n  sleep 1s\ndone\n\necho \"Script done\"",
 	}
-	_, err := jobs.Create(context.TODO(), fake.ServiceClient(), options).Extract()
+	_, err := jobs.Create(t.Context(), fake.ServiceClient(), options).Extract()
 	th.AssertNoErr(t, err)
 }
 
@@ -171,7 +171,7 @@ func TestGetLog(t *testing.T) {
 		fmt.Fprint(w, LogResponse)
 	})
 
-	response := jobs.GetLog(context.TODO(), fake.ServiceClient(), "7ec336bd-fcd1-42af-a663-da578dd0b224")
+	response := jobs.GetLog(t.Context(), fake.ServiceClient(), "7ec336bd-fcd1-42af-a663-da578dd0b224")
 	th.AssertNoErr(t, response.Err)
 
 	expectedHeader := &jobs.GetLogHeader{ContentType: "text/plain; charset=utf-8"}
@@ -190,7 +190,7 @@ func TestRequiredCreateOpts(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	res := jobs.Create(context.TODO(), fake.ServiceClient(), jobs.CreateOpts{})
+	res := jobs.Create(t.Context(), fake.ServiceClient(), jobs.CreateOpts{})
 	if res.Err == nil || !strings.Contains(res.Err.Error(), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
 	}

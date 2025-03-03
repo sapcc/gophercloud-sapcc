@@ -15,7 +15,6 @@
 package v1
 
 import (
-	"context"
 	"testing"
 
 	"github.com/gophercloud/gophercloud/v2"
@@ -33,7 +32,7 @@ func InitAgent(t *testing.T, client *gophercloud.ServiceClient, accept string) (
 		Accept: accept,
 	}
 
-	response := agents.Init(context.TODO(), client, createOpts)
+	response := agents.Init(t.Context(), client, createOpts)
 	if response.Err != nil {
 		return nil, response.Err
 	}

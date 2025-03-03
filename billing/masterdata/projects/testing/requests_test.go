@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -109,7 +108,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allProjects, err := projects.List(fake.ServiceClient(), projects.ListOpts{}).AllPages(context.TODO())
+	allProjects, err := projects.List(fake.ServiceClient(), projects.ListOpts{}).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)
@@ -142,7 +141,7 @@ func TestListOpts(t *testing.T) {
 		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
 	}
 
-	allProjects, err := projects.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
+	allProjects, err := projects.List(fake.ServiceClient(), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)
@@ -165,7 +164,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := projects.Get(context.TODO(), fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132").Extract()
+	n, err := projects.Get(t.Context(), fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, projectsList[0])
@@ -216,7 +215,7 @@ func TestUpdate(t *testing.T) {
 		BusinessCriticality: "dev",
 	}
 
-	s, err := projects.Update(context.TODO(), fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132", options).Extract()
+	s, err := projects.Update(t.Context(), fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132", options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *s, updateResponse)

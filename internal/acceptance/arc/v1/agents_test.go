@@ -29,7 +29,7 @@ import (
 )
 
 func TestAgentInit(t *testing.T) {
-	client, err := NewArcV1Client(context.TODO())
+	client, err := NewArcV1Client(t.Context())
 	th.AssertNoErr(t, err)
 
 	cloudConfig, err := InitAgent(t, client, "text/cloud-config")
@@ -51,14 +51,14 @@ func TestAgentInit(t *testing.T) {
 }
 
 func TestAgentList(t *testing.T) {
-	client, err := NewArcV1Client(context.TODO())
+	client, err := NewArcV1Client(t.Context())
 	th.AssertNoErr(t, err)
 
 	var count int
 	var allAgents []agents.Agent
 
 	//nolint:errcheck
-	agents.List(client, agents.ListOpts{PerPage: 1}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	agents.List(client, agents.ListOpts{PerPage: 1}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		tmp, err := agents.ExtractAgents(page)
 		if err != nil {

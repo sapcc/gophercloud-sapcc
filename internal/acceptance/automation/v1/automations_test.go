@@ -27,21 +27,21 @@ import (
 )
 
 func TestAutomationCRUD(t *testing.T) {
-	client, err := NewAutomationV1Client(context.TODO())
+	client, err := NewAutomationV1Client(t.Context())
 	th.AssertNoErr(t, err)
 
 	// Create Chef and Script automations
 	runList := []string{"foo"}
 	chefAutomation, err := CreateChefAutomation(t, client, runList)
 	th.AssertNoErr(t, err)
-	defer automations.Delete(context.TODO(), client, chefAutomation.ID)
+	defer automations.Delete(t.Context(), client, chefAutomation.ID)
 
 	tools.PrintResource(t, chefAutomation)
 
 	path := "foo"
 	scriptAutomation, err := CreateScriptAutomation(t, client, path)
 	th.AssertNoErr(t, err)
-	defer automations.Delete(context.TODO(), client, scriptAutomation.ID)
+	defer automations.Delete(t.Context(), client, scriptAutomation.ID)
 
 	tools.PrintResource(t, scriptAutomation)
 
@@ -53,12 +53,12 @@ func TestAutomationCRUD(t *testing.T) {
 		ChefAttributes: chefAttributes,
 	}
 
-	newChefAutomation, err := automations.Update(context.TODO(), client, chefAutomation.ID, updateOpts).Extract()
+	newChefAutomation, err := automations.Update(t.Context(), client, chefAutomation.ID, updateOpts).Extract()
 	th.AssertNoErr(t, err)
 	tools.PrintResource(t, newChefAutomation)
 
 	// Read the updated automation
-	newGetAutomation, err := automations.Get(context.TODO(), client, chefAutomation.ID).Extract()
+	newGetAutomation, err := automations.Get(t.Context(), client, chefAutomation.ID).Extract()
 	th.AssertNoErr(t, err)
 
 	tools.PrintResource(t, newGetAutomation)
@@ -73,12 +73,12 @@ func TestAutomationCRUD(t *testing.T) {
 		RepositoryRevision: &newRevision,
 	}
 
-	newChefAutomation, err = automations.Update(context.TODO(), client, chefAutomation.ID, updateOpts).Extract()
+	newChefAutomation, err = automations.Update(t.Context(), client, chefAutomation.ID, updateOpts).Extract()
 	th.AssertNoErr(t, err)
 	tools.PrintResource(t, newChefAutomation)
 
 	// Read the updated automation
-	newGetAutomation, err = automations.Get(context.TODO(), client, chefAutomation.ID).Extract()
+	newGetAutomation, err = automations.Get(t.Context(), client, chefAutomation.ID).Extract()
 	th.AssertNoErr(t, err)
 
 	tools.PrintResource(t, newGetAutomation)
@@ -98,12 +98,12 @@ func TestAutomationCRUD(t *testing.T) {
 		Timeout:            1,
 	}
 
-	newScriptAutomation, err := automations.Update(context.TODO(), client, scriptAutomation.ID, updateOpts).Extract()
+	newScriptAutomation, err := automations.Update(t.Context(), client, scriptAutomation.ID, updateOpts).Extract()
 	th.AssertNoErr(t, err)
 	tools.PrintResource(t, newScriptAutomation)
 
 	// Read the updated automation
-	newGetAutomation, err = automations.Get(context.TODO(), client, scriptAutomation.ID).Extract()
+	newGetAutomation, err = automations.Get(t.Context(), client, scriptAutomation.ID).Extract()
 	th.AssertNoErr(t, err)
 
 	tools.PrintResource(t, newGetAutomation)
@@ -123,12 +123,12 @@ func TestAutomationCRUD(t *testing.T) {
 		Timeout:            3600,
 	}
 
-	newScriptAutomation, err = automations.Update(context.TODO(), client, scriptAutomation.ID, updateOpts).Extract()
+	newScriptAutomation, err = automations.Update(t.Context(), client, scriptAutomation.ID, updateOpts).Extract()
 	th.AssertNoErr(t, err)
 	tools.PrintResource(t, newScriptAutomation)
 
 	// Read the updated automation
-	newGetAutomation, err = automations.Get(context.TODO(), client, scriptAutomation.ID).Extract()
+	newGetAutomation, err = automations.Get(t.Context(), client, scriptAutomation.ID).Extract()
 	th.AssertNoErr(t, err)
 
 	tools.PrintResource(t, newGetAutomation)
@@ -141,25 +141,25 @@ func TestAutomationCRUD(t *testing.T) {
 }
 
 func TestAutomationList(t *testing.T) {
-	client, err := NewAutomationV1Client(context.TODO())
+	client, err := NewAutomationV1Client(t.Context())
 	th.AssertNoErr(t, err)
 
 	// Create automations
 	runList := []string{"foo"}
 	chefAutomation, err := CreateChefAutomation(t, client, runList)
 	th.AssertNoErr(t, err)
-	defer automations.Delete(context.TODO(), client, chefAutomation.ID)
+	defer automations.Delete(t.Context(), client, chefAutomation.ID)
 
 	path := "foo"
 	scriptAutomation, err := CreateScriptAutomation(t, client, path)
 	th.AssertNoErr(t, err)
-	defer automations.Delete(context.TODO(), client, scriptAutomation.ID)
+	defer automations.Delete(t.Context(), client, scriptAutomation.ID)
 
 	count := 0
 	var allAutomations []automations.Automation
 
 	//nolint:errcheck
-	automations.List(client, automations.ListOpts{PerPage: 1}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	automations.List(client, automations.ListOpts{PerPage: 1}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		tmp, err := automations.ExtractAutomations(page)
 		if err != nil {

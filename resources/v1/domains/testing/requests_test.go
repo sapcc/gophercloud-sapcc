@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"testing"
 	"time"
 
@@ -32,7 +31,7 @@ func TestListDomain(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListDomainsSuccessfully(t)
 
-	actual, err := domains.List(context.TODO(), fake.ServiceClient(), domains.ListOpts{}).ExtractDomains()
+	actual, err := domains.List(t.Context(), fake.ServiceClient(), domains.ListOpts{}).ExtractDomains()
 	th.AssertNoErr(t, err)
 
 	var backendQ uint64
@@ -173,7 +172,7 @@ func TestListFilteredDomain(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListDomainsSuccessfully(t)
 
-	actual, err := domains.List(context.TODO(), fake.ServiceClient(), domains.ListOpts{
+	actual, err := domains.List(t.Context(), fake.ServiceClient(), domains.ListOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).ExtractDomains()
@@ -241,7 +240,7 @@ func TestGetDomain(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetDomainSuccessfully(t)
 
-	actual, err := domains.Get(context.TODO(), fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{}).Extract()
+	actual, err := domains.Get(t.Context(), fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesresources.DomainReport{
@@ -314,7 +313,7 @@ func TestGetDomainFiltered(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetDomainSuccessfully(t)
 
-	actual, err := domains.Get(context.TODO(), fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{
+	actual, err := domains.Get(t.Context(), fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).Extract()

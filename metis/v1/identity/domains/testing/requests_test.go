@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
@@ -29,7 +28,7 @@ func TestGetDomain(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetDomainSuccessfully(t)
 
-	actual, err := domains.Get(context.TODO(), fakeclient.ServiceClient(), "domain-1").Extract()
+	actual, err := domains.Get(t.Context(), fakeclient.ServiceClient(), "domain-1").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &domains.Domain{
@@ -56,7 +55,7 @@ func TestListDomains(t *testing.T) {
 		Limit: 1,
 	}
 
-	p, err := domains.List(fakeclient.ServiceClient(), opts).AllPages(context.TODO())
+	p, err := domains.List(fakeclient.ServiceClient(), opts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 	actual, err := domains.Extract(p)
 	th.AssertNoErr(t, err)

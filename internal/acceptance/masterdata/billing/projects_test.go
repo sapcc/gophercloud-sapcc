@@ -15,7 +15,6 @@
 package billing
 
 import (
-	"context"
 	"testing"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/internal/acceptance/tools"
@@ -28,11 +27,11 @@ import (
 var projectID = "3e0fd3f8e9ec449686ef26a16a284265"
 
 func TestProjectReadUpdate(t *testing.T) {
-	client, err := NewBillingClient(context.TODO())
+	client, err := NewBillingClient(t.Context())
 	th.AssertNoErr(t, err)
 
 	// Get project
-	project, err := projects.Get(context.TODO(), client, projectID).Extract()
+	project, err := projects.Get(t.Context(), client, projectID).Extract()
 	th.AssertNoErr(t, err)
 
 	// restore initial project data
@@ -49,15 +48,15 @@ func TestProjectReadUpdate(t *testing.T) {
 }
 
 func TestProjectList(t *testing.T) {
-	client, err := NewBillingClient(context.TODO())
+	client, err := NewBillingClient(t.Context())
 	th.AssertNoErr(t, err)
 
 	// Get project
-	project, err := projects.Get(context.TODO(), client, projectID).Extract()
+	project, err := projects.Get(t.Context(), client, projectID).Extract()
 	th.AssertNoErr(t, err)
 
 	// Get projects
-	allPages, err := projects.List(client, projects.ListOpts{}).AllPages(context.TODO())
+	allPages, err := projects.List(client, projects.ListOpts{}).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	allProjects, err := projects.ExtractProjects(allPages)

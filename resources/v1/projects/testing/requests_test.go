@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"encoding/json"
 	"testing"
 	"time"
@@ -33,7 +32,7 @@ func TestListProjects(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	actual, err := projects.List(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{}).ExtractProjects()
+	actual, err := projects.List(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	backendQuota := int64(100)
@@ -166,7 +165,7 @@ func TestListProjectsDetailed(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	actual, err := projects.List(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Detail: true}).ExtractProjects()
+	actual, err := projects.List(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Detail: true}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	expected := []limesresources.ProjectReport{
@@ -214,7 +213,7 @@ func TestListProjectsFiltered(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleListProjectsSuccessfully(t)
 
-	actual, err := projects.List(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
+	actual, err := projects.List(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).ExtractProjects()
@@ -282,7 +281,7 @@ func TestGetProject(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetProjectSuccessfully(t)
 
-	actual, err := projects.Get(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{}).Extract()
+	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesresources.ProjectReport{
@@ -327,7 +326,7 @@ func TestGetProjectDetailed(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetProjectSuccessfully(t)
 
-	actual, err := projects.Get(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{Detail: true}).Extract()
+	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{Detail: true}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesresources.ProjectReport{
@@ -373,7 +372,7 @@ func TestGetProjectFiltered(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetProjectSuccessfully(t)
 
-	actual, err := projects.Get(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
+	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).Extract()
@@ -414,7 +413,7 @@ func TestSyncProject(t *testing.T) {
 	HandleSyncProjectSuccessfully(t)
 
 	// if sync succeeds then a 202 (no error) is returned.
-	err := projects.Sync(context.TODO(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden").ExtractErr()
+	err := projects.Sync(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden").ExtractErr()
 	th.AssertNoErr(t, err)
 }
 

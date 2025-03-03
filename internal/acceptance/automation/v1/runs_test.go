@@ -28,14 +28,14 @@ import (
 )
 
 func TestRunCR(t *testing.T) {
-	client, err := NewAutomationV1Client(context.TODO())
+	client, err := NewAutomationV1Client(t.Context())
 	th.AssertNoErr(t, err)
 
 	// Create Chef and Script automations
 	runList := []string{"foo"}
 	chefAutomation, err := CreateChefAutomation(t, client, runList)
 	th.AssertNoErr(t, err)
-	defer automations.Delete(context.TODO(), client, chefAutomation.ID)
+	defer automations.Delete(t.Context(), client, chefAutomation.ID)
 
 	tools.PrintResource(t, chefAutomation)
 
@@ -49,7 +49,7 @@ func TestRunCR(t *testing.T) {
 	tools.PrintResource(t, run)
 
 	// Read the run
-	newRun, err := runs.Get(context.TODO(), client, run.ID).Extract()
+	newRun, err := runs.Get(t.Context(), client, run.ID).Extract()
 	th.AssertNoErr(t, err)
 
 	tools.PrintResource(t, newRun)
@@ -58,14 +58,14 @@ func TestRunCR(t *testing.T) {
 }
 
 func TestRunList(t *testing.T) {
-	client, err := NewAutomationV1Client(context.TODO())
+	client, err := NewAutomationV1Client(t.Context())
 	th.AssertNoErr(t, err)
 
 	count := 0
 	var allRuns []runs.Run
 
 	//nolint:errcheck
-	runs.List(client, runs.ListOpts{PerPage: 1}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	runs.List(client, runs.ListOpts{PerPage: 1}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		tmp, err := runs.ExtractRuns(page)
 		if err != nil {

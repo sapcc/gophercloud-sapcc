@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -77,7 +76,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allDomains, err := domains.List(fake.ServiceClient(), domains.ListOpts{}).AllPages(context.TODO())
+	allDomains, err := domains.List(fake.ServiceClient(), domains.ListOpts{}).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := domains.ExtractDomains(allDomains)
@@ -110,7 +109,7 @@ func TestListOpts(t *testing.T) {
 		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
 	}
 
-	allDomains, err := domains.List(fake.ServiceClient(), listOpts).AllPages(context.TODO())
+	allDomains, err := domains.List(fake.ServiceClient(), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := domains.ExtractDomains(allDomains)
@@ -133,7 +132,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := domains.Get(context.TODO(), fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285").Extract()
+	n, err := domains.Get(t.Context(), fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, domainsList[0])
@@ -169,7 +168,7 @@ func TestUpdate(t *testing.T) {
 		Region:                      "region",
 	}
 
-	s, err := domains.Update(context.TODO(), fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285", options).Extract()
+	s, err := domains.Update(t.Context(), fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285", options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *s, updateResponse)

@@ -87,7 +87,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	agents.List(fake.ServiceClient(), agents.ListOpts{}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	agents.List(fake.ServiceClient(), agents.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := agents.ExtractAgents(page)
 		if err != nil {
@@ -119,7 +119,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := agents.Get(context.TODO(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
+	n, err := agents.Get(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, agentsList[0])
@@ -143,7 +143,7 @@ func TestInit(t *testing.T) {
 	options := agents.InitOpts{
 		Accept: "text/x-powershellscript",
 	}
-	response := agents.Init(context.TODO(), fake.ServiceClient(), options)
+	response := agents.Init(t.Context(), fake.ServiceClient(), options)
 	th.AssertNoErr(t, response.Err)
 
 	expectedHeader := &agents.InitHeader{ContentType: "text/x-powershellscript"}
@@ -184,7 +184,7 @@ func TestInitJSON(t *testing.T) {
 	options := agents.InitOpts{
 		Accept: "application/json",
 	}
-	response := agents.Init(context.TODO(), fake.ServiceClient(), options)
+	response := agents.Init(t.Context(), fake.ServiceClient(), options)
 	th.AssertNoErr(t, response.Err)
 
 	expectedHeader := &agents.InitHeader{ContentType: "application/json"}
@@ -229,7 +229,7 @@ func TestDelete(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := agents.Delete(context.TODO(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").ExtractErr()
+	err := agents.Delete(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
@@ -247,7 +247,7 @@ func TestGetTags(t *testing.T) {
 		fmt.Fprint(w, GetTagsResponse)
 	})
 
-	n, err := agents.GetTags(context.TODO(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
+	n, err := agents.GetTags(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, n, agentTags)
@@ -265,7 +265,7 @@ func TestCreateTag(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := agents.CreateTags(context.TODO(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1", agentTags).ExtractErr()
+	err := agents.CreateTags(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1", agentTags).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
@@ -281,7 +281,7 @@ func TestDeleteTag(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := agents.DeleteTag(context.TODO(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1", "pool").ExtractErr()
+	err := agents.DeleteTag(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1", "pool").ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
@@ -299,7 +299,7 @@ func TestGetFacts(t *testing.T) {
 		fmt.Fprint(w, GetFactsResponse)
 	})
 
-	n, err := agents.GetFacts(context.TODO(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
+	n, err := agents.GetFacts(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, n, agentFacts)

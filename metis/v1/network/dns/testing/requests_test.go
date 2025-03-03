@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
@@ -29,7 +28,7 @@ func TestGetDNSZone(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetDNSZoneSuccessfully(t)
 
-	actual, err := dns.Get(context.TODO(), fakeclient.ServiceClient(), "004321e142604754a789dd9b23db3242").Extract()
+	actual, err := dns.Get(t.Context(), fakeclient.ServiceClient(), "004321e142604754a789dd9b23db3242").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &dns.Zone{
@@ -69,7 +68,7 @@ func TestListDNSZones(t *testing.T) {
 
 	opts := dns.ListOpts{Limit: 1}
 
-	p, err := dns.List(fakeclient.ServiceClient(), opts).AllPages(context.TODO())
+	p, err := dns.List(fakeclient.ServiceClient(), opts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 	actual, err := dns.Extract(p)
 	th.AssertNoErr(t, err)

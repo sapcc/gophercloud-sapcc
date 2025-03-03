@@ -101,7 +101,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	events.List(fake.ServiceClient(), events.ListOpts{}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	events.List(fake.ServiceClient(), events.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := events.ExtractEvents(page)
 		if err != nil {
@@ -146,7 +146,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := events.Get(context.TODO(), fake.ServiceClient(), "7189ce80-6e73-5ad9-bdc5-dcc47f176378", nil).Extract()
+	n, err := events.Get(t.Context(), fake.ServiceClient(), "7189ce80-6e73-5ad9-bdc5-dcc47f176378", nil).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, event)

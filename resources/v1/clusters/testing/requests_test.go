@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"encoding/json"
 	"testing"
 	"time"
@@ -33,7 +32,7 @@ func TestGetCluster(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetClusterSuccessfully(t)
 
-	actual, err := clusters.Get(context.TODO(), fake.ServiceClient(), clusters.GetOpts{}).Extract()
+	actual, err := clusters.Get(t.Context(), fake.ServiceClient(), clusters.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	var capacity uint64 = 10
@@ -109,7 +108,7 @@ func TestGetFilteredCluster(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetClusterSuccessfully(t)
 
-	actual, err := clusters.Get(context.TODO(), fake.ServiceClient(), clusters.GetOpts{
+	actual, err := clusters.Get(t.Context(), fake.ServiceClient(), clusters.GetOpts{
 		Detail:    true,
 		Services:  []limes.ServiceType{"unshared"},
 		Resources: []limesresources.ResourceName{"stuff"},

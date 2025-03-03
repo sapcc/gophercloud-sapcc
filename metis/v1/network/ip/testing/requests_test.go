@@ -15,7 +15,6 @@
 package testing
 
 import (
-	"context"
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
@@ -29,7 +28,7 @@ func TestGetProject(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleGetIPAddressSuccessfully(t)
 
-	actual, err := ip.Get(context.TODO(), fakeclient.ServiceClient(), "10.216.24.194").Extract()
+	actual, err := ip.Get(t.Context(), fakeclient.ServiceClient(), "10.216.24.194").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &ip.IPAddress{
@@ -61,7 +60,7 @@ func TestListProjects(t *testing.T) {
 
 	opts := ip.ListOpts{Limit: 1}
 
-	p, err := ip.List(fakeclient.ServiceClient(), opts).AllPages(context.TODO())
+	p, err := ip.List(fakeclient.ServiceClient(), opts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 	actual, err := ip.Extract(p)
 	th.AssertNoErr(t, err)

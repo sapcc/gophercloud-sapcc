@@ -90,7 +90,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	runs.List(fake.ServiceClient(), runs.ListOpts{}).EachPage(context.TODO(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	runs.List(fake.ServiceClient(), runs.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := runs.ExtractRuns(page)
 		if err != nil {
@@ -122,7 +122,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := runs.Get(context.TODO(), fake.ServiceClient(), "1").Extract()
+	n, err := runs.Get(t.Context(), fake.ServiceClient(), "1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, RunObject, *n)
@@ -149,7 +149,7 @@ func TestCreate(t *testing.T) {
 		AutomationID: "2",
 		Selector:     "@identity='88e5cad3-38e6-454f-b412-662cda03e7a1'",
 	}
-	n, err := runs.Create(context.TODO(), fake.ServiceClient(), options).Extract()
+	n, err := runs.Create(t.Context(), fake.ServiceClient(), options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, CreatedObject)
@@ -159,7 +159,7 @@ func TestRequiredCreateOpts(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
-	res := runs.Create(context.TODO(), fake.ServiceClient(), runs.CreateOpts{})
+	res := runs.Create(t.Context(), fake.ServiceClient(), runs.CreateOpts{})
 	if res.Err == nil || !strings.Contains(res.Err.Error(), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
 	}
