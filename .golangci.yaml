@@ -178,14 +178,12 @@ linters:
       - linters:
           - goconst
         path: (.+)_test\.go
-      - path:
-        - acceptance/clients
-      - path:
-        - acceptance/tools
     paths:
       - third_party$
       - builtin$
       - examples$
+      - acceptance/clients
+      - acceptance/tools
 
 output:
   formats:
