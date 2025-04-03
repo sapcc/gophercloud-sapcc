@@ -3,7 +3,7 @@ module github.com/sapcc/gophercloud-sapcc/v2
 go 1.24
 
 require (
-	github.com/gophercloud/gophercloud/v2 v2.6.0
+	github.com/gophercloud/gophercloud/v2 v2.7.0
 	github.com/gophercloud/utils/v2 v2.0.0-20250212084022-725b94822eeb
 	github.com/sapcc/go-api-declarations v1.14.2
 )
