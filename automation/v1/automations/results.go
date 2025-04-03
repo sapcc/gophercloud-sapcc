@@ -42,7 +42,7 @@ func (r commonResult) Extract() (*Automation, error) {
 }
 
 func (r commonResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "")
+	return r.ExtractIntoStructPtr(v, "")
 }
 
 // CreateResult represents the result of a create operation. Call its Extract
@@ -203,5 +203,5 @@ func ExtractAutomations(r pagination.Page) ([]Automation, error) {
 }
 
 func ExtractAutomationsInto(r pagination.Page, v interface{}) error {
-	return r.(AutomationPage).Result.ExtractIntoSlicePtr(v, "")
+	return r.(AutomationPage).ExtractIntoSlicePtr(v, "")
 }

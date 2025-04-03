@@ -35,7 +35,7 @@ func (r commonResult) Extract() (*Domain, error) {
 }
 
 func (r commonResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "")
+	return r.ExtractIntoStructPtr(v, "")
 }
 
 // GetResult represents the result of a get operation. Call its Extract method
@@ -130,5 +130,5 @@ func ExtractDomains(r pagination.Page) ([]Domain, error) {
 }
 
 func ExtractDomainsInto(r pagination.Page, v interface{}) error {
-	return r.(DomainPage).Result.ExtractIntoSlicePtr(v, "")
+	return r.(DomainPage).ExtractIntoSlicePtr(v, "")
 }

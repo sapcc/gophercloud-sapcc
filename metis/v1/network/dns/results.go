@@ -79,5 +79,5 @@ func (r GetResult) Extract() (*Zone, error) {
 }
 
 func (r GetResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "")
+	return r.ExtractIntoStructPtr(v, "")
 }

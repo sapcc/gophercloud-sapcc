@@ -71,5 +71,5 @@ func ExtractPrices(r pagination.Page) ([]Price, error) {
 }
 
 func ExtractPricesInto(r pagination.Page, v interface{}) error {
-	return r.(PricePage).Result.ExtractIntoSlicePtr(v, "")
+	return r.(PricePage).ExtractIntoSlicePtr(v, "")
 }

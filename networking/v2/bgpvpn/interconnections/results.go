@@ -39,7 +39,7 @@ func (r commonResult) Extract() (*Interconnection, error) {
 }
 
 func (r commonResult) ExtractInto(v any) error {
-	return r.Result.ExtractIntoStructPtr(v, "interconnection")
+	return r.ExtractIntoStructPtr(v, "interconnection")
 }
 
 // CreateResult represents the result of a create operation.
@@ -116,7 +116,7 @@ func (r InterconnectionPage) LastMarker() (string, error) {
 		return invalidMarker, nil
 	}
 
-	u, err := url.Parse(r.URL.String())
+	u, err := url.Parse(r.String())
 	if err != nil {
 		return invalidMarker, err
 	}
@@ -152,5 +152,5 @@ func ExtractInterconnections(r pagination.Page) ([]Interconnection, error) {
 }
 
 func ExtractInterconnectionssInto(r pagination.Page, v any) error {
-	return r.(InterconnectionPage).Result.ExtractIntoSlicePtr(v, "interconnections")
+	return r.(InterconnectionPage).ExtractIntoSlicePtr(v, "interconnections")
 }

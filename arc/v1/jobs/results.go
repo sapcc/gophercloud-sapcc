@@ -41,7 +41,7 @@ func (r commonResult) Extract() (*Job, error) {
 }
 
 func (r commonResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "")
+	return r.ExtractIntoStructPtr(v, "")
 }
 
 // InitResult represents the result of a create operation. Call its Extract
@@ -189,5 +189,5 @@ func ExtractJobs(r pagination.Page) ([]Job, error) {
 }
 
 func ExtractJobsInto(r pagination.Page, v interface{}) error {
-	return r.(JobPage).Result.ExtractIntoSlicePtr(v, "")
+	return r.(JobPage).ExtractIntoSlicePtr(v, "")
 }
