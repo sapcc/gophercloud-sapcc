@@ -56,5 +56,5 @@ func ExtractCostings(r pagination.Page) ([]Costing, error) {
 }
 
 func ExtractCostingsInto(r pagination.Page, v interface{}) error {
-	return r.(CostingPage).Result.ExtractIntoSlicePtr(v, "")
+	return r.(CostingPage).ExtractIntoSlicePtr(v, "")
 }

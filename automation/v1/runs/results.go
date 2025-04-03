@@ -41,7 +41,7 @@ func (r commonResult) Extract() (*Run, error) {
 }
 
 func (r commonResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "")
+	return r.ExtractIntoStructPtr(v, "")
 }
 
 // CreateResult represents the result of a create operation. Call its Extract
@@ -151,5 +151,5 @@ func ExtractRuns(r pagination.Page) ([]Run, error) {
 }
 
 func ExtractRunsInto(r pagination.Page, v interface{}) error {
-	return r.(RunPage).Result.ExtractIntoSlicePtr(v, "")
+	return r.(RunPage).ExtractIntoSlicePtr(v, "")
 }

@@ -60,5 +60,5 @@ func (r GetResult) Extract() (*CostObject, error) {
 }
 
 func (r GetResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "")
+	return r.ExtractIntoStructPtr(v, "")
 }

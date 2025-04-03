@@ -32,7 +32,7 @@ func (r GetResult) Extract() (*Event, error) {
 }
 
 func (r GetResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "")
+	return r.ExtractIntoStructPtr(v, "")
 }
 
 // Event represents a Hermes Event.
@@ -84,5 +84,5 @@ func ExtractEvents(r pagination.Page) ([]Event, error) {
 }
 
 func ExtractEventsInto(r pagination.Page, v interface{}) error {
-	return r.(EventPage).Result.ExtractIntoSlicePtr(v, "events")
+	return r.(EventPage).ExtractIntoSlicePtr(v, "events")
 }

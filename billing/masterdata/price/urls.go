@@ -25,7 +25,7 @@ func listURL(c *gophercloud.ServiceClient, opts ListOpts) string {
 		return c.ServiceURL("masterdata", "pricelist")
 	}
 
-	if opts.To == (time.Time{}) {
+	if opts.To.Equal((time.Time{})) {
 		opts.To = time.Date(9999, time.December, 31, 0, 0, 0, 0, time.UTC)
 	}
 

@@ -41,7 +41,7 @@ func (r GetResult) Extract() (*Agent, error) {
 }
 
 func (r GetResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "")
+	return r.ExtractIntoStructPtr(v, "")
 }
 
 // InitHeader represents the headers returned in the response from an Init
@@ -176,7 +176,7 @@ func ExtractAgents(r pagination.Page) ([]Agent, error) {
 }
 
 func ExtractAgentsInto(r pagination.Page, v interface{}) error {
-	return r.(AgentPage).Result.ExtractIntoSlicePtr(v, "")
+	return r.(AgentPage).ExtractIntoSlicePtr(v, "")
 }
 
 type Tags map[string]string

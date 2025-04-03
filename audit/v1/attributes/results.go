@@ -44,5 +44,5 @@ func ExtractAttributes(r pagination.Page) ([]string, error) {
 }
 
 func ExtractAttributesInto(r pagination.Page, v interface{}) error {
-	return r.(AttributePage).Result.ExtractIntoSlicePtr(v, "")
+	return r.(AttributePage).ExtractIntoSlicePtr(v, "")
 }
