@@ -1,4 +1,8 @@
+// SPDX-FileCopyrightText: 2023 Gophercloud contributors
+// SPDX-License-Identifier: Apache-2.0
+
 // copied from upstream to bypass internal package
+// https://github.com/gophercloud/gophercloud/blob/v1.7.0/internal/acceptance/tools/tools.go
 package tools
 
 import (
