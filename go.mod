@@ -4,7 +4,7 @@ go 1.24
 
 require (
 	github.com/gophercloud/gophercloud/v2 v2.7.0
-	github.com/gophercloud/utils/v2 v2.0.0-20250606082759-66f28657aaaa
+	github.com/gophercloud/utils/v2 v2.0.0-20250617123236-b0c67de63928
 	github.com/sapcc/go-api-declarations v1.16.0
 )
 
