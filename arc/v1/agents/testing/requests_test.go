@@ -23,8 +23,8 @@ var agentTags = map[string]string{
 	"landscape": "staging",
 }
 
-var agentFacts = map[string]interface{}{
-	"agents": map[string]interface{}{
+var agentFacts = map[string]any{
+	"agents": map[string]any{
 		"chef":    "enabled",
 		"execute": "enabled",
 		"rpc":     "enabled",

@@ -61,7 +61,7 @@ func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetRes
 // CreateOptsBuilder allows extensions to add additional parameters to the
 // Create request.
 type CreateOptsBuilder interface {
-	ToRunCreateMap() (map[string]interface{}, error)
+	ToRunCreateMap() (map[string]any, error)
 }
 
 // CreateOpts represents the attributes used when creating a new run.
@@ -71,7 +71,7 @@ type CreateOpts struct {
 }
 
 // ToRunCreateMap builds a request body from CreateOpts.
-func (opts CreateOpts) ToRunCreateMap() (map[string]interface{}, error) {
+func (opts CreateOpts) ToRunCreateMap() (map[string]any, error) {
 	return gophercloud.BuildRequestBody(opts, "")
 }
 

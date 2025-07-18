@@ -73,7 +73,7 @@ func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetRes
 // UpdateOptsBuilder allows extensions to add additional parameters to the
 // Update request.
 type UpdateOptsBuilder interface {
-	ToProjectUpdateMap() (map[string]interface{}, error)
+	ToProjectUpdateMap() (map[string]any, error)
 }
 
 // UpdateOpts represents the attributes used when updating an existing
@@ -181,7 +181,7 @@ func (opts UpdateOpts) MarshalJSON() ([]byte, error) {
 }
 
 // ToProjectUpdateMap builds a request body from UpdateOpts.
-func (opts UpdateOpts) ToProjectUpdateMap() (map[string]interface{}, error) {
+func (opts UpdateOpts) ToProjectUpdateMap() (map[string]any, error) {
 	return gophercloud.BuildRequestBody(opts, "")
 }
 

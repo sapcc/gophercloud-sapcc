@@ -29,7 +29,7 @@ func (r GetResult) Extract() (*Agent, error) {
 	return &s, err
 }
 
-func (r GetResult) ExtractInto(v interface{}) error {
+func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
 
@@ -84,16 +84,16 @@ type DeleteResult struct {
 
 // Agent represents an Arc Agent.
 type Agent struct {
-	DisplayName  string                 `json:"display_name"`
-	AgentID      string                 `json:"agent_id"`
-	Project      string                 `json:"project"`
-	Organization string                 `json:"organization"`
-	Facts        map[string]interface{} `json:"facts"`
-	Tags         map[string]string      `json:"tags"`
-	CreatedAt    time.Time              `json:"created_at"`
-	UpdatedAt    time.Time              `json:"updated_at"`
-	UpdatedWith  string                 `json:"updated_with"`
-	UpdatedBy    string                 `json:"updated_by"`
+	DisplayName  string            `json:"display_name"`
+	AgentID      string            `json:"agent_id"`
+	Project      string            `json:"project"`
+	Organization string            `json:"organization"`
+	Facts        map[string]any    `json:"facts"`
+	Tags         map[string]string `json:"tags"`
+	CreatedAt    time.Time         `json:"created_at"`
+	UpdatedAt    time.Time         `json:"updated_at"`
+	UpdatedWith  string            `json:"updated_with"`
+	UpdatedBy    string            `json:"updated_by"`
 }
 
 func (r *Agent) UnmarshalJSON(b []byte) error {
@@ -164,7 +164,7 @@ func ExtractAgents(r pagination.Page) ([]Agent, error) {
 	return s, err
 }
 
-func ExtractAgentsInto(r pagination.Page, v interface{}) error {
+func ExtractAgentsInto(r pagination.Page, v any) error {
 	return r.(AgentPage).ExtractIntoSlicePtr(v, "")
 }
 
@@ -189,7 +189,7 @@ func (r TagsResult) Extract() (map[string]string, error) {
 	return s, err
 }
 
-type Facts map[string]interface{}
+type Facts map[string]any
 
 // FactsResult is the result of a facts request. Call its Extract method
 // to interpret it as a map[string]string.
@@ -198,7 +198,7 @@ type FactsResult struct {
 }
 
 // Extract interprets any FactsResult as map[string]string.
-func (r FactsResult) Extract() (map[string]interface{}, error) {
+func (r FactsResult) Extract() (map[string]any, error) {
 	var s Facts
 	err := r.ExtractInto(&s)
 	return s, err

@@ -29,7 +29,7 @@ func (r commonResult) Extract() (*Job, error) {
 	return &s, err
 }
 
-func (r commonResult) ExtractInto(v interface{}) error {
+func (r commonResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
 
@@ -177,6 +177,6 @@ func ExtractJobs(r pagination.Page) ([]Job, error) {
 	return s, err
 }
 
-func ExtractJobsInto(r pagination.Page, v interface{}) error {
+func ExtractJobsInto(r pagination.Page, v any) error {
 	return r.(JobPage).ExtractIntoSlicePtr(v, "")
 }

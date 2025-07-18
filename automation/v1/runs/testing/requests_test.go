@@ -35,7 +35,7 @@ var RunObject = runs.Run{
 	AutomationID:   "2",
 	AutomationName: "chef",
 	Selector:       "@identity='88e5cad3-38e6-454f-b412-662cda03e7a1'",
-	AutomationAttributes: map[string]interface{}{
+	AutomationAttributes: map[string]any{
 		"name":                "chef",
 		"debug":               true,
 		"timeout":             float64(3600),
