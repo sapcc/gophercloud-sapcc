@@ -30,5 +30,5 @@ func RandomString(prefix string, n int) string {
 // PrintResource returns a resource as a readable structure
 func PrintResource(t *testing.T, resource any) {
 	b, _ := json.MarshalIndent(resource, "", "  ")
-	t.Logf(string(b))
+	t.Log(string(b))
 }
