@@ -28,7 +28,7 @@ func RandomString(prefix string, n int) string {
 
 // copied from https://github.com/gophercloud/gophercloud/v2/blob/v1.7.0/github.com/sapcc/gophercloud-sapcc/v2/internal/acceptance/tools/tools.go#L77-L81
 // PrintResource returns a resource as a readable structure
-func PrintResource(t *testing.T, resource interface{}) {
+func PrintResource(t *testing.T, resource any) {
 	b, _ := json.MarshalIndent(resource, "", "  ")
-	t.Logf(string(b))
+	t.Log(string(b))
 }

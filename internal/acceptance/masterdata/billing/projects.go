@@ -14,7 +14,7 @@ import (
 	"github.com/sapcc/gophercloud-sapcc/v2/billing/masterdata/projects"
 )
 
-func getIntField(v interface{}, field string) int {
+func getIntField(v any, field string) int {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
 
@@ -25,7 +25,7 @@ func getIntField(v interface{}, field string) int {
 	return int(f.Int())
 }
 
-func getStrField(v interface{}, field string) string {
+func getStrField(v any, field string) string {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
 

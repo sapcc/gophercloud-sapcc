@@ -20,7 +20,7 @@ func (r GetResult) Extract() (*Event, error) {
 	return &s, err
 }
 
-func (r GetResult) ExtractInto(v interface{}) error {
+func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
 
@@ -72,6 +72,6 @@ func ExtractEvents(r pagination.Page) ([]Event, error) {
 	return s, err
 }
 
-func ExtractEventsInto(r pagination.Page, v interface{}) error {
+func ExtractEventsInto(r pagination.Page, v any) error {
 	return r.(EventPage).ExtractIntoSlicePtr(v, "events")
 }

@@ -61,7 +61,7 @@ func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetRes
 // CreateOptsBuilder allows extensions to add additional parameters to the
 // Create request.
 type CreateOptsBuilder interface {
-	ToAutomationCreateMap() (map[string]interface{}, error)
+	ToAutomationCreateMap() (map[string]any, error)
 }
 
 // CreateOpts represents the attributes used when creating a new automation.
@@ -82,8 +82,8 @@ type CreateOpts struct {
 	// RunList is required only, when Type is Chef
 	RunList []string `json:"run_list,omitempty"`
 	// ChefAttributes can be set only, when Type is Chef
-	ChefAttributes map[string]interface{} `json:"chef_attributes,omitempty"`
-	LogLevel       string                 `json:"log_level,omitempty"`
+	ChefAttributes map[string]any `json:"chef_attributes,omitempty"`
+	LogLevel       string         `json:"log_level,omitempty"`
 	// Debug can be set only, when Type is Chef
 	Debug bool `json:"debug,omitempty"`
 	// ChefVersion can be set only, when Type is Chef
@@ -98,7 +98,7 @@ type CreateOpts struct {
 }
 
 // ToAutomationCreateMap builds a request body from CreateOpts.
-func (opts CreateOpts) ToAutomationCreateMap() (map[string]interface{}, error) {
+func (opts CreateOpts) ToAutomationCreateMap() (map[string]any, error) {
 	return gophercloud.BuildRequestBody(opts, "")
 }
 
@@ -121,7 +121,7 @@ func Create(ctx context.Context, c *gophercloud.ServiceClient, opts CreateOptsBu
 // UpdateOptsBuilder allows extensions to add additional parameters to the
 // Update request.
 type UpdateOptsBuilder interface {
-	ToAutomationUpdateMap() (map[string]interface{}, error)
+	ToAutomationUpdateMap() (map[string]any, error)
 }
 
 // UpdateOpts represents the attributes used when updating an existing
@@ -140,11 +140,11 @@ type UpdateOpts struct {
 	Tags map[string]string `json:"tags,omitempty"`
 
 	// Chef
-	RunList        []string               `json:"run_list,omitempty"`
-	ChefAttributes map[string]interface{} `json:"chef_attributes,omitempty"`
-	LogLevel       *string                `json:"log_level,omitempty"`
-	Debug          *bool                  `json:"debug,omitempty"`
-	ChefVersion    *string                `json:"chef_version,omitempty"`
+	RunList        []string       `json:"run_list,omitempty"`
+	ChefAttributes map[string]any `json:"chef_attributes,omitempty"`
+	LogLevel       *string        `json:"log_level,omitempty"`
+	Debug          *bool          `json:"debug,omitempty"`
+	ChefVersion    *string        `json:"chef_version,omitempty"`
 
 	// Script
 	Path        *string           `json:"path,omitempty"`
@@ -153,7 +153,7 @@ type UpdateOpts struct {
 }
 
 // ToAutomationUpdateMap builds a request body from UpdateOpts.
-func (opts UpdateOpts) ToAutomationUpdateMap() (map[string]interface{}, error) {
+func (opts UpdateOpts) ToAutomationUpdateMap() (map[string]any, error) {
 	b, err := gophercloud.BuildRequestBody(opts, "")
 	if err != nil {
 		return nil, err

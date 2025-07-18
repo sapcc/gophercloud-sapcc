@@ -48,6 +48,6 @@ func (r GetResult) Extract() (*CostObject, error) {
 	return &s.Data.Item, nil
 }
 
-func (r GetResult) ExtractInto(v interface{}) error {
+func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

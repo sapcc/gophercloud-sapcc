@@ -23,7 +23,7 @@ func (r commonResult) Extract() (*Project, error) {
 	return &s, err
 }
 
-func (r commonResult) ExtractInto(v interface{}) error {
+func (r commonResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
 
@@ -226,6 +226,6 @@ func ExtractProjects(r pagination.Page) ([]Project, error) {
 	return s, err
 }
 
-func ExtractProjectsInto(r pagination.Page, v interface{}) error {
+func ExtractProjectsInto(r pagination.Page, v any) error {
 	return r.(ProjectPage).ExtractIntoSlicePtr(v, "")
 }

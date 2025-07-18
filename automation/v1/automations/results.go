@@ -30,7 +30,7 @@ func (r commonResult) Extract() (*Automation, error) {
 	return &s, err
 }
 
-func (r commonResult) ExtractInto(v interface{}) error {
+func (r commonResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
 
@@ -99,7 +99,7 @@ type Automation struct {
 	RunList []string `json:"run_list"`
 
 	// A map of Chef cookbook attributes.
-	ChefAttributes map[string]interface{} `json:"chef_attributes"`
+	ChefAttributes map[string]any `json:"chef_attributes"`
 
 	// The automation log level. Doesn't work yet.
 	LogLevel string `json:"log_level"`
@@ -191,6 +191,6 @@ func ExtractAutomations(r pagination.Page) ([]Automation, error) {
 	return s, err
 }
 
-func ExtractAutomationsInto(r pagination.Page, v interface{}) error {
+func ExtractAutomationsInto(r pagination.Page, v any) error {
 	return r.(AutomationPage).ExtractIntoSlicePtr(v, "")
 }

@@ -64,6 +64,6 @@ func (r GetResult) Extract() (*IPAddress, error) {
 	return &s.Data.Item, nil
 }
 
-func (r GetResult) ExtractInto(v interface{}) error {
+func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

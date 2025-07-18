@@ -29,7 +29,7 @@ func (r commonResult) Extract() (*Run, error) {
 	return &s, err
 }
 
-func (r commonResult) ExtractInto(v interface{}) error {
+func (r commonResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
 
@@ -55,12 +55,12 @@ type Owner struct {
 
 // Run represents a Lyra Run.
 type Run struct {
-	ID                   string      `json:"id"`
-	AutomationID         string      `json:"automation_id"`
-	AutomationName       string      `json:"automation_name"`
-	Selector             string      `json:"selector"`
-	RepositoryRevision   string      `json:"repository_revision"`
-	AutomationAttributes interface{} `json:"automation_attributes"`
+	ID                   string `json:"id"`
+	AutomationID         string `json:"automation_id"`
+	AutomationName       string `json:"automation_name"`
+	Selector             string `json:"selector"`
+	RepositoryRevision   string `json:"repository_revision"`
+	AutomationAttributes any    `json:"automation_attributes"`
 	// State could be: preparing, executing, failed, completed
 	State     string    `json:"state"`
 	Log       string    `json:"log"`
@@ -139,6 +139,6 @@ func ExtractRuns(r pagination.Page) ([]Run, error) {
 	return s, err
 }
 
-func ExtractRunsInto(r pagination.Page, v interface{}) error {
+func ExtractRunsInto(r pagination.Page, v any) error {
 	return r.(RunPage).ExtractIntoSlicePtr(v, "")
 }

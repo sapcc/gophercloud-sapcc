@@ -36,7 +36,7 @@ func TestAutomationCRUD(t *testing.T) {
 
 	// Update Chef automation
 	newRunList := []string{"bar"}
-	chefAttributes := map[string]interface{}{"foo": "bar"}
+	chefAttributes := map[string]any{"foo": "bar"}
 	updateOpts := automations.UpdateOpts{
 		RunList:        newRunList,
 		ChefAttributes: chefAttributes,
@@ -58,7 +58,7 @@ func TestAutomationCRUD(t *testing.T) {
 	// Unset attributes from the Chef automation
 	newRevision := "dev"
 	updateOpts = automations.UpdateOpts{
-		ChefAttributes:     map[string]interface{}{},
+		ChefAttributes:     map[string]any{},
 		RepositoryRevision: &newRevision,
 	}
 
@@ -72,7 +72,7 @@ func TestAutomationCRUD(t *testing.T) {
 
 	tools.PrintResource(t, newGetAutomation)
 	th.AssertDeepEquals(t, newChefAutomation, newGetAutomation)
-	th.AssertDeepEquals(t, newChefAutomation.ChefAttributes, map[string]interface{}(nil))
+	th.AssertDeepEquals(t, newChefAutomation.ChefAttributes, map[string]any(nil))
 	th.AssertDeepEquals(t, newChefAutomation.RepositoryRevision, newRevision)
 
 	// Update Script automation

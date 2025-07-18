@@ -17,7 +17,7 @@ type Project struct {
 	Description   string        `json:"description,omitempty"`
 	DomainName    string        `json:"domainName,omitempty"`
 	DomainUUID    string        `json:"domainUUID,omitempty"`
-	CBRMasterdata CBRMasterdata `json:"cbrMasterdata,omitempty"`
+	CBRMasterdata CBRMasterdata `json:"cbrMasterdata"`
 	Users         []User        `json:"users"`
 }
 
@@ -37,7 +37,7 @@ type CBRMasterdata struct {
 	InventoryRoleEmail              string                 `json:"inventoryRoleEmail,omitempty"`
 	InfrastructureCoordinatorUserID string                 `json:"infrastructureCoordinatorUserID,omitempty"`
 	InfrastructureCoordinatorEmail  string                 `json:"infrastructureCoordinatorEmail,omitempty"`
-	ExternalCertifications          ExternalCertifications `json:"externalCertifications,omitempty"`
+	ExternalCertifications          ExternalCertifications `json:"externalCertifications"`
 	GPUEnabled                      bool                   `json:"gpuEnabled,omitempty"`
 	ContainsPIIDPPHR                bool                   `json:"containsPIIDPPHR,omitempty"`
 	ContainsExternalCustomerData    bool                   `json:"containsExternalCustomerData,omitempty"`
@@ -94,6 +94,6 @@ func (r GetResult) Extract() (*Project, error) {
 	return &s.Data.Item, nil
 }
 
-func (r GetResult) ExtractInto(v interface{}) error {
+func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

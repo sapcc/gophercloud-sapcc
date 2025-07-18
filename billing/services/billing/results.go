@@ -48,6 +48,6 @@ func ExtractBillings(r pagination.Page) ([]Billing, error) {
 	return s, err
 }
 
-func ExtractBillingsInto(r pagination.Page, v interface{}) error {
+func ExtractBillingsInto(r pagination.Page, v any) error {
 	return r.(BillingPage).ExtractIntoSlicePtr(v, "")
 }

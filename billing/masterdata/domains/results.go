@@ -23,7 +23,7 @@ func (r commonResult) Extract() (*Domain, error) {
 	return &s, err
 }
 
-func (r commonResult) ExtractInto(v interface{}) error {
+func (r commonResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
 
@@ -118,6 +118,6 @@ func ExtractDomains(r pagination.Page) ([]Domain, error) {
 	return s, err
 }
 
-func ExtractDomainsInto(r pagination.Page, v interface{}) error {
+func ExtractDomainsInto(r pagination.Page, v any) error {
 	return r.(DomainPage).ExtractIntoSlicePtr(v, "")
 }

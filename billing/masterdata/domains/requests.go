@@ -71,7 +71,7 @@ func Get(ctx context.Context, c *gophercloud.ServiceClient, id string) (r GetRes
 // UpdateOptsBuilder allows extensions to add additional parameters to the
 // Update request.
 type UpdateOptsBuilder interface {
-	ToDomainUpdateMap() (map[string]interface{}, error)
+	ToDomainUpdateMap() (map[string]any, error)
 }
 
 // UpdateOpts represents the attributes used when updating an existing
@@ -98,7 +98,7 @@ type UpdateOpts struct {
 }
 
 // ToDomainUpdateMap builds a request body from UpdateOpts.
-func (opts UpdateOpts) ToDomainUpdateMap() (map[string]interface{}, error) {
+func (opts UpdateOpts) ToDomainUpdateMap() (map[string]any, error) {
 	return gophercloud.BuildRequestBody(opts, "")
 }
 

@@ -44,7 +44,7 @@ var automationsList = []automations.Automation{
 		CreatedAt:          time.Date(2018, time.December, 27, 14, 20, 8, 521000000, time.UTC),
 		UpdatedAt:          time.Date(2018, time.December, 28, 13, 5, 52, 241000000, time.UTC),
 		RunList:            []string{"recipe[application::app]"},
-		ChefAttributes:     map[string]interface{}{},
+		ChefAttributes:     map[string]any{},
 		Debug:              true,
 		ChefVersion:        "12.22.5",
 	},
