@@ -14,6 +14,9 @@ coverageTest:
   # ignore these packages for coverage reporting.
   except: '/acceptance'
 
+golang:
+  autoupdateableDeps: ^github.com/(?:sapcc|sap-cloud-infrastructure)/
+
 golangciLint:
   createConfig: true
   skipDirs:
