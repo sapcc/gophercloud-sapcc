@@ -7,17 +7,17 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/metis/v1/network/ip"
 )
 
 func TestGetProject(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetIPAddressSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetIPAddressSuccessfully(t, fakeServer)
 
-	actual, err := ip.Get(t.Context(), fakeclient.ServiceClient(), "10.216.24.194").Extract()
+	actual, err := ip.Get(t.Context(), client.ServiceClient(fakeServer), "10.216.24.194").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &ip.IPAddress{
@@ -43,13 +43,13 @@ func TestGetProject(t *testing.T) {
 }
 
 func TestListProjects(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListIPAddressesSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListIPAddressesSuccessfully(t, fakeServer)
 
 	opts := ip.ListOpts{Limit: 1}
 
-	p, err := ip.List(fakeclient.ServiceClient(), opts).AllPages(t.Context())
+	p, err := ip.List(client.ServiceClient(fakeServer), opts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 	actual, err := ip.Extract(p)
 	th.AssertNoErr(t, err)

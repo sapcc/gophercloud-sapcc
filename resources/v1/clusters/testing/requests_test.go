@@ -9,7 +9,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
@@ -17,11 +17,11 @@ import (
 )
 
 func TestGetCluster(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetClusterSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetClusterSuccessfully(t, fakeServer)
 
-	actual, err := clusters.Get(t.Context(), fake.ServiceClient(), clusters.GetOpts{}).Extract()
+	actual, err := clusters.Get(t.Context(), client.ServiceClient(fakeServer), clusters.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	var capacity uint64 = 10
@@ -93,11 +93,11 @@ func TestGetCluster(t *testing.T) {
 }
 
 func TestGetFilteredCluster(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetClusterSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetClusterSuccessfully(t, fakeServer)
 
-	actual, err := clusters.Get(t.Context(), fake.ServiceClient(), clusters.GetOpts{
+	actual, err := clusters.Get(t.Context(), client.ServiceClient(fakeServer), clusters.GetOpts{
 		Detail:    true,
 		Services:  []limes.ServiceType{"unshared"},
 		Resources: []limesresources.ResourceName{"stuff"},

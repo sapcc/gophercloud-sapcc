@@ -7,17 +7,17 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/metis/v1/network/dns"
 )
 
 func TestGetDNSZone(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetDNSZoneSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetDNSZoneSuccessfully(t, fakeServer)
 
-	actual, err := dns.Get(t.Context(), fakeclient.ServiceClient(), "004321e142604754a789dd9b23db3242").Extract()
+	actual, err := dns.Get(t.Context(), client.ServiceClient(fakeServer), "004321e142604754a789dd9b23db3242").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &dns.Zone{
@@ -51,13 +51,13 @@ func TestGetDNSZone(t *testing.T) {
 }
 
 func TestListDNSZones(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListDNSZonesSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListDNSZonesSuccessfully(t, fakeServer)
 
 	opts := dns.ListOpts{Limit: 1}
 
-	p, err := dns.List(fakeclient.ServiceClient(), opts).AllPages(t.Context())
+	p, err := dns.List(client.ServiceClient(fakeServer), opts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 	actual, err := dns.Extract(p)
 	th.AssertNoErr(t, err)

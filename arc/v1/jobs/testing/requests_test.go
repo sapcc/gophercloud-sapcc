@@ -13,7 +13,7 @@ import (
 
 	"github.com/gophercloud/gophercloud/v2/pagination"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/arc/v1/jobs"
 )
@@ -64,12 +64,12 @@ var jobsList = []jobs.Job{
 }
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/jobs", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/jobs", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -80,7 +80,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	jobs.List(fake.ServiceClient(), jobs.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	jobs.List(client.ServiceClient(fakeServer), jobs.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := jobs.ExtractJobs(page)
 		if err != nil {
@@ -99,12 +99,12 @@ func TestList(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/jobs/88e5cad3-38e6-454f-b412-662cda03e7a1", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/jobs/88e5cad3-38e6-454f-b412-662cda03e7a1", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -112,19 +112,19 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := jobs.Get(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
+	n, err := jobs.Get(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, jobsList[1])
 }
 
 func TestCreate(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/jobs", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/jobs", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodPost)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
 		th.TestHeader(t, r, "Accept", "application/json")
 		th.TestJSONRequest(t, r, CreateRequest)
@@ -142,17 +142,17 @@ func TestCreate(t *testing.T) {
 		Action:  "script",
 		Payload: "echo \"Script start\"\n\nfor i in {1..10}\ndo\n\techo $i\n  sleep 1s\ndone\n\necho \"Script done\"",
 	}
-	_, err := jobs.Create(t.Context(), fake.ServiceClient(), options).Extract()
+	_, err := jobs.Create(t.Context(), client.ServiceClient(fakeServer), options).Extract()
 	th.AssertNoErr(t, err)
 }
 
 func TestGetLog(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/jobs/7ec336bd-fcd1-42af-a663-da578dd0b224/log", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/jobs/7ec336bd-fcd1-42af-a663-da578dd0b224/log", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
@@ -160,7 +160,7 @@ func TestGetLog(t *testing.T) {
 		fmt.Fprint(w, LogResponse)
 	})
 
-	response := jobs.GetLog(t.Context(), fake.ServiceClient(), "7ec336bd-fcd1-42af-a663-da578dd0b224")
+	response := jobs.GetLog(t.Context(), client.ServiceClient(fakeServer), "7ec336bd-fcd1-42af-a663-da578dd0b224")
 	th.AssertNoErr(t, response.Err)
 
 	expectedHeader := &jobs.GetLogHeader{ContentType: "text/plain; charset=utf-8"}
@@ -176,10 +176,10 @@ func TestGetLog(t *testing.T) {
 }
 
 func TestRequiredCreateOpts(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	res := jobs.Create(t.Context(), fake.ServiceClient(), jobs.CreateOpts{})
+	res := jobs.Create(t.Context(), client.ServiceClient(fakeServer), jobs.CreateOpts{})
 	if res.Err == nil || !strings.Contains(res.Err.Error(), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
 	}

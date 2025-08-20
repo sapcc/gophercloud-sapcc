@@ -13,7 +13,7 @@ import (
 
 	"github.com/gophercloud/gophercloud/v2/pagination"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/automation/v1/runs"
 )
@@ -63,12 +63,12 @@ var CreatedObject = runs.Run{
 }
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/runs", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/runs", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -79,7 +79,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	runs.List(fake.ServiceClient(), runs.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	runs.List(client.ServiceClient(fakeServer), runs.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := runs.ExtractRuns(page)
 		if err != nil {
@@ -98,12 +98,12 @@ func TestList(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/runs/1", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/runs/1", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -111,19 +111,19 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := runs.Get(t.Context(), fake.ServiceClient(), "1").Extract()
+	n, err := runs.Get(t.Context(), client.ServiceClient(fakeServer), "1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, RunObject, *n)
 }
 
 func TestCreate(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/runs", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/runs", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodPost)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
 		th.TestHeader(t, r, "Accept", "application/json")
 		th.TestJSONRequest(t, r, CreateRequest)
@@ -138,17 +138,17 @@ func TestCreate(t *testing.T) {
 		AutomationID: "2",
 		Selector:     "@identity='88e5cad3-38e6-454f-b412-662cda03e7a1'",
 	}
-	n, err := runs.Create(t.Context(), fake.ServiceClient(), options).Extract()
+	n, err := runs.Create(t.Context(), client.ServiceClient(fakeServer), options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, CreatedObject)
 }
 
 func TestRequiredCreateOpts(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	res := runs.Create(t.Context(), fake.ServiceClient(), runs.CreateOpts{})
+	res := runs.Create(t.Context(), client.ServiceClient(fakeServer), runs.CreateOpts{})
 	if res.Err == nil || !strings.Contains(res.Err.Error(), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
 	}

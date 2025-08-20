@@ -13,7 +13,7 @@ import (
 
 	"github.com/gophercloud/gophercloud/v2/pagination"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/arc/v1/agents"
 )
@@ -60,12 +60,12 @@ var agentsList = []agents.Agent{
 }
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -76,7 +76,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	agents.List(fake.ServiceClient(), agents.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	agents.List(client.ServiceClient(fakeServer), agents.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := agents.ExtractAgents(page)
 		if err != nil {
@@ -95,12 +95,12 @@ func TestList(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -108,19 +108,19 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := agents.Get(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
+	n, err := agents.Get(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, agentsList[0])
 }
 
 func TestInit(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents/init", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents/init", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodPost)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestHeader(t, r, "Accept", "text/x-powershellscript")
 
 		w.Header().Add("Content-Type", "text/x-powershellscript")
@@ -132,7 +132,7 @@ func TestInit(t *testing.T) {
 	options := agents.InitOpts{
 		Accept: "text/x-powershellscript",
 	}
-	response := agents.Init(t.Context(), fake.ServiceClient(), options)
+	response := agents.Init(t.Context(), client.ServiceClient(fakeServer), options)
 	th.AssertNoErr(t, response.Err)
 
 	expectedHeader := &agents.InitHeader{ContentType: "text/x-powershellscript"}
@@ -148,12 +148,12 @@ func TestInit(t *testing.T) {
 }
 
 func TestInitJSON(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents/init", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents/init", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodPost)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestHeader(t, r, "Accept", "application/json")
 
 		w.Header().Add("Content-Type", "application/json")
@@ -173,7 +173,7 @@ func TestInitJSON(t *testing.T) {
 	options := agents.InitOpts{
 		Accept: "application/json",
 	}
-	response := agents.Init(t.Context(), fake.ServiceClient(), options)
+	response := agents.Init(t.Context(), client.ServiceClient(fakeServer), options)
 	th.AssertNoErr(t, response.Err)
 
 	expectedHeader := &agents.InitHeader{ContentType: "application/json"}
@@ -196,10 +196,10 @@ func TestInitJSON(t *testing.T) {
 // TODO required headers
 /*
 func TestRequiredInitOpts(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	res := agents.Init(fake.ServiceClient(), agents.InitOpts{})
+	res := agents.Init(client.ServiceClient(fakeServer), agents.InitOpts{})
 	if res.Err == nil || !strings.Contains(fmt.Sprintf("%s", res.Err), "Missing input for argument") {
 		t.Fatalf("Expected error, got none")
 	}
@@ -207,28 +207,28 @@ func TestRequiredInitOpts(t *testing.T) {
 */
 
 func TestDelete(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "DELETE")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := agents.Delete(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").ExtractErr()
+	err := agents.Delete(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1").ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
 func TestGetTags(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1/tags", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1/tags", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -236,51 +236,51 @@ func TestGetTags(t *testing.T) {
 		fmt.Fprint(w, GetTagsResponse)
 	})
 
-	n, err := agents.GetTags(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
+	n, err := agents.GetTags(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, n, agentTags)
 }
 
 func TestCreateTag(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1/tags", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1/tags", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodPost)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := agents.CreateTags(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1", agentTags).ExtractErr()
+	err := agents.CreateTags(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1", agentTags).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
 func TestDeleteTag(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1/tags/pool", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1/tags/pool", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "DELETE")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := agents.DeleteTag(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1", "pool").ExtractErr()
+	err := agents.DeleteTag(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1", "pool").ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
 func TestGetFacts(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1/facts", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/agents/88e5cad3-38e6-454f-b412-662cda03e7a1/facts", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -288,7 +288,7 @@ func TestGetFacts(t *testing.T) {
 		fmt.Fprint(w, GetFactsResponse)
 	})
 
-	n, err := agents.GetFacts(t.Context(), fake.ServiceClient(), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
+	n, err := agents.GetFacts(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, n, agentFacts)

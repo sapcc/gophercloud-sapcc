@@ -7,17 +7,17 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/metis/v1/identity/domains"
 )
 
 func TestGetDomain(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetDomainSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetDomainSuccessfully(t, fakeServer)
 
-	actual, err := domains.Get(t.Context(), fakeclient.ServiceClient(), "domain-1").Extract()
+	actual, err := domains.Get(t.Context(), client.ServiceClient(fakeServer), "domain-1").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &domains.Domain{
@@ -37,14 +37,14 @@ func TestGetDomain(t *testing.T) {
 }
 
 func TestListDomains(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListDomainsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListDomainsSuccessfully(t, fakeServer)
 	opts := domains.ListOpts{
 		Limit: 1,
 	}
 
-	p, err := domains.List(fakeclient.ServiceClient(), opts).AllPages(t.Context())
+	p, err := domains.List(client.ServiceClient(fakeServer), opts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 	actual, err := domains.Extract(p)
 	th.AssertNoErr(t, err)

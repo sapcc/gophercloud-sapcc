@@ -11,15 +11,15 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleGetIPAddressSuccessfully creates an HTTP handler at `/network/ip/:ipaddress` on the
 // test handler mux that responds with a single ipaddress.
-func HandleGetIPAddressSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/network/ip/10.216.24.194", func(w http.ResponseWriter, r *http.Request) {
+func HandleGetIPAddressSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/network/ip/10.216.24.194", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -32,10 +32,10 @@ func HandleGetIPAddressSuccessfully(t *testing.T) {
 
 // HandleListIPAddressesSuccessfully creates an HTTP handler at `/network/ip` on the
 // test handler mux that responds with a list of ipaddresses.
-func HandleListIPAddressesSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/network/ip", func(w http.ResponseWriter, r *http.Request) {
+func HandleListIPAddressesSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/network/ip", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -55,7 +55,7 @@ func HandleListIPAddressesSuccessfully(t *testing.T) {
 			err = json.Unmarshal(jsonBytes, &resp)
 			th.AssertNoErr(t, err)
 			// adding a nextLink to the pagination response
-			resp.Data["nextLink"] = th.Endpoint() + "/network/ip?cursor=dummycursor&limit=1"
+			resp.Data["nextLink"] = fakeServer.Endpoint() + "/network/ip?cursor=dummycursor&limit=1"
 			jsonBytes, err = json.Marshal(resp)
 		default:
 			jsonBytes, err = os.ReadFile(filepath.Join("fixtures", "list.json"))

@@ -7,17 +7,17 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/metis/v1/identity/costobjects"
 )
 
 func TestGetProject(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetCostObjectSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetCostObjectSuccessfully(t, fakeServer)
 
-	actual, err := costobjects.Get(t.Context(), fakeclient.ServiceClient(), "costobject-1").Extract()
+	actual, err := costobjects.Get(t.Context(), client.ServiceClient(fakeServer), "costobject-1").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &costobjects.CostObject{
@@ -28,9 +28,9 @@ func TestGetProject(t *testing.T) {
 }
 
 func TestListCostObjects(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListCostObjectsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListCostObjectsSuccessfully(t, fakeServer)
 	opts := costobjects.ListOpts{
 		Limit: 1,
 		// Set the domain and project options to verify the filtering works
@@ -38,7 +38,7 @@ func TestListCostObjects(t *testing.T) {
 		Project: "bar",
 	}
 
-	p, err := costobjects.List(fakeclient.ServiceClient(), opts).AllPages(t.Context())
+	p, err := costobjects.List(client.ServiceClient(fakeServer), opts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 	actual, err := costobjects.Extract(p)
 	th.AssertNoErr(t, err)

@@ -11,15 +11,15 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleGetProjectSuccessfully creates an HTTP handler at `/identity/project/:project_id` on the
 // test handler mux that responds with a single project.
-func HandleGetProjectSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/identity/project/project-1", func(w http.ResponseWriter, r *http.Request) {
+func HandleGetProjectSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/identity/project/project-1", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -32,10 +32,10 @@ func HandleGetProjectSuccessfully(t *testing.T) {
 
 // HandleGetProjectSuccessfully creates an HTTP handler at `/identity/project` on the
 // test handler mux that responds with a list of projects.
-func HandleListProjectsSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/identity/project", func(w http.ResponseWriter, r *http.Request) {
+func HandleListProjectsSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/identity/project", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -55,7 +55,7 @@ func HandleListProjectsSuccessfully(t *testing.T) {
 			err = json.Unmarshal(jsonBytes, &resp)
 			th.AssertNoErr(t, err)
 			// adding a nextLink to the pagination response
-			resp.Data["nextLink"] = th.Endpoint() + "/identity/project?cursor=dummycursor&limit=1"
+			resp.Data["nextLink"] = fakeServer.Endpoint() + "/identity/project?cursor=dummycursor&limit=1"
 			jsonBytes, err = json.Marshal(resp)
 		default:
 			jsonBytes, err = os.ReadFile(filepath.Join("fixtures", "list.json"))

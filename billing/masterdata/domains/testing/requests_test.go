@@ -10,7 +10,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/billing/masterdata/domains"
 )
@@ -52,12 +52,12 @@ var updateResponse = domains.Domain{
 }
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/masterdata/domains", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/masterdata/domains", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -65,7 +65,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allDomains, err := domains.List(fake.ServiceClient(), domains.ListOpts{}).AllPages(t.Context())
+	allDomains, err := domains.List(client.ServiceClient(fakeServer), domains.ListOpts{}).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := domains.ExtractDomains(allDomains)
@@ -75,12 +75,12 @@ func TestList(t *testing.T) {
 }
 
 func TestListOpts(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/masterdata/domains", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/masterdata/domains", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		th.CheckEquals(t, "true", r.URL.Query().Get("checkCOValidity"))
 		th.CheckEquals(t, "true", r.URL.Query().Get("excludeDeleted"))
@@ -98,7 +98,7 @@ func TestListOpts(t *testing.T) {
 		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
 	}
 
-	allDomains, err := domains.List(fake.ServiceClient(), listOpts).AllPages(t.Context())
+	allDomains, err := domains.List(client.ServiceClient(fakeServer), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := domains.ExtractDomains(allDomains)
@@ -108,12 +108,12 @@ func TestListOpts(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/masterdata/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/masterdata/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -121,19 +121,19 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := domains.Get(t.Context(), fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285").Extract()
+	n, err := domains.Get(t.Context(), client.ServiceClient(fakeServer), "707c94677ac741ecb1f2cabc804c1285").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, domainsList[0])
 }
 
 func TestUpdate(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/masterdata/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/masterdata/domains/707c94677ac741ecb1f2cabc804c1285", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
 		th.TestHeader(t, r, "Accept", "application/json")
 		th.TestJSONRequest(t, r, UpdateRequest)
@@ -157,7 +157,7 @@ func TestUpdate(t *testing.T) {
 		Region:                      "region",
 	}
 
-	s, err := domains.Update(t.Context(), fake.ServiceClient(), "707c94677ac741ecb1f2cabc804c1285", options).Extract()
+	s, err := domains.Update(t.Context(), client.ServiceClient(fakeServer), "707c94677ac741ecb1f2cabc804c1285", options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *s, updateResponse)

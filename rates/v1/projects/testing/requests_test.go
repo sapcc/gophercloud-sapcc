@@ -8,7 +8,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesrates "github.com/sapcc/go-api-declarations/limes/rates"
 
@@ -16,11 +16,11 @@ import (
 )
 
 func TestListProjectsRates(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListProjectsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListProjectsSuccessfully(t, fakeServer)
 
-	actual, err := projects.List(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ReadOpts{}).ExtractProjects()
+	actual, err := projects.List(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", projects.ReadOpts{}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	rateWindow := 2 * limesrates.WindowMinutes
@@ -117,11 +117,11 @@ func TestListProjectsRates(t *testing.T) {
 }
 
 func TestListProjectsFilteredRates(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListProjectsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListProjectsSuccessfully(t, fakeServer)
 
-	actual, err := projects.List(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ReadOpts{
+	actual, err := projects.List(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", projects.ReadOpts{
 		Services: []limes.ServiceType{"shared"},
 	}).ExtractProjects()
 	th.AssertNoErr(t, err)
@@ -178,11 +178,11 @@ func TestListProjectsFilteredRates(t *testing.T) {
 }
 
 func TestGetProjectRates(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetProjectSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetProjectSuccessfully(t, fakeServer)
 
-	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{}).Extract()
+	actual, err := projects.Get(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	rateWindow := 2 * limesrates.WindowMinutes
@@ -218,11 +218,11 @@ func TestGetProjectRates(t *testing.T) {
 }
 
 func TestGetProjectFilteredRates(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetProjectSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetProjectSuccessfully(t, fakeServer)
 
-	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{
+	actual, err := projects.Get(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", "uuid-for-berlin", projects.ReadOpts{
 		Services: []limes.ServiceType{"shared"},
 	}).Extract()
 	th.AssertNoErr(t, err)
