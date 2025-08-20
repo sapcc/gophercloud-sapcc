@@ -11,15 +11,15 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleListDomainsSuccessfully creates an HTTP handler at `/v1/domains` on the
 // test handler mux that responds with a list of (two) domains.
-func HandleListDomainsSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/domains", func(w http.ResponseWriter, r *http.Request) {
+func HandleListDomainsSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/domains", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -38,10 +38,10 @@ func HandleListDomainsSuccessfully(t *testing.T) {
 
 // HandleGetDomainSuccessfully creates an HTTP handler at `/v1/domains/:domain_id` on the
 // test handler mux that responds with a single domain.
-func HandleGetDomainSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/domains/uuid-for-karachi", func(w http.ResponseWriter, r *http.Request) {
+func HandleGetDomainSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/domains/uuid-for-karachi", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)

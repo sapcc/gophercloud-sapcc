@@ -11,15 +11,15 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleGetDNSZoneSuccessfully creates an HTTP handler at `/network/dns/zone/:zone_id` on the
 // test handler mux that responds with a single DNS zone.
-func HandleGetDNSZoneSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/network/dns/zone/004321e142604754a789dd9b23db3242", func(w http.ResponseWriter, r *http.Request) {
+func HandleGetDNSZoneSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/network/dns/zone/004321e142604754a789dd9b23db3242", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -32,10 +32,10 @@ func HandleGetDNSZoneSuccessfully(t *testing.T) {
 
 // HandleListDNSZonesSuccessfully creates an HTTP handler at `/network/dns/zone` on the
 // test handler mux that responds with a list of DNS zones.
-func HandleListDNSZonesSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/network/dns/zone", func(w http.ResponseWriter, r *http.Request) {
+func HandleListDNSZonesSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/network/dns/zone", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -55,7 +55,7 @@ func HandleListDNSZonesSuccessfully(t *testing.T) {
 			err = json.Unmarshal(jsonBytes, &resp)
 			th.AssertNoErr(t, err)
 			// adding a nextLink to the pagination response
-			resp.Data["nextLink"] = th.Endpoint() + "/network/dns/zone?cursor=dummycursor&limit=1"
+			resp.Data["nextLink"] = fakeServer.Endpoint() + "/network/dns/zone?cursor=dummycursor&limit=1"
 			jsonBytes, err = json.Marshal(resp)
 		default:
 			jsonBytes, err = os.ReadFile(filepath.Join("fixtures", "list.json"))

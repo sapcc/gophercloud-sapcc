@@ -17,14 +17,14 @@ import (
 )
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
 	fields := []string{"id", "name"}
 	listOpts := interconnections.ListOpts{
 		Fields: fields,
 	}
-	th.Mux.HandleFunc("/v2.0/interconnection/interconnections",
+	fakeServer.Mux.HandleFunc("/v2.0/interconnection/interconnections",
 		func(w http.ResponseWriter, r *http.Request) {
 			th.TestMethod(t, r, http.MethodGet)
 			th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
@@ -39,7 +39,7 @@ func TestList(t *testing.T) {
 		})
 	count := 0
 
-	err := interconnections.List(fake.ServiceClient(), listOpts).EachPage(
+	err := interconnections.List(fake.ServiceClient(fakeServer), listOpts).EachPage(
 		t.Context(),
 		func(ctx context.Context, page pagination.Page) (bool, error) {
 			count++
@@ -57,11 +57,11 @@ func TestList(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
 	id := "a943ab0b-8b32-47dd-805b-4d17b7e15359"
-	th.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		w.Header().Add("Content-Type", "application/json")
@@ -69,16 +69,16 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetInterconnectionResponse)
 	})
 
-	s, err := interconnections.Get(t.Context(), fake.ServiceClient(), id).Extract()
+	s, err := interconnections.Get(t.Context(), fake.ServiceClient(fakeServer), id).Extract()
 	th.AssertNoErr(t, err)
 	th.CheckDeepEquals(t, *s, interconnectionGet)
 }
 
 func TestCreate(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/v2.0/interconnection/interconnections", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/v2.0/interconnection/interconnections", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodPost)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
@@ -89,17 +89,17 @@ func TestCreate(t *testing.T) {
 		fmt.Fprint(w, GetInterconnectionResponse)
 	})
 
-	r, err := interconnections.Create(t.Context(), fake.ServiceClient(), interconnectionCreate).Extract()
+	r, err := interconnections.Create(t.Context(), fake.ServiceClient(fakeServer), interconnectionCreate).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, *r, interconnectionGet)
 }
 
 func TestDelete(t *testing.T) {
 	id := "0f9d472a-908f-40f5-8574-b4e8a63ccbf0"
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodDelete)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Accept", "application/json")
@@ -108,16 +108,16 @@ func TestDelete(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	err := interconnections.Delete(t.Context(), fake.ServiceClient(), id).ExtractErr()
+	err := interconnections.Delete(t.Context(), fake.ServiceClient(fakeServer), id).ExtractErr()
 	th.AssertNoErr(t, err)
 }
 
 func TestUpdate(t *testing.T) {
 	id := "a943ab0b-8b32-47dd-805b-4d17b7e15359"
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/v2.0/interconnection/interconnections/"+id, func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodPut)
 		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
@@ -137,7 +137,7 @@ func TestUpdate(t *testing.T) {
 		State: &state,
 	}
 
-	r, err := interconnections.Update(t.Context(), fake.ServiceClient(), id, opts).Extract()
+	r, err := interconnections.Update(t.Context(), fake.ServiceClient(fakeServer), id, opts).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, r.Name, name)
 	th.AssertDeepEquals(t, r.State, state)

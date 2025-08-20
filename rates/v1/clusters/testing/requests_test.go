@@ -8,7 +8,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesrates "github.com/sapcc/go-api-declarations/limes/rates"
 
@@ -16,11 +16,11 @@ import (
 )
 
 func TestGetClusterRates(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetClusterSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetClusterSuccessfully(t, fakeServer)
 
-	actual, err := clusters.Get(t.Context(), fake.ServiceClient(), clusters.GetOpts{}).Extract()
+	actual, err := clusters.Get(t.Context(), client.ServiceClient(fakeServer), clusters.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesrates.ClusterReport{
@@ -59,11 +59,11 @@ func TestGetClusterRates(t *testing.T) {
 }
 
 func TestGetFilteredClusterRates(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetClusterSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetClusterSuccessfully(t, fakeServer)
 
-	actual, err := clusters.Get(t.Context(), fake.ServiceClient(), clusters.GetOpts{
+	actual, err := clusters.Get(t.Context(), client.ServiceClient(fakeServer), clusters.GetOpts{
 		Services: []limes.ServiceType{"shared"},
 	}).Extract()
 	th.AssertNoErr(t, err)

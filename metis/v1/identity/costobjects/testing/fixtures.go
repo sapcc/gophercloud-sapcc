@@ -11,15 +11,15 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleGetCostObjectSuccessfully creates an HTTP handler at `/identity/costobject/:costobject_id` on the
 // test handler mux that responds with a single costobject.
-func HandleGetCostObjectSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/identity/costobject/costobject-1", func(w http.ResponseWriter, r *http.Request) {
+func HandleGetCostObjectSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/identity/costobject/costobject-1", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -32,10 +32,10 @@ func HandleGetCostObjectSuccessfully(t *testing.T) {
 
 // HandleListCostObjectsSuccessfully creates an HTTP handler at `/identity/costobject` on the
 // test handler mux that responds with a list of costobjects.
-func HandleListCostObjectsSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/identity/costobject", func(w http.ResponseWriter, r *http.Request) {
+func HandleListCostObjectsSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/identity/costobject", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -60,7 +60,7 @@ func HandleListCostObjectsSuccessfully(t *testing.T) {
 			err = json.Unmarshal(jsonBytes, &resp)
 			th.AssertNoErr(t, err)
 			// adding a nextLink to the pagination response
-			resp.Data["nextLink"] = th.Endpoint() + "/identity/costobject?domain=foo&project=bar&cursor=dummycursor&limit=1"
+			resp.Data["nextLink"] = fakeServer.Endpoint() + "/identity/costobject?domain=foo&project=bar&cursor=dummycursor&limit=1"
 			jsonBytes, err = json.Marshal(resp)
 		default:
 			jsonBytes, err = os.ReadFile(filepath.Join("fixtures", "list.json"))

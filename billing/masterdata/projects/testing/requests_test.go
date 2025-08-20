@@ -10,7 +10,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/billing/masterdata/projects"
 )
@@ -84,12 +84,12 @@ var updateResponse = projects.Project{
 }
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/masterdata/projects", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/masterdata/projects", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -97,7 +97,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allProjects, err := projects.List(fake.ServiceClient(), projects.ListOpts{}).AllPages(t.Context())
+	allProjects, err := projects.List(client.ServiceClient(fakeServer), projects.ListOpts{}).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)
@@ -107,12 +107,12 @@ func TestList(t *testing.T) {
 }
 
 func TestListOpts(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/masterdata/projects", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/masterdata/projects", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		th.CheckEquals(t, r.URL.Query().Get("checkCOValidity"), "true")
 		th.CheckEquals(t, r.URL.Query().Get("excludeDeleted"), "true")
@@ -130,7 +130,7 @@ func TestListOpts(t *testing.T) {
 		From:            time.Date(2023, 04, 26, 12, 31, 42, 133700000, time.UTC),
 	}
 
-	allProjects, err := projects.List(fake.ServiceClient(), listOpts).AllPages(t.Context())
+	allProjects, err := projects.List(client.ServiceClient(fakeServer), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := projects.ExtractProjects(allProjects)
@@ -140,12 +140,12 @@ func TestListOpts(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/masterdata/projects/e9141fb24eee4b3e9f25ae69cda31132", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/masterdata/projects/e9141fb24eee4b3e9f25ae69cda31132", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -153,19 +153,19 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := projects.Get(t.Context(), fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132").Extract()
+	n, err := projects.Get(t.Context(), client.ServiceClient(fakeServer), "e9141fb24eee4b3e9f25ae69cda31132").Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, projectsList[0])
 }
 
 func TestUpdate(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/masterdata/projects/e9141fb24eee4b3e9f25ae69cda31132", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/masterdata/projects/e9141fb24eee4b3e9f25ae69cda31132", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestHeader(t, r, "Content-Type", "application/json")
 		th.TestHeader(t, r, "Accept", "application/json")
 		th.TestJSONRequest(t, r, UpdateRequest)
@@ -204,7 +204,7 @@ func TestUpdate(t *testing.T) {
 		BusinessCriticality: "dev",
 	}
 
-	s, err := projects.Update(t.Context(), fake.ServiceClient(), "e9141fb24eee4b3e9f25ae69cda31132", options).Extract()
+	s, err := projects.Update(t.Context(), client.ServiceClient(fakeServer), "e9141fb24eee4b3e9f25ae69cda31132", options).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *s, updateResponse)

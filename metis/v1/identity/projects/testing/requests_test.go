@@ -7,17 +7,17 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/metis/v1/identity/projects"
 )
 
 func TestGetProject(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetProjectSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetProjectSuccessfully(t, fakeServer)
 
-	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "project-1").Extract()
+	actual, err := projects.Get(t.Context(), client.ServiceClient(fakeServer), "project-1").Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &projects.Project{
@@ -67,14 +67,14 @@ func TestGetProject(t *testing.T) {
 }
 
 func TestListProjects(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListProjectsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListProjectsSuccessfully(t, fakeServer)
 	opts := projects.ListOpts{
 		Limit: 1,
 	}
 
-	p, err := projects.List(fakeclient.ServiceClient(), opts).AllPages(t.Context())
+	p, err := projects.List(client.ServiceClient(fakeServer), opts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 	actual, err := projects.Extract(p)
 	th.AssertNoErr(t, err)

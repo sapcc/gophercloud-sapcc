@@ -10,7 +10,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/billing/services/billing"
 )
@@ -49,12 +49,12 @@ var billingList = []billing.Billing{
 }
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/services/billing", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/services/billing", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -62,7 +62,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allBillings, err := billing.List(fake.ServiceClient(), nil).AllPages(t.Context())
+	allBillings, err := billing.List(client.ServiceClient(fakeServer), nil).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := billing.ExtractBillings(allBillings)
@@ -72,12 +72,12 @@ func TestList(t *testing.T) {
 }
 
 func TestListOpts(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/services/billing", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/services/billing", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		th.CheckEquals(t, r.URL.Query().Get("exclude_missing_co"), "true")
 		th.CheckEquals(t, r.URL.Query().Get("year"), "2019")
@@ -97,7 +97,7 @@ func TestListOpts(t *testing.T) {
 		To:               time.Date(2019, time.August, 20, 14, 39, 39, 786000000, time.UTC),
 	}
 
-	allBillings, err := billing.List(fake.ServiceClient(), listOpts).AllPages(t.Context())
+	allBillings, err := billing.List(client.ServiceClient(fakeServer), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := billing.ExtractBillings(allBillings)

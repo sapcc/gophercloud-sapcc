@@ -11,7 +11,7 @@ import (
 
 	"github.com/gophercloud/gophercloud/v2/pagination"
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/cadf"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/audit/v1/events"
@@ -74,12 +74,12 @@ var event = events.Event{
 }
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/events", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/events", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -90,7 +90,7 @@ func TestList(t *testing.T) {
 	count := 0
 
 	//nolint:errcheck
-	events.List(fake.ServiceClient(), events.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
+	events.List(client.ServiceClient(fakeServer), events.ListOpts{}).EachPage(t.Context(), func(ctx context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := events.ExtractEvents(page)
 		if err != nil {
@@ -122,12 +122,12 @@ func TestListOpts(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/events/7189ce80-6e73-5ad9-bdc5-dcc47f176378", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/events/7189ce80-6e73-5ad9-bdc5-dcc47f176378", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -135,7 +135,7 @@ func TestGet(t *testing.T) {
 		fmt.Fprint(w, GetResponse)
 	})
 
-	n, err := events.Get(t.Context(), fake.ServiceClient(), "7189ce80-6e73-5ad9-bdc5-dcc47f176378", nil).Extract()
+	n, err := events.Get(t.Context(), client.ServiceClient(fakeServer), "7189ce80-6e73-5ad9-bdc5-dcc47f176378", nil).Extract()
 	th.AssertNoErr(t, err)
 
 	th.AssertDeepEquals(t, *n, event)

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
@@ -16,11 +16,11 @@ import (
 )
 
 func TestListDomain(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListDomainsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListDomainsSuccessfully(t, fakeServer)
 
-	actual, err := domains.List(t.Context(), fake.ServiceClient(), domains.ListOpts{}).ExtractDomains()
+	actual, err := domains.List(t.Context(), client.ServiceClient(fakeServer), domains.ListOpts{}).ExtractDomains()
 	th.AssertNoErr(t, err)
 
 	var backendQ uint64
@@ -157,11 +157,11 @@ func TestListDomain(t *testing.T) {
 }
 
 func TestListFilteredDomain(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListDomainsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListDomainsSuccessfully(t, fakeServer)
 
-	actual, err := domains.List(t.Context(), fake.ServiceClient(), domains.ListOpts{
+	actual, err := domains.List(t.Context(), client.ServiceClient(fakeServer), domains.ListOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).ExtractDomains()
@@ -225,11 +225,11 @@ func TestListFilteredDomain(t *testing.T) {
 }
 
 func TestGetDomain(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetDomainSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetDomainSuccessfully(t, fakeServer)
 
-	actual, err := domains.Get(t.Context(), fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{}).Extract()
+	actual, err := domains.Get(t.Context(), client.ServiceClient(fakeServer), "uuid-for-karachi", domains.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesresources.DomainReport{
@@ -298,11 +298,11 @@ func TestGetDomain(t *testing.T) {
 }
 
 func TestGetDomainFiltered(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetDomainSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetDomainSuccessfully(t, fakeServer)
 
-	actual, err := domains.Get(t.Context(), fake.ServiceClient(), "uuid-for-karachi", domains.GetOpts{
+	actual, err := domains.Get(t.Context(), client.ServiceClient(fakeServer), "uuid-for-karachi", domains.GetOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).Extract()

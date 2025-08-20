@@ -11,15 +11,15 @@ import (
 	"testing"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
 // HandleGetDomainSuccessfully creates an HTTP handler at `/identity/domain/:domain_id` on the
 // test handler mux that responds with a single Domain.
-func HandleGetDomainSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/identity/domain/domain-1", func(w http.ResponseWriter, r *http.Request) {
+func HandleGetDomainSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/identity/domain/domain-1", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -32,10 +32,10 @@ func HandleGetDomainSuccessfully(t *testing.T) {
 
 // HandleListDomainsSuccessfully creates an HTTP handler at `/identity/domain` on the
 // test handler mux that responds with a list of Domains.
-func HandleListDomainsSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/identity/domain", func(w http.ResponseWriter, r *http.Request) {
+func HandleListDomainsSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/identity/domain", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -55,7 +55,7 @@ func HandleListDomainsSuccessfully(t *testing.T) {
 			err = json.Unmarshal(jsonBytes, &resp)
 			th.AssertNoErr(t, err)
 			// adding a nextLink to the pagination response
-			resp.Data["nextLink"] = th.Endpoint() + "/identity/domain?cursor=dummycursor&limit=1"
+			resp.Data["nextLink"] = fakeServer.Endpoint() + "/identity/domain?cursor=dummycursor&limit=1"
 			jsonBytes, err = json.Marshal(resp)
 		default:
 			jsonBytes, err = os.ReadFile(filepath.Join("fixtures", "list.json"))

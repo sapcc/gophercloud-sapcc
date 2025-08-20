@@ -9,7 +9,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fakeclient "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 	"github.com/sapcc/go-api-declarations/limes"
 	limesresources "github.com/sapcc/go-api-declarations/limes/resources"
 
@@ -17,11 +17,11 @@ import (
 )
 
 func TestListProjects(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListProjectsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListProjectsSuccessfully(t, fakeServer)
 
-	actual, err := projects.List(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{}).ExtractProjects()
+	actual, err := projects.List(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", projects.ListOpts{}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	backendQuota := int64(100)
@@ -150,11 +150,11 @@ func TestListProjects(t *testing.T) {
 }
 
 func TestListProjectsDetailed(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListProjectsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListProjectsSuccessfully(t, fakeServer)
 
-	actual, err := projects.List(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{Detail: true}).ExtractProjects()
+	actual, err := projects.List(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", projects.ListOpts{Detail: true}).ExtractProjects()
 	th.AssertNoErr(t, err)
 
 	expected := []limesresources.ProjectReport{
@@ -198,11 +198,11 @@ func TestListProjectsDetailed(t *testing.T) {
 }
 
 func TestListProjectsFiltered(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListProjectsSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListProjectsSuccessfully(t, fakeServer)
 
-	actual, err := projects.List(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", projects.ListOpts{
+	actual, err := projects.List(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", projects.ListOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).ExtractProjects()
@@ -266,11 +266,11 @@ func TestListProjectsFiltered(t *testing.T) {
 }
 
 func TestGetProject(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetProjectSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetProjectSuccessfully(t, fakeServer)
 
-	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{}).Extract()
+	actual, err := projects.Get(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesresources.ProjectReport{
@@ -311,11 +311,11 @@ func TestGetProject(t *testing.T) {
 }
 
 func TestGetProjectDetailed(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetProjectSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetProjectSuccessfully(t, fakeServer)
 
-	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{Detail: true}).Extract()
+	actual, err := projects.Get(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{Detail: true}).Extract()
 	th.AssertNoErr(t, err)
 
 	expected := &limesresources.ProjectReport{
@@ -357,11 +357,11 @@ func TestGetProjectDetailed(t *testing.T) {
 }
 
 func TestGetProjectFiltered(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetProjectSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetProjectSuccessfully(t, fakeServer)
 
-	actual, err := projects.Get(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
+	actual, err := projects.Get(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", "uuid-for-berlin", projects.GetOpts{
 		Services:  []limes.ServiceType{"shared"},
 		Resources: []limesresources.ResourceName{"things"},
 	}).Extract()
@@ -397,12 +397,12 @@ func TestGetProjectFiltered(t *testing.T) {
 }
 
 func TestSyncProject(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleSyncProjectSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleSyncProjectSuccessfully(t, fakeServer)
 
 	// if sync succeeds then a 202 (no error) is returned.
-	err := projects.Sync(t.Context(), fakeclient.ServiceClient(), "uuid-for-germany", "uuid-for-dresden").ExtractErr()
+	err := projects.Sync(t.Context(), client.ServiceClient(fakeServer), "uuid-for-germany", "uuid-for-dresden").ExtractErr()
 	th.AssertNoErr(t, err)
 }
 

@@ -10,7 +10,7 @@ import (
 	"time"
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
-	fake "github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/billing/services/costing"
 )
@@ -59,12 +59,12 @@ var costingList = []costing.Costing{
 }
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/services/costing/objects", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/services/costing/objects", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -72,7 +72,7 @@ func TestList(t *testing.T) {
 		fmt.Fprint(w, ListResponse)
 	})
 
-	allCostings, err := costing.ListObjects(fake.ServiceClient(), nil).AllPages(t.Context())
+	allCostings, err := costing.ListObjects(client.ServiceClient(fakeServer), nil).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := costing.ExtractCostings(allCostings)
@@ -82,12 +82,12 @@ func TestList(t *testing.T) {
 }
 
 func TestListOpts(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
 
-	th.Mux.HandleFunc("/services/costing/objects", func(w http.ResponseWriter, r *http.Request) {
+	fakeServer.Mux.HandleFunc("/services/costing/objects", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, http.MethodGet)
-		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		th.CheckEquals(t, r.URL.Query().Get("exclude_internal_co"), "true")
 		th.CheckEquals(t, r.URL.Query().Get("last"), "12")
@@ -107,7 +107,7 @@ func TestListOpts(t *testing.T) {
 		End:               time.Date(2019, time.August, 20, 14, 39, 39, 786000000, time.UTC),
 	}
 
-	allCostings, err := costing.ListObjects(fake.ServiceClient(), listOpts).AllPages(t.Context())
+	allCostings, err := costing.ListObjects(client.ServiceClient(fakeServer), listOpts).AllPages(t.Context())
 	th.AssertNoErr(t, err)
 
 	actual, err := costing.ExtractCostings(allCostings)
