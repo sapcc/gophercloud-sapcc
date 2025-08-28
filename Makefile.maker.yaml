@@ -27,7 +27,6 @@ golangciLint:
 githubWorkflow:
   ci:
     enabled: true
-    coveralls: true
   license:
     ignorePatterns:
       # vendored copies from upstream
