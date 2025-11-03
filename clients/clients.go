@@ -44,6 +44,22 @@ func NewLimesRatesV1(client *gophercloud.ProviderClient, endpointOpts gopherclou
 	}, nil
 }
 
+// NewCastellumV1 creates a ServiceClient that may be used with the v1 Castellum package.
+func NewCastellumV1(client *gophercloud.ProviderClient, endpointOpts gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
+	endpointOpts.ApplyDefaults("projects")
+	endpoint, err := client.EndpointLocator(endpointOpts)
+	if err != nil {
+		return nil, err
+	}
+	endpoint += "v1/"
+
+	return &gophercloud.ServiceClient{
+		ProviderClient: client,
+		Endpoint:       endpoint,
+		Type:           "projects",
+	}, nil
+}
+
 // NewAutomationV1 creates a ServiceClient that may be used with the v1 automation package.
 func NewAutomationV1(client *gophercloud.ProviderClient, endpointOpts gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
 	sc := new(gophercloud.ServiceClient)
