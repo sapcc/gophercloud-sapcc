@@ -1,7 +1,7 @@
 github.com/gofrs/uuid/v5 v5.4.0 h1:EfbpCTjqMuGyq5ZJwxqzn3Cbr2d0rUZU7v5ycAk/e/0=
 github.com/gofrs/uuid/v5 v5.4.0/go.mod h1:CDOjlDMVAtN56jqyRUZh58JT31Tiw7/oQyEXZV+9bD8=
-github.com/gophercloud/gophercloud/v2 v2.8.0 h1:of2+8tT6+FbEYHfYC8GBu8TXJNsXYSNm9KuvpX7Neqo=
-github.com/gophercloud/gophercloud/v2 v2.8.0/go.mod h1:Ki/ILhYZr/5EPebrPL9Ej+tUg4lqx71/YH2JWVeU+Qk=
+github.com/gophercloud/gophercloud/v2 v2.9.0 h1:Y9OMrwKF9EDERcHFSOTpf/6XGoAI0yOxmsLmQki4LPM=
+github.com/gophercloud/gophercloud/v2 v2.9.0/go.mod h1:Ki/ILhYZr/5EPebrPL9Ej+tUg4lqx71/YH2JWVeU+Qk=
 github.com/gophercloud/utils/v2 v2.0.0-20251103115625-7dba497d90f8 h1:F3kGkwROpZHylGYJjecvx0+OQWMCSCjHmbazzeoeukc=
 github.com/gophercloud/utils/v2 v2.0.0-20251103115625-7dba497d90f8/go.mod h1:2e2v79VFnqidqjhRr7hmJOsoJkeaU1mEoDd1p9c1eaU=
 github.com/majewsky/gg v1.3.0 h1:1bBuQ+S1u9wuD8YT2OMdngEUctwv+xx5D6bZTd1lAto=
