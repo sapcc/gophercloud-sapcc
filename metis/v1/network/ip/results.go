@@ -35,12 +35,12 @@ type IPAddress struct {
 // and extracts the elements into a slice of IPAddress structs.
 func Extract(r pagination.Page) ([]IPAddress, error) {
 	var s struct {
-		IPAdresses []IPAddress `json:"items"`
+		IPAddresses []IPAddress `json:"items"`
 	}
 	if err := (r.(v1.CommonPage)).ExtractInto(&s); err != nil {
 		return nil, err
 	}
-	return s.IPAdresses, nil
+	return s.IPAddresses, nil
 }
 
 // GetResult represents the result of a get operation. Call its Extract method
