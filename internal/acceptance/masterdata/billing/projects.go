@@ -18,7 +18,7 @@ func getIntField(v any, field string) int {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
 
-	if f.Kind() == reflect.Ptr {
+	if f.Kind() == reflect.Pointer {
 		return int(f.Elem().Int())
 	}
 
@@ -29,7 +29,7 @@ func getStrField(v any, field string) string {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
 
-	if f.Kind() == reflect.Ptr {
+	if f.Kind() == reflect.Pointer {
 		return f.Elem().String()
 	}
 

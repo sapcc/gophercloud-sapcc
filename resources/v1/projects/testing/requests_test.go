@@ -45,14 +45,14 @@ func TestListProjects(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 						"things": &limesresources.ProjectResourceReport{
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 					},
@@ -70,14 +70,14 @@ func TestListProjects(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 						"things": &limesresources.ProjectResourceReport{
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 					},
@@ -104,7 +104,7 @@ func TestListProjects(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota:        p2ui64(10),
+							Quota:        new(uint64(10)),
 							Usage:        2,
 							BackendQuota: &backendQuota,
 						},
@@ -112,7 +112,7 @@ func TestListProjects(t *testing.T) {
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 					},
@@ -130,14 +130,14 @@ func TestListProjects(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 						"things": &limesresources.ProjectResourceReport{
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 					},
@@ -177,14 +177,14 @@ func TestListProjectsDetailed(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 						"things": &limesresources.ProjectResourceReport{
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							Quota:        p2ui64(10),
+							Quota:        new(uint64(10)),
 							Usage:        2,
 							Subresources: json.RawMessage(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
 						},
@@ -227,7 +227,7 @@ func TestListProjectsFiltered(t *testing.T) {
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 					},
@@ -253,7 +253,7 @@ func TestListProjectsFiltered(t *testing.T) {
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							Quota: p2ui64(10),
+							Quota: new(uint64(10)),
 							Usage: 2,
 						},
 					},
@@ -292,14 +292,14 @@ func TestGetProject(t *testing.T) {
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
-						Quota: p2ui64(10),
+						Quota: new(uint64(10)),
 						Usage: 2,
 					},
 					"things": &limesresources.ProjectResourceReport{
 						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
-						Quota: p2ui64(10),
+						Quota: new(uint64(10)),
 						Usage: 2,
 					},
 				},
@@ -337,14 +337,14 @@ func TestGetProjectDetailed(t *testing.T) {
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
-						Quota: p2ui64(10),
+						Quota: new(uint64(10)),
 						Usage: 2,
 					},
 					"things": &limesresources.ProjectResourceReport{
 						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
-						Quota:        p2ui64(10),
+						Quota:        new(uint64(10)),
 						Usage:        2,
 						Subresources: json.RawMessage(`[{"id":"thirdthing","value":5},{"id":"fourththing","value":123}]`),
 					},
@@ -385,7 +385,7 @@ func TestGetProjectFiltered(t *testing.T) {
 						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
-						Quota: p2ui64(10),
+						Quota: new(uint64(10)),
 						Usage: 2,
 					},
 				},
@@ -409,8 +409,4 @@ func TestSyncProject(t *testing.T) {
 func p2time(timestamp int64) *limes.UnixEncodedTime {
 	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
 	return &t
-}
-
-func p2ui64(x uint64) *uint64 {
-	return &x
 }
