@@ -43,7 +43,7 @@ func TestGetCluster(t *testing.T) {
 							Unit: limes.UnitBytes,
 						},
 						Capacity:     &capacity,
-						DomainsQuota: p2ui64(5),
+						DomainsQuota: new(uint64(5)),
 						Usage:        2,
 					},
 					"things": &limesresources.ClusterResourceReport{
@@ -51,7 +51,7 @@ func TestGetCluster(t *testing.T) {
 							Name: "things",
 						},
 						Capacity:     &capacity,
-						DomainsQuota: p2ui64(5),
+						DomainsQuota: new(uint64(5)),
 						Usage:        2,
 					},
 				},
@@ -70,7 +70,7 @@ func TestGetCluster(t *testing.T) {
 							Unit: limes.UnitBytes,
 						},
 						Capacity:     &capacity,
-						DomainsQuota: p2ui64(5),
+						DomainsQuota: new(uint64(5)),
 						Usage:        2,
 					},
 					"things": &limesresources.ClusterResourceReport{
@@ -78,7 +78,7 @@ func TestGetCluster(t *testing.T) {
 							Name: "things",
 						},
 						Capacity:     &capacity,
-						DomainsQuota: p2ui64(5),
+						DomainsQuota: new(uint64(5)),
 						Usage:        2,
 					},
 				},
@@ -123,7 +123,7 @@ func TestGetFilteredCluster(t *testing.T) {
 							Unit: limes.UnitBytes,
 						},
 						Capacity:      &capacity,
-						DomainsQuota:  p2ui64(4),
+						DomainsQuota:  new(uint64(4)),
 						Usage:         2,
 						Subcapacities: json.RawMessage(`[{"cores":200,"hypervisor":"cluster-1"},{"cores":800,"hypervisor":"cluster-2"}]`),
 					},
@@ -141,8 +141,4 @@ func TestGetFilteredCluster(t *testing.T) {
 func p2time(timestamp int64) *limes.UnixEncodedTime {
 	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
 	return &t
-}
-
-func p2ui64(x uint64) *uint64 {
-	return &x
 }

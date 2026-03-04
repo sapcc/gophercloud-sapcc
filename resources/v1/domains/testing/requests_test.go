@@ -43,16 +43,16 @@ func TestListDomain(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							DomainQuota:   p2ui64(10),
-							ProjectsQuota: p2ui64(5),
+							DomainQuota:   new(uint64(10)),
+							ProjectsQuota: new(uint64(5)),
 							Usage:         2,
 						},
 						"things": &limesresources.DomainResourceReport{
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							DomainQuota:   p2ui64(10),
-							ProjectsQuota: p2ui64(5),
+							DomainQuota:   new(uint64(10)),
+							ProjectsQuota: new(uint64(5)),
 							Usage:         2,
 						},
 					},
@@ -70,16 +70,16 @@ func TestListDomain(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							DomainQuota:   p2ui64(55),
-							ProjectsQuota: p2ui64(25),
+							DomainQuota:   new(uint64(55)),
+							ProjectsQuota: new(uint64(25)),
 							Usage:         10,
 						},
 						"things": &limesresources.DomainResourceReport{
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							DomainQuota:   p2ui64(55),
-							ProjectsQuota: p2ui64(25),
+							DomainQuota:   new(uint64(55)),
+							ProjectsQuota: new(uint64(25)),
 							Usage:         10,
 						},
 					},
@@ -105,16 +105,16 @@ func TestListDomain(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							DomainQuota:   p2ui64(10),
-							ProjectsQuota: p2ui64(5),
+							DomainQuota:   new(uint64(10)),
+							ProjectsQuota: new(uint64(5)),
 							Usage:         2,
 						},
 						"things": &limesresources.DomainResourceReport{
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							DomainQuota:   p2ui64(10),
-							ProjectsQuota: p2ui64(5),
+							DomainQuota:   new(uint64(10)),
+							ProjectsQuota: new(uint64(5)),
 							Usage:         2,
 						},
 					},
@@ -132,8 +132,8 @@ func TestListDomain(t *testing.T) {
 								Name: "capacity",
 								Unit: limes.UnitBytes,
 							},
-							DomainQuota:          p2ui64(55),
-							ProjectsQuota:        p2ui64(25),
+							DomainQuota:          new(uint64(55)),
+							ProjectsQuota:        new(uint64(25)),
 							Usage:                10,
 							BackendQuota:         &backendQ,
 							InfiniteBackendQuota: &infiniteBackendQ,
@@ -142,8 +142,8 @@ func TestListDomain(t *testing.T) {
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							DomainQuota:   p2ui64(55),
-							ProjectsQuota: p2ui64(25),
+							DomainQuota:   new(uint64(55)),
+							ProjectsQuota: new(uint64(25)),
 							Usage:         10,
 						},
 					},
@@ -184,8 +184,8 @@ func TestListFilteredDomain(t *testing.T) {
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							DomainQuota:   p2ui64(10),
-							ProjectsQuota: p2ui64(5),
+							DomainQuota:   new(uint64(10)),
+							ProjectsQuota: new(uint64(5)),
 							Usage:         2,
 						},
 					},
@@ -210,8 +210,8 @@ func TestListFilteredDomain(t *testing.T) {
 							ResourceInfo: limesresources.ResourceInfo{
 								Name: "things",
 							},
-							DomainQuota:   p2ui64(10),
-							ProjectsQuota: p2ui64(5),
+							DomainQuota:   new(uint64(10)),
+							ProjectsQuota: new(uint64(5)),
 							Usage:         2,
 						},
 					},
@@ -249,16 +249,16 @@ func TestGetDomain(t *testing.T) {
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
-						DomainQuota:   p2ui64(10),
-						ProjectsQuota: p2ui64(5),
+						DomainQuota:   new(uint64(10)),
+						ProjectsQuota: new(uint64(5)),
 						Usage:         2,
 					},
 					"things": &limesresources.DomainResourceReport{
 						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
-						DomainQuota:   p2ui64(10),
-						ProjectsQuota: p2ui64(5),
+						DomainQuota:   new(uint64(10)),
+						ProjectsQuota: new(uint64(5)),
 						Usage:         2,
 					},
 				},
@@ -276,16 +276,16 @@ func TestGetDomain(t *testing.T) {
 							Name: "capacity",
 							Unit: limes.UnitBytes,
 						},
-						DomainQuota:   p2ui64(55),
-						ProjectsQuota: p2ui64(25),
+						DomainQuota:   new(uint64(55)),
+						ProjectsQuota: new(uint64(25)),
 						Usage:         10,
 					},
 					"things": &limesresources.DomainResourceReport{
 						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
-						DomainQuota:   p2ui64(55),
-						ProjectsQuota: p2ui64(25),
+						DomainQuota:   new(uint64(55)),
+						ProjectsQuota: new(uint64(25)),
 						Usage:         10,
 					},
 				},
@@ -324,8 +324,8 @@ func TestGetDomainFiltered(t *testing.T) {
 						ResourceInfo: limesresources.ResourceInfo{
 							Name: "things",
 						},
-						DomainQuota:   p2ui64(10),
-						ProjectsQuota: p2ui64(5),
+						DomainQuota:   new(uint64(10)),
+						ProjectsQuota: new(uint64(5)),
 						Usage:         2,
 					},
 				},
@@ -340,8 +340,4 @@ func TestGetDomainFiltered(t *testing.T) {
 func p2time(timestamp int64) *limes.UnixEncodedTime {
 	t := limes.UnixEncodedTime{Time: time.Unix(timestamp, 0).UTC()}
 	return &t
-}
-
-func p2ui64(x uint64) *uint64 {
-	return &x
 }
