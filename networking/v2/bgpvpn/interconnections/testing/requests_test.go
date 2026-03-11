@@ -29,7 +29,7 @@ func TestList(t *testing.T) {
 			th.TestMethod(t, r, http.MethodGet)
 			th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
 
-			err := r.ParseForm()
+			err := r.ParseForm() //nolint:gosec // this is a test, we do not care
 			th.AssertNoErr(t, err)
 			th.AssertDeepEquals(t, r.Form["fields"], fields)
 
