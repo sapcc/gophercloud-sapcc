@@ -3,3 +3,6 @@ build/
 
 # test artifacts
 *.actual
+
+# macOS
+.DS_Store
