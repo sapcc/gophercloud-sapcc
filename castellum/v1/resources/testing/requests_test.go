@@ -11,57 +11,57 @@ import (
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	"github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/majewsky/gg/option"
+	"github.com/sapcc/go-api-declarations/castellum"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/castellum/v1/resources"
 )
 
-func intPtr(v int) *int { return &v }
-
 var resourcesList = []resources.Resource{
 	{
 		ResourceType: "nfs-shares",
-		AssetCount:   42,
-		Checked:      &resources.ResourceChecked{Error: "cannot connect to OpenStack"},
-		LowThreshold: &resources.Threshold{
-			UsagePercent: 20.0,
-			DelaySeconds: 3600,
-		},
-		HighThreshold: &resources.Threshold{
-			UsagePercent: 80.0,
-			DelaySeconds: 1800,
-		},
-		CriticalThreshold: &resources.Threshold{
-			UsagePercent: 95.0,
-		},
-		SizeConstraints: &resources.SizeConstraints{
-			Minimum: intPtr(10),
-			Maximum: intPtr(2000),
-		},
-		SizeSteps: &resources.SizeSteps{
-			Percent: 20.0,
+		Resource: castellum.Resource{
+			AssetCount: 42,
+			Checked:    option.Some(castellum.Checked{ErrorMessage: "cannot connect to OpenStack"}),
+			LowThreshold: option.Some(castellum.Threshold{
+				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 20.0},
+				DelaySeconds: 3600,
+			}),
+			HighThreshold: option.Some(castellum.Threshold{
+				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 80.0},
+				DelaySeconds: 1800,
+			}),
+			CriticalThreshold: option.Some(castellum.Threshold{
+				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 95.0},
+			}),
+			SizeConstraints: option.Some(castellum.SizeConstraints{
+				Minimum: option.Some(uint64(10)),
+				Maximum: option.Some(uint64(2000)),
+			}),
+			SizeSteps: castellum.SizeSteps{Percent: 20.0},
 		},
 	},
 	{
 		ResourceType: "smb-shares",
-		AssetCount:   42,
-		Checked:      &resources.ResourceChecked{Error: "cannot connect to OpenStack"},
-		LowThreshold: &resources.Threshold{
-			UsagePercent: 10.0,
-			DelaySeconds: 3600,
-		},
-		HighThreshold: &resources.Threshold{
-			UsagePercent: 50.0,
-			DelaySeconds: 1800,
-		},
-		CriticalThreshold: &resources.Threshold{
-			UsagePercent: 90.0,
-		},
-		SizeConstraints: &resources.SizeConstraints{
-			Minimum: intPtr(20),
-			Maximum: intPtr(2000),
-		},
-		SizeSteps: &resources.SizeSteps{
-			Percent: 10.0,
+		Resource: castellum.Resource{
+			AssetCount: 42,
+			Checked:    option.Some(castellum.Checked{ErrorMessage: "cannot connect to OpenStack"}),
+			LowThreshold: option.Some(castellum.Threshold{
+				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 10.0},
+				DelaySeconds: 3600,
+			}),
+			HighThreshold: option.Some(castellum.Threshold{
+				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 50.0},
+				DelaySeconds: 1800,
+			}),
+			CriticalThreshold: option.Some(castellum.Threshold{
+				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 90.0},
+			}),
+			SizeConstraints: option.Some(castellum.SizeConstraints{
+				Minimum: option.Some(uint64(20)),
+				Maximum: option.Some(uint64(2000)),
+			}),
+			SizeSteps: castellum.SizeSteps{Percent: 10.0},
 		},
 	},
 }
@@ -148,24 +148,22 @@ func TestCreate(t *testing.T) {
 	})
 
 	options := resources.CreateOpts{
-		LowThreshold: &resources.Threshold{
-			UsagePercent: 20.0,
+		LowThreshold: &castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 20.0},
 			DelaySeconds: 3600,
 		},
-		HighThreshold: &resources.Threshold{
-			UsagePercent: 80.0,
+		HighThreshold: &castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 80.0},
 			DelaySeconds: 1800,
 		},
-		CriticalThreshold: &resources.Threshold{
-			UsagePercent: 95.0,
+		CriticalThreshold: &castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 95.0},
 		},
-		SizeConstraints: &resources.SizeConstraints{
-			Minimum: intPtr(10),
-			Maximum: intPtr(2000),
+		SizeConstraints: &castellum.SizeConstraints{
+			Minimum: option.Some(uint64(10)),
+			Maximum: option.Some(uint64(2000)),
 		},
-		SizeSteps: &resources.SizeSteps{
-			Percent: 20.0,
-		},
+		SizeSteps: &castellum.SizeSteps{Percent: 20.0},
 	}
 
 	err := resources.Create(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1", "nfs-shares", options).ExtractErr()

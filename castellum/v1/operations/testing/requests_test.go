@@ -10,6 +10,8 @@ import (
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	"github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/majewsky/gg/option"
+	"github.com/sapcc/go-api-declarations/castellum"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/castellum/v1/operations"
 )
@@ -20,45 +22,60 @@ const (
 	assetID   = "05620cba-c0c1-4e75-a5e9-b5decf643dc7"
 )
 
-var pendingOp = operations.Operation{
-	ProjectID: projectID,
-	AssetType: assetType,
-	AssetID:   assetID,
-	State:     "confirmed",
-	Reason:    "high",
-	OldSize:   100,
-	NewSize:   120,
-	Created:   operations.OperationEvent{At: 1700000000, UsagePercent: 82.0},
-	Confirmed: &operations.OperationEvent{At: 1700003600},
-	Greenlit:  &operations.GreenlitEvent{At: 1700007200},
+var pendingOp = castellum.StandaloneOperation{
+	ProjectUUID: projectID,
+	AssetType:   assetType,
+	AssetID:     assetID,
+	Operation: castellum.Operation{
+		State:   castellum.OperationStateConfirmed,
+		Reason:  castellum.OperationReasonHigh,
+		OldSize: 100,
+		NewSize: 120,
+		Created: castellum.OperationCreation{
+			AtUnix:       1700000000,
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 82.0},
+		},
+		Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
+		Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
+	},
 }
 
-var failedOp = operations.Operation{
-	ProjectID: projectID,
-	AssetType: assetType,
-	AssetID:   assetID,
-	State:     "failed",
-	Reason:    "high",
-	OldSize:   100,
-	NewSize:   120,
-	Created:   operations.OperationEvent{At: 1700000000, UsagePercent: 82.0},
-	Confirmed: &operations.OperationEvent{At: 1700003600},
-	Greenlit:  &operations.GreenlitEvent{At: 1700007200},
-	Finished:  &operations.FinishedEvent{At: 1700010800, Error: "quota exceeded"},
+var failedOp = castellum.StandaloneOperation{
+	ProjectUUID: projectID,
+	AssetType:   assetType,
+	AssetID:     assetID,
+	Operation: castellum.Operation{
+		State:   castellum.OperationStateFailed,
+		Reason:  castellum.OperationReasonHigh,
+		OldSize: 100,
+		NewSize: 120,
+		Created: castellum.OperationCreation{
+			AtUnix:       1700000000,
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 82.0},
+		},
+		Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
+		Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
+		Finished:  option.Some(castellum.OperationFinish{AtUnix: 1700010800, ErrorMessage: "quota exceeded"}),
+	},
 }
 
-var succeededOp = operations.Operation{
-	ProjectID: projectID,
-	AssetType: assetType,
-	AssetID:   assetID,
-	State:     "succeeded",
-	Reason:    "high",
-	OldSize:   80,
-	NewSize:   100,
-	Created:   operations.OperationEvent{At: 1699000000, UsagePercent: 85.0},
-	Confirmed: &operations.OperationEvent{At: 1699003600},
-	Greenlit:  &operations.GreenlitEvent{At: 1699007200},
-	Finished:  &operations.FinishedEvent{At: 1699010800},
+var succeededOp = castellum.StandaloneOperation{
+	ProjectUUID: projectID,
+	AssetType:   assetType,
+	AssetID:     assetID,
+	Operation: castellum.Operation{
+		State:   castellum.OperationStateSucceeded,
+		Reason:  castellum.OperationReasonHigh,
+		OldSize: 80,
+		NewSize: 100,
+		Created: castellum.OperationCreation{
+			AtUnix:       1699000000,
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 85.0},
+		},
+		Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1699003600}),
+		Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1699007200}),
+		Finished:  option.Some(castellum.OperationFinish{AtUnix: 1699010800}),
+	},
 }
 
 func TestListPending(t *testing.T) {
@@ -77,7 +94,7 @@ func TestListPending(t *testing.T) {
 
 	result, err := operations.ListPending(t.Context(), client.ServiceClient(fakeServer), nil).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, result, []operations.Operation{pendingOp})
+	th.AssertDeepEquals(t, result, []castellum.StandaloneOperation{pendingOp})
 }
 
 func TestListPendingWithOpts(t *testing.T) {
@@ -97,7 +114,7 @@ func TestListPendingWithOpts(t *testing.T) {
 
 	result, err := operations.ListPending(t.Context(), client.ServiceClient(fakeServer), operations.ListOpts{Project: projectID}).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, result, []operations.Operation{pendingOp})
+	th.AssertDeepEquals(t, result, []castellum.StandaloneOperation{pendingOp})
 }
 
 func TestListRecentlyFailed(t *testing.T) {
@@ -116,7 +133,7 @@ func TestListRecentlyFailed(t *testing.T) {
 
 	result, err := operations.ListRecentlyFailed(t.Context(), client.ServiceClient(fakeServer), nil).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, result, []operations.Operation{failedOp})
+	th.AssertDeepEquals(t, result, []castellum.StandaloneOperation{failedOp})
 }
 
 func TestListRecentlySucceeded(t *testing.T) {
@@ -135,7 +152,7 @@ func TestListRecentlySucceeded(t *testing.T) {
 
 	result, err := operations.ListRecentlySucceeded(t.Context(), client.ServiceClient(fakeServer), nil).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, result, []operations.Operation{succeededOp})
+	th.AssertDeepEquals(t, result, []castellum.StandaloneOperation{succeededOp})
 }
 
 func TestListProjectPending(t *testing.T) {
@@ -154,7 +171,7 @@ func TestListProjectPending(t *testing.T) {
 
 	result, err := operations.ListProjectPending(t.Context(), client.ServiceClient(fakeServer), projectID, assetType, nil).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, result, []operations.Operation{pendingOp})
+	th.AssertDeepEquals(t, result, []castellum.StandaloneOperation{pendingOp})
 }
 
 func TestListProjectRecentlyFailed(t *testing.T) {
@@ -173,7 +190,7 @@ func TestListProjectRecentlyFailed(t *testing.T) {
 
 	result, err := operations.ListProjectRecentlyFailed(t.Context(), client.ServiceClient(fakeServer), projectID, assetType, nil).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, result, []operations.Operation{failedOp})
+	th.AssertDeepEquals(t, result, []castellum.StandaloneOperation{failedOp})
 }
 
 func TestListProjectRecentlySucceeded(t *testing.T) {
@@ -192,5 +209,5 @@ func TestListProjectRecentlySucceeded(t *testing.T) {
 
 	result, err := operations.ListProjectRecentlySucceeded(t.Context(), client.ServiceClient(fakeServer), projectID, assetType, nil).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, result, []operations.Operation{succeededOp})
+	th.AssertDeepEquals(t, result, []castellum.StandaloneOperation{succeededOp})
 }

@@ -10,6 +10,7 @@ import (
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	"github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/sapcc/go-api-declarations/castellum"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/castellum/v1/admin"
 )
@@ -35,12 +36,12 @@ func TestGetResourceScrapeErrors(t *testing.T) {
 		fmt.Fprint(w, ResourceScrapeErrorsResponse)
 	})
 
-	expected := []admin.ResourceScrapeError{
+	expected := []castellum.ResourceScrapeError{
 		{
-			AssetType: assetType,
-			Checked:   admin.ResourceChecked{Error: "cannot connect to backend"},
-			DomainID:  domainID,
-			ProjectID: projectID,
+			AssetType:   assetType,
+			Checked:     castellum.Checked{ErrorMessage: "cannot connect to backend"},
+			DomainUUID:  domainID,
+			ProjectUUID: projectID,
 		},
 	}
 
@@ -63,13 +64,13 @@ func TestGetAssetScrapeErrors(t *testing.T) {
 		fmt.Fprint(w, AssetScrapeErrorsResponse)
 	})
 
-	expected := []admin.AssetScrapeError{
+	expected := []castellum.AssetScrapeError{
 		{
-			AssetID:   assetID,
-			AssetType: assetType,
-			Checked:   admin.ResourceChecked{Error: "share not found"},
-			DomainID:  domainID,
-			ProjectID: projectID,
+			AssetUUID:   assetID,
+			AssetType:   assetType,
+			Checked:     castellum.Checked{ErrorMessage: "share not found"},
+			DomainUUID:  domainID,
+			ProjectUUID: projectID,
 		},
 	}
 
@@ -92,15 +93,15 @@ func TestGetAssetResizeErrors(t *testing.T) {
 		fmt.Fprint(w, AssetResizeErrorsResponse)
 	})
 
-	expected := []admin.AssetResizeError{
+	expected := []castellum.AssetResizeError{
 		{
-			AssetID:   assetID,
-			AssetType: assetType,
-			DomainID:  domainID,
-			ProjectID: projectID,
-			OldSize:   100,
-			NewSize:   120,
-			Finished:  admin.FinishedEvent{At: 1700010800, Error: "quota exceeded"},
+			AssetUUID:   assetID,
+			AssetType:   assetType,
+			DomainUUID:  domainID,
+			ProjectUUID: projectID,
+			OldSize:     100,
+			NewSize:     120,
+			Finished:    castellum.OperationFinish{AtUnix: 1700010800, ErrorMessage: "quota exceeded"},
 		},
 	}
 

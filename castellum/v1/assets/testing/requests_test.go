@@ -10,11 +10,11 @@ import (
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	"github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/majewsky/gg/option"
+	"github.com/sapcc/go-api-declarations/castellum"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/castellum/v1/assets"
 )
-
-func intPtr(v int) *int { return &v }
 
 const (
 	projectID = "88e5cad3-38e6-454f-b412-662cda03e7a1"
@@ -22,58 +22,68 @@ const (
 	assetID   = "05620cba-c0c1-4e75-a5e9-b5decf643dc7"
 )
 
-var assetsList = []assets.Asset{
+var assetsList = []castellum.Asset{
 	{
-		ID:           "05620cba-c0c1-4e75-a5e9-b5decf643dc7",
+		UUID:         "05620cba-c0c1-4e75-a5e9-b5decf643dc7",
 		Size:         100,
-		UsagePercent: 75.5,
-		MinSize:      intPtr(10),
-		MaxSize:      intPtr(1000),
-		Checked:      &assets.AssetChecked{Error: ""},
+		UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 75.5},
+		MinimumSize:  option.Some(uint64(10)),
+		MaximumSize:  option.Some(uint64(1000)),
+		Checked:      option.Some(castellum.Checked{}),
 		Stale:        false,
 	},
 	{
-		ID:           "5d7f5c1c-3f2e-4b0a-9e6d-8a1b2c3d4e5f",
+		UUID:         "5d7f5c1c-3f2e-4b0a-9e6d-8a1b2c3d4e5f",
 		Size:         200,
-		UsagePercent: 20.0,
+		UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 20.0},
 		Stale:        false,
 	},
 }
 
-var singleAsset = assets.Asset{
-	ID:           "05620cba-c0c1-4e75-a5e9-b5decf643dc7",
+var singleAsset = castellum.Asset{
+	UUID:         "05620cba-c0c1-4e75-a5e9-b5decf643dc7",
 	Size:         100,
-	UsagePercent: 75.5,
-	MinSize:      intPtr(10),
-	MaxSize:      intPtr(1000),
-	Checked:      &assets.AssetChecked{Error: ""},
+	UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 75.5},
+	MinimumSize:  option.Some(uint64(10)),
+	MaximumSize:  option.Some(uint64(1000)),
+	Checked:      option.Some(castellum.Checked{}),
 	Stale:        false,
-	PendingOperation: &assets.Operation{
-		State:     "confirmed",
-		Reason:    "high",
-		OldSize:   100,
-		NewSize:   120,
-		Created:   assets.OperationEvent{At: 1700000000, UsagePercent: 82.0},
-		Confirmed: &assets.OperationEvent{At: 1700003600},
-		Greenlit:  &assets.GreenlitEvent{At: 1700007200},
-	},
+	PendingOperation: option.Some(castellum.StandaloneOperation{
+		Operation: castellum.Operation{
+			State:   castellum.OperationStateConfirmed,
+			Reason:  castellum.OperationReasonHigh,
+			OldSize: 100,
+			NewSize: 120,
+			Created: castellum.OperationCreation{
+				AtUnix:       1700000000,
+				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 82.0},
+			},
+			Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
+			Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
+		},
+	}),
 }
 
-var singleAssetWithHistory = assets.Asset{
-	ID:           "05620cba-c0c1-4e75-a5e9-b5decf643dc7",
+var singleAssetWithHistory = castellum.Asset{
+	UUID:         "05620cba-c0c1-4e75-a5e9-b5decf643dc7",
 	Size:         100,
-	UsagePercent: 75.5,
+	UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 75.5},
 	Stale:        false,
-	FinishedOperations: []assets.Operation{
+	FinishedOperations: []castellum.StandaloneOperation{
 		{
-			State:     "succeeded",
-			Reason:    "high",
-			OldSize:   80,
-			NewSize:   100,
-			Created:   assets.OperationEvent{At: 1699000000, UsagePercent: 85.0},
-			Confirmed: &assets.OperationEvent{At: 1699003600},
-			Greenlit:  &assets.GreenlitEvent{At: 1699007200},
-			Finished:  &assets.FinishedEvent{At: 1699010800},
+			Operation: castellum.Operation{
+				State:   castellum.OperationStateSucceeded,
+				Reason:  castellum.OperationReasonHigh,
+				OldSize: 80,
+				NewSize: 100,
+				Created: castellum.OperationCreation{
+					AtUnix:       1699000000,
+					UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 85.0},
+				},
+				Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1699003600}),
+				Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1699007200}),
+				Finished:  option.Some(castellum.OperationFinish{AtUnix: 1699010800}),
+			},
 		},
 	},
 }
