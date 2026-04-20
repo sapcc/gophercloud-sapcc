@@ -25,6 +25,7 @@ type Price struct {
 	ValidTo             time.Time `json:"-"`
 }
 
+// UnmarshalJSON implements the json.Unmarshaler interface.
 func (r *Price) UnmarshalJSON(b []byte) error {
 	type tmp Price
 	var s struct {
@@ -46,6 +47,8 @@ func (r *Price) UnmarshalJSON(b []byte) error {
 
 // PricePage is the page returned by a pager when traversing over a collection
 // of price.
+//
+//nolint:revive // historically grown stuttering name price.PricePage
 type PricePage struct {
 	pagination.SinglePageBase
 }
@@ -59,6 +62,7 @@ func ExtractPrices(r pagination.Page) ([]Price, error) {
 	return s, err
 }
 
+// ExtractPricesInto is used by ExtractPrices.
 func ExtractPricesInto(r pagination.Page, v any) error {
 	return r.(PricePage).ExtractIntoSlicePtr(v, "")
 }

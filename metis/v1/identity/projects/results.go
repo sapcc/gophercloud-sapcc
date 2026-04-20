@@ -94,6 +94,7 @@ func (r GetResult) Extract() (*Project, error) {
 	return &s.Data.Item, nil
 }
 
+// ExtractInto is used by Extract.
 func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

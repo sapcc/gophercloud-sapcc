@@ -10,6 +10,9 @@ import (
 	v1 "github.com/sapcc/gophercloud-sapcc/v2/metis/v1"
 )
 
+// IPAddress resembles an IP Address in the OpenStack network service.
+//
+//nolint:revive // historically grown stuttering name ip.IPAddress
 type IPAddress struct {
 	IP          string `json:"ipaddress"`
 	PortUUID    string `json:"port"`
@@ -64,6 +67,7 @@ func (r GetResult) Extract() (*IPAddress, error) {
 	return &s.Data.Item, nil
 }
 
+// ExtractInto is used by Extract.
 func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

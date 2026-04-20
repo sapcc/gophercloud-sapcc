@@ -27,6 +27,7 @@ func (r commonResult) Extract() (*Interconnection, error) {
 	return &s, err
 }
 
+// ExtractInto is used by Extract.
 func (r commonResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "interconnection")
 }
@@ -67,12 +68,12 @@ type Interconnection struct {
 	RemoteParameters        Parameters `json:"remote_parameters"`
 }
 
-// Parameter represents the structure of a parameter object.
+// Parameters appears in Type Interconnection.
 type Parameters struct {
 	ProjectID []string `json:"project_id"`
 }
 
-// InterconnectionPage
+// InterconnectionPage is a MarkerPageBase for an Interconnection.
 type InterconnectionPage struct {
 	pagination.MarkerPageBase
 }
@@ -140,6 +141,7 @@ func ExtractInterconnections(r pagination.Page) ([]Interconnection, error) {
 	return s, err
 }
 
+// ExtractInterconnectionssInto is used by ExtractInterconnections.
 func ExtractInterconnectionssInto(r pagination.Page, v any) error {
 	return r.(InterconnectionPage).ExtractIntoSlicePtr(v, "interconnections")
 }

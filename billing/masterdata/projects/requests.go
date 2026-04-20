@@ -143,6 +143,7 @@ type UpdateOpts struct {
 	ProjectType string `json:"project_type,omitempty"`
 }
 
+// UnmarshalJSON implements the json.Unmarshaler interface.
 func (opts *UpdateOpts) UnmarshalJSON(b []byte) error {
 	type tmp UpdateOpts
 	var s struct {
@@ -164,6 +165,7 @@ func (opts *UpdateOpts) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON implements the json.Marshaler interface.
 func (opts UpdateOpts) MarshalJSON() ([]byte, error) {
 	type tmp UpdateOpts
 	res := struct {
@@ -201,6 +203,7 @@ func Update(ctx context.Context, c *gophercloud.ServiceClient, id string, opts U
 	return
 }
 
+// ProjectToUpdateOpts builds UpdateOpts from a Project.
 func ProjectToUpdateOpts(project *Project) UpdateOpts {
 	return UpdateOpts{
 		Description:                               project.Description,

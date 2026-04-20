@@ -31,6 +31,8 @@ type Costing struct {
 
 // CostingPage is the page returned by a pager when traversing over a collection
 // of costing.
+//
+//nolint:revive // historically grown stuttering name costing.CostingPage
 type CostingPage struct {
 	pagination.SinglePageBase
 }
@@ -44,6 +46,7 @@ func ExtractCostings(r pagination.Page) ([]Costing, error) {
 	return s, err
 }
 
+// ExtractCostingsInto is used by ExtractCostings.
 func ExtractCostingsInto(r pagination.Page, v any) error {
 	return r.(CostingPage).ExtractIntoSlicePtr(v, "")
 }

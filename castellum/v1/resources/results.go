@@ -8,11 +8,14 @@ import (
 	"github.com/sapcc/go-api-declarations/castellum"
 )
 
+// GetResult represents the result of a get operation. Call its Extract method
+// to interpret it as an Event.
 type GetResult struct {
 	gophercloud.Result
 	resourceType string
 }
 
+// ListResult is the result of a List operation.
 type ListResult struct {
 	gophercloud.Result
 }
@@ -23,6 +26,7 @@ type DeleteResult struct {
 	gophercloud.ErrResult
 }
 
+// CreateResult represents the result of a create operation.
 type CreateResult struct {
 	gophercloud.ErrResult
 }
@@ -36,12 +40,14 @@ func (r ListResult) Extract() (map[string]castellum.Resource, error) {
 	return s.Resources, err
 }
 
+// Extract is a function that accepts a result and extracts a castellum.Resource.
 func (r GetResult) Extract() (castellum.Resource, error) {
 	var s castellum.Resource
 	err := r.ExtractInto(&s)
 	return s, err
 }
 
+// ExtractInto is used by Extract.
 func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

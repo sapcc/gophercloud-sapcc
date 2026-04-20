@@ -118,6 +118,7 @@ func Update(ctx context.Context, c *gophercloud.ServiceClient, id string, opts U
 	return
 }
 
+// DomainToUpdateOpts builds UpdateOpts from a Domain.
 func DomainToUpdateOpts(domain *Domain) UpdateOpts {
 	return UpdateOpts{
 		DomainID:                       domain.DomainID,

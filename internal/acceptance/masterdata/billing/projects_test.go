@@ -24,16 +24,16 @@ func TestProjectReadUpdate(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	// restore initial project data
-	defer UpdateProject(t, client, projectID, projects.ProjectToUpdateOpts(project))
+	defer updateProject(t, client, projectID, projects.ProjectToUpdateOpts(project))
 
-	UpdateProjectField(t, client, project, "Description")
-	UpdateProjectField(t, client, project, "RevenueRelevance")
-	UpdateProjectField(t, client, project, "BusinessCriticality")
-	UpdateProjectField(t, client, project, "AdditionalInformation")
-	UpdateProjectField(t, client, project, "NumberOfEndusers")
+	updateProjectField(t, client, project, "Description")
+	updateProjectField(t, client, project, "RevenueRelevance")
+	updateProjectField(t, client, project, "BusinessCriticality")
+	updateProjectField(t, client, project, "AdditionalInformation")
+	updateProjectField(t, client, project, "NumberOfEndusers")
 
 	// valid project is required
-	// UpdateProjectField(t, client, project, "CostObject")
+	// updateProjectField(t, client, project, "CostObject")
 }
 
 func TestProjectList(t *testing.T) {

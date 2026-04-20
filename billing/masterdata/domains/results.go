@@ -23,6 +23,7 @@ func (r commonResult) Extract() (*Domain, error) {
 	return &s, err
 }
 
+// ExtractInto is used by Extract.
 func (r commonResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
@@ -73,7 +74,7 @@ type Domain struct {
 	Region string `json:"region"`
 }
 
-// The cost object structure
+// CostObject appears in type Domain.
 type CostObject struct {
 	// Set to true, if the costobject should be inheritable for subprojects
 	ProjectsCanInherit bool `json:"projects_can_inherit"`
@@ -84,6 +85,7 @@ type CostObject struct {
 	Type string `json:"type,omitempty"`
 }
 
+// UnmarshalJSON implements the json.Unmarshaler interface.
 func (r *Domain) UnmarshalJSON(b []byte) error {
 	type tmp Domain
 	var s struct {
@@ -118,6 +120,7 @@ func ExtractDomains(r pagination.Page) ([]Domain, error) {
 	return s, err
 }
 
+// ExtractDomainsInto is used by ExtractDomain.
 func ExtractDomainsInto(r pagination.Page, v any) error {
 	return r.(DomainPage).ExtractIntoSlicePtr(v, "")
 }
