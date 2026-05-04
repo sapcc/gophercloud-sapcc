@@ -81,13 +81,13 @@ const ListInterconnectionsResponse = `
 var interconnectionsList = []interconnections.Interconnection{
 	{
 		ID:                      "a943ab0b-8b32-47dd-805b-4d17b7e15359",
-		ProjectID:               "efc95e26964c46568de64dec41ee9204",
+		ProjectID:               "efc95e26964c46568de64dec41ee9204", //nolint:goconst
 		Name:                    "interconnection1",
 		Type:                    "bgpvpn",
 		State:                   "ACTIVE",
 		LocalResourceID:         "b1421282-a0e6-4add-9b6a-423aaabd67d2",
 		RemoteResourceID:        "6a985ed2-cb97-45ae-a6dc-07feb0f36110",
-		RemoteRegion:            "region2",
+		RemoteRegion:            "region2", //nolint:goconst
 		RemoteInterconnectionID: "a341bc06-05f0-40a4-ad19-084fbf1b1c79",
 		LocalParameters: interconnections.Parameters{
 			ProjectID: []string{"efc95e26964c46568de64dec41ee9204"},
