@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 SAP SE or an SAP affiliate company
+// SPDX-FileCopyrightText: 2026 Dexter Le <dextersydney2001@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
 package testing
@@ -11,7 +11,7 @@ import (
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	"github.com/gophercloud/gophercloud/v2/testhelper/client"
-	"github.com/majewsky/gg/option"
+	"go.xyrillian.de/gg/option"
 	"github.com/sapcc/go-api-declarations/castellum"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/castellum/v1/resources"
