@@ -10,8 +10,8 @@ import (
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	"github.com/gophercloud/gophercloud/v2/testhelper/client"
-	"go.xyrillian.de/gg/option"
 	"github.com/sapcc/go-api-declarations/castellum"
+	. "go.xyrillian.de/gg/option"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/castellum/v1/assets"
 )
@@ -27,9 +27,9 @@ var assetsList = []castellum.Asset{
 		UUID:         "05620cba-c0c1-4e75-a5e9-b5decf643dc7",
 		Size:         100,
 		UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 75.5},
-		MinimumSize:  option.Some(uint64(10)),
-		MaximumSize:  option.Some(uint64(1000)),
-		Checked:      option.Some(castellum.Checked{}),
+		MinimumSize:  Some(uint64(10)),
+		MaximumSize:  Some(uint64(1000)),
+		Checked:      Some(castellum.Checked{}),
 		Stale:        false,
 	},
 	{
@@ -44,11 +44,11 @@ var singleAsset = castellum.Asset{
 	UUID:         "05620cba-c0c1-4e75-a5e9-b5decf643dc7",
 	Size:         100,
 	UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 75.5},
-	MinimumSize:  option.Some(uint64(10)),
-	MaximumSize:  option.Some(uint64(1000)),
-	Checked:      option.Some(castellum.Checked{}),
+	MinimumSize:  Some(uint64(10)),
+	MaximumSize:  Some(uint64(1000)),
+	Checked:      Some(castellum.Checked{}),
 	Stale:        false,
-	PendingOperation: option.Some(castellum.StandaloneOperation{
+	PendingOperation: Some(castellum.StandaloneOperation{
 		Operation: castellum.Operation{
 			State:   castellum.OperationStateConfirmed,
 			Reason:  castellum.OperationReasonHigh,
@@ -58,8 +58,8 @@ var singleAsset = castellum.Asset{
 				AtUnix:       1700000000,
 				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 82.0},
 			},
-			Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
-			Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
+			Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
+			Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
 		},
 	}),
 }
@@ -80,9 +80,9 @@ var singleAssetWithHistory = castellum.Asset{
 					AtUnix:       1699000000,
 					UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 85.0},
 				},
-				Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1699003600}),
-				Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1699007200}),
-				Finished:  option.Some(castellum.OperationFinish{AtUnix: 1699010800}),
+				Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1699003600}),
+				Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1699007200}),
+				Finished:  Some(castellum.OperationFinish{AtUnix: 1699010800}),
 			},
 		},
 	},
@@ -123,7 +123,7 @@ func TestGet(t *testing.T) {
 
 	result, err := assets.Get(t.Context(), client.ServiceClient(fakeServer), projectID, assetType, assetID, false).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, *result, singleAsset)
+	th.AssertDeepEquals(t, result, singleAsset)
 }
 
 func TestGetWithHistory(t *testing.T) {
@@ -145,7 +145,7 @@ func TestGetWithHistory(t *testing.T) {
 
 	result, err := assets.Get(t.Context(), client.ServiceClient(fakeServer), projectID, assetType, assetID, true).Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, *result, singleAssetWithHistory)
+	th.AssertDeepEquals(t, result, singleAssetWithHistory)
 }
 
 func TestResolveError(t *testing.T) {

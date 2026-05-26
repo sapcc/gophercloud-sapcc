@@ -10,8 +10,8 @@ import (
 
 	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	"github.com/gophercloud/gophercloud/v2/testhelper/client"
-	"go.xyrillian.de/gg/option"
 	"github.com/sapcc/go-api-declarations/castellum"
+	. "go.xyrillian.de/gg/option"
 
 	"github.com/sapcc/gophercloud-sapcc/v2/castellum/v1/operations"
 )
@@ -35,8 +35,8 @@ var pendingOp = castellum.StandaloneOperation{
 			AtUnix:       1700000000,
 			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 82.0},
 		},
-		Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
-		Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
+		Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
+		Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
 	},
 }
 
@@ -53,9 +53,9 @@ var failedOp = castellum.StandaloneOperation{
 			AtUnix:       1700000000,
 			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 82.0},
 		},
-		Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
-		Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
-		Finished:  option.Some(castellum.OperationFinish{AtUnix: 1700010800, ErrorMessage: "quota exceeded"}),
+		Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
+		Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
+		Finished:  Some(castellum.OperationFinish{AtUnix: 1700010800, ErrorMessage: "quota exceeded"}),
 	},
 }
 
@@ -72,9 +72,9 @@ var succeededOp = castellum.StandaloneOperation{
 			AtUnix:       1699000000,
 			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 85.0},
 		},
-		Confirmed: option.Some(castellum.OperationConfirmation{AtUnix: 1699003600}),
-		Greenlit:  option.Some(castellum.OperationGreenlight{AtUnix: 1699007200}),
-		Finished:  option.Some(castellum.OperationFinish{AtUnix: 1699010800}),
+		Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1699003600}),
+		Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1699007200}),
+		Finished:  Some(castellum.OperationFinish{AtUnix: 1699010800}),
 	},
 }
 
@@ -112,7 +112,7 @@ func TestListPendingWithOpts(t *testing.T) {
 		fmt.Fprint(w, ListPendingResponse)
 	})
 
-	result, err := operations.ListPending(t.Context(), client.ServiceClient(fakeServer), operations.ListOpts{Project: projectID}).Extract()
+	result, err := operations.ListPending(t.Context(), client.ServiceClient(fakeServer), operations.ListOpts{ProjectID: projectID}).Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, result, []castellum.StandaloneOperation{pendingOp})
 }

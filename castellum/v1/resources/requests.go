@@ -10,6 +10,7 @@ import (
 
 	"github.com/gophercloud/gophercloud/v2"
 	"github.com/sapcc/go-api-declarations/castellum"
+	. "go.xyrillian.de/gg/option"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the List request.
@@ -35,11 +36,11 @@ type CreateOptsBuilder interface {
 
 // CreateOpts specifies the autoscaling configuration for a resource.
 type CreateOpts struct {
-	LowThreshold      *castellum.Threshold       `json:"low_threshold,omitempty"`
-	HighThreshold     *castellum.Threshold       `json:"high_threshold,omitempty"`
-	CriticalThreshold *castellum.Threshold       `json:"critical_threshold,omitempty"`
-	SizeConstraints   *castellum.SizeConstraints `json:"size_constraints,omitempty"`
-	SizeSteps         *castellum.SizeSteps       `json:"size_steps,omitempty"`
+	LowThreshold      Option[castellum.Threshold]       `json:"low_threshold,omitzero"`
+	HighThreshold     Option[castellum.Threshold]       `json:"high_threshold,omitzero"`
+	CriticalThreshold Option[castellum.Threshold]       `json:"critical_threshold,omitzero"`
+	SizeConstraints   Option[castellum.SizeConstraints] `json:"size_constraints,omitzero"`
+	SizeSteps         Option[castellum.SizeSteps]       `json:"size_steps,omitzero"`
 }
 
 // ToResourceCreateBody marshals the CreateOpts into a JSON request body.

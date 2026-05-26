@@ -37,8 +37,8 @@ func (r ListResult) Extract() ([]castellum.Asset, error) {
 }
 
 // Extract returns a single Asset from a GetResult.
-func (r GetResult) Extract() (*castellum.Asset, error) {
+func (r GetResult) Extract() (castellum.Asset, error) {
 	var s castellum.Asset
 	err := r.ExtractIntoStructPtr(&s, "")
-	return &s, err
+	return s, err
 }

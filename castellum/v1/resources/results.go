@@ -8,12 +8,6 @@ import (
 	"github.com/sapcc/go-api-declarations/castellum"
 )
 
-// Resource wraps castellum.Resource with the resource type name from the URL.
-type Resource struct {
-	castellum.Resource
-	ResourceType string `json:"-"`
-}
-
 type GetResult struct {
 	gophercloud.Result
 	resourceType string
@@ -33,31 +27,19 @@ type CreateResult struct {
 	gophercloud.ErrResult
 }
 
-func (r ListResult) Extract() ([]Resource, error) {
+// Extract returns the full set of resources, keyed on asset type.
+func (r ListResult) Extract() (map[string]castellum.Resource, error) {
 	var s struct {
-		Resources map[string]*castellum.Resource `json:"resources"`
+		Resources map[string]castellum.Resource `json:"resources"`
 	}
-
 	err := r.ExtractInto(&s)
-	if err != nil {
-		return nil, err
-	}
-
-	extracted := make([]Resource, 0, len(s.Resources))
-	for name, resource := range s.Resources {
-		extracted = append(extracted, Resource{Resource: *resource, ResourceType: name})
-	}
-
-	return extracted, nil
+	return s.Resources, err
 }
 
-func (r GetResult) Extract() (*Resource, error) {
+func (r GetResult) Extract() (castellum.Resource, error) {
 	var s castellum.Resource
 	err := r.ExtractInto(&s)
-	if err != nil {
-		return nil, err
-	}
-	return &Resource{Resource: s, ResourceType: r.resourceType}, err
+	return s, err
 }
 
 func (r GetResult) ExtractInto(v any) error {

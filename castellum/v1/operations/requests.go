@@ -17,8 +17,8 @@ type ListOptsBuilder interface {
 
 // ListOpts filters the operations returned by list functions.
 type ListOpts struct {
-	Project   string `q:"project"`
-	Domain    string `q:"domain"`
+	ProjectID string `q:"project"`
+	DomainID  string `q:"domain"`
 	AssetType string `q:"asset-type"`
 	// MaxAge filters recently-succeeded operations by age (e.g. "1d", "2h", "30m").
 	// Only applicable to ListRecentlySucceeded and its project-scoped variant.
