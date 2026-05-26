@@ -1,0 +1,155 @@
+// SPDX-FileCopyrightText: 2026 Dexter Le <dextersydney2001@gmail.com>
+// SPDX-License-Identifier: Apache-2.0
+
+package testing
+
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
+	"github.com/gophercloud/gophercloud/v2/testhelper/client"
+	"github.com/sapcc/go-api-declarations/castellum"
+	. "go.xyrillian.de/gg/option"
+
+	"github.com/sapcc/gophercloud-sapcc/v2/castellum/v1/resources"
+)
+
+var resourcesList = map[string]castellum.Resource{
+	"nfs-shares": {
+		AssetCount: 42,
+		Checked:    Some(castellum.Checked{ErrorMessage: "cannot connect to OpenStack"}),
+		LowThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 20.0},
+			DelaySeconds: 3600,
+		}),
+		HighThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 80.0},
+			DelaySeconds: 1800,
+		}),
+		CriticalThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 95.0},
+		}),
+		SizeConstraints: Some(castellum.SizeConstraints{
+			Minimum: Some(uint64(10)),
+			Maximum: Some(uint64(2000)),
+		}),
+		SizeSteps: castellum.SizeSteps{Percent: 20.0},
+	},
+	"smb-shares": {
+		AssetCount: 42,
+		Checked:    Some(castellum.Checked{ErrorMessage: "cannot connect to OpenStack"}),
+		LowThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 10.0},
+			DelaySeconds: 3600,
+		}),
+		HighThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 50.0},
+			DelaySeconds: 1800,
+		}),
+		CriticalThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 90.0},
+		}),
+		SizeConstraints: Some(castellum.SizeConstraints{
+			Minimum: Some(uint64(20)),
+			Maximum: Some(uint64(2000)),
+		}),
+		SizeSteps: castellum.SizeSteps{Percent: 10.0},
+	},
+}
+
+func TestList(t *testing.T) {
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+
+	fakeServer.Mux.HandleFunc("/projects/88e5cad3-38e6-454f-b412-662cda03e7a1", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, http.MethodGet)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprint(w, ListResponse)
+	})
+
+	n, err := resources.List(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1", resources.ListOpts{}).Extract()
+	th.AssertNoErr(t, err)
+	th.AssertDeepEquals(t, n, resourcesList)
+}
+
+func TestGet(t *testing.T) {
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+
+	fakeServer.Mux.HandleFunc("/projects/88e5cad3-38e6-454f-b412-662cda03e7a1/resources/nfs-shares", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, http.MethodGet)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprint(w, GetResponse)
+	})
+
+	n, err := resources.Get(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1", "nfs-shares").Extract()
+	th.AssertNoErr(t, err)
+
+	th.AssertDeepEquals(t, n, resourcesList["nfs-shares"])
+}
+
+func TestDelete(t *testing.T) {
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+
+	fakeServer.Mux.HandleFunc("/projects/88e5cad3-38e6-454f-b412-662cda03e7a1/resources/nfs-shares", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, http.MethodDelete)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	err := resources.Delete(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1", "nfs-shares").ExtractErr()
+	th.AssertNoErr(t, err)
+}
+
+func TestCreate(t *testing.T) {
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+
+	fakeServer.Mux.HandleFunc("/projects/88e5cad3-38e6-454f-b412-662cda03e7a1/resources/nfs-shares", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, http.MethodPut)
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+		th.TestHeader(t, r, "Content-Type", "application/json")
+		th.TestHeader(t, r, "Accept", "application/json")
+		th.TestJSONRequest(t, r, CreateRequest)
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusAccepted)
+
+		fmt.Fprint(w, CreateResponse)
+	})
+
+	options := resources.CreateOpts{
+		LowThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 20.0},
+			DelaySeconds: 3600,
+		}),
+		HighThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 80.0},
+			DelaySeconds: 1800,
+		}),
+		CriticalThreshold: Some(castellum.Threshold{
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 95.0},
+		}),
+		SizeConstraints: Some(castellum.SizeConstraints{
+			Minimum: Some(uint64(10)),
+			Maximum: Some(uint64(2000)),
+		}),
+		SizeSteps: Some(castellum.SizeSteps{Percent: 20.0}),
+	}
+
+	err := resources.Create(t.Context(), client.ServiceClient(fakeServer), "88e5cad3-38e6-454f-b412-662cda03e7a1", "nfs-shares", options).ExtractErr()
+	th.AssertNoErr(t, err)
+}
