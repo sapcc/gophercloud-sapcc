@@ -10,6 +10,7 @@ import (
 	v1 "github.com/sapcc/gophercloud-sapcc/v2/metis/v1"
 )
 
+// CostObject represents a CostObject to which billing data is charged by billing.
 type CostObject struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
@@ -48,6 +49,7 @@ func (r GetResult) Extract() (*CostObject, error) {
 	return &s.Data.Item, nil
 }
 
+// ExtractInto is used by Extract.
 func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

@@ -36,7 +36,7 @@ func getStrField(v any, field string) string {
 	return f.String()
 }
 
-func UpdateProjectField(t *testing.T, client *gophercloud.ServiceClient, project *projects.Project, field string) {
+func updateProjectField(t *testing.T, client *gophercloud.ServiceClient, project *projects.Project, field string) {
 	opts := projects.UpdateOpts{
 		ResponsiblePrimaryContactID:    project.ResponsiblePrimaryContactID,
 		ResponsiblePrimaryContactEmail: project.ResponsiblePrimaryContactEmail,
@@ -79,7 +79,7 @@ func UpdateProjectField(t *testing.T, client *gophercloud.ServiceClient, project
 	}
 }
 
-func UpdateProject(t *testing.T, client *gophercloud.ServiceClient, id string, opts projects.UpdateOpts) {
+func updateProject(t *testing.T, client *gophercloud.ServiceClient, id string, opts projects.UpdateOpts) {
 	res := projects.Update(t.Context(), client, id, opts)
 	th.AssertNoErr(t, res.Err)
 }

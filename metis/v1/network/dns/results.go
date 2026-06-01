@@ -10,6 +10,7 @@ import (
 	v1 "github.com/sapcc/gophercloud-sapcc/v2/metis/v1"
 )
 
+// Zone resembles a DNS zone in the OpenStack DNS service.
 type Zone struct {
 	UUID               string            `json:"uuid,omitempty"`
 	Name               string            `json:"name,omitempty"`
@@ -67,6 +68,7 @@ func (r GetResult) Extract() (*Zone, error) {
 	return &s.Data.Item, nil
 }
 
+// ExtractInto is used by Extract.
 func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

@@ -23,6 +23,7 @@ func (r commonResult) Extract() (*Project, error) {
 	return &s, err
 }
 
+// ExtractInto is used by Extract.
 func (r commonResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }
@@ -118,7 +119,7 @@ type Project struct {
 	Region string `json:"region"`
 }
 
-// The cost object structure
+// CostObject appears in type Project.
 type CostObject struct {
 	// Shows, if the CO is inherited. Mandatory, if name/type not set
 	Inherited bool `json:"inherited"`
@@ -129,6 +130,7 @@ type CostObject struct {
 	Type string `json:"type,omitempty"`
 }
 
+// ExtCertification appears in type Project.
 type ExtCertification struct {
 	// C5 is a government-backed verification framework implemented by the German Federal Office for Information Security (BSI)
 	C5 bool `json:"-"`
@@ -143,6 +145,7 @@ type ExtCertification struct {
 	SOX bool `json:"-"`
 }
 
+// UnmarshalJSON implements the json.Unmarshaler interface.
 func (r *ExtCertification) UnmarshalJSON(b []byte) error {
 	var s struct {
 		C5   int `json:"c5"`
@@ -167,6 +170,7 @@ func (r *ExtCertification) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON implements the json.Marshaler interface.
 func (r ExtCertification) MarshalJSON() ([]byte, error) {
 	res := struct {
 		C5   int `json:"c5"`
@@ -186,6 +190,7 @@ func (r ExtCertification) MarshalJSON() ([]byte, error) {
 	return json.Marshal(res)
 }
 
+// UnmarshalJSON implements the json.Unmarshaler interface.
 func (r *Project) UnmarshalJSON(b []byte) error {
 	type tmp Project
 	var s struct {
@@ -226,6 +231,7 @@ func ExtractProjects(r pagination.Page) ([]Project, error) {
 	return s, err
 }
 
+// ExtractProjectsInto is used by Extract.
 func ExtractProjectsInto(r pagination.Page, v any) error {
 	return r.(ProjectPage).ExtractIntoSlicePtr(v, "")
 }

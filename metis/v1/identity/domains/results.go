@@ -18,6 +18,7 @@ type Domain struct {
 	BillingMetadata BillingDomainMetadata `json:"cbrMasterdata"`
 }
 
+// BillingDomainMetadata appears in type Domain.
 type BillingDomainMetadata struct {
 	PrimaryContactUserID  string `json:"primaryContactUserID"`
 	PrimaryContactEmail   string `json:"primaryContactEmail"`
@@ -60,6 +61,7 @@ func (r GetResult) Extract() (*Domain, error) {
 	return &s.Data.Item, nil
 }
 
+// ExtractInto is used by Extract.
 func (r GetResult) ExtractInto(v any) error {
 	return r.ExtractIntoStructPtr(v, "")
 }

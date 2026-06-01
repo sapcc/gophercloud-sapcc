@@ -53,25 +53,25 @@ func (opts ListOpts) ToCostingListQuery() (string, error) {
 	return q.String(), nil
 }
 
-// List returns a Pager which allows you to iterate over a collection of
+// ListCluster returns a Pager which allows you to iterate over a collection of
 // costing clusters.
 func ListCluster(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	return list(c, opts, listURL(c, "cluster"))
 }
 
-// List returns a Pager which allows you to iterate over a collection of
+// ListDomains returns a Pager which allows you to iterate over a collection of
 // costing domains.
 func ListDomains(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	return list(c, opts, listURL(c, "domains"))
 }
 
-// List returns a Pager which allows you to iterate over a collection of
+// ListProjects returns a Pager which allows you to iterate over a collection of
 // costing projects.
 func ListProjects(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	return list(c, opts, listURL(c, "projects"))
 }
 
-// List returns a Pager which allows you to iterate over a collection of
+// ListObjects returns a Pager which allows you to iterate over a collection of
 // costing objects.
 func ListObjects(c *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	return list(c, opts, listURL(c, "objects"))

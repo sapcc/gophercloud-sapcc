@@ -25,6 +25,11 @@ golangciLint:
     # copied from upstream
     - acceptance/clients
     - acceptance/tools
+  reviveRules:
+    - name: exported
+      arguments:
+        - checkPrivateReceivers
+        - disableChecksOnConstants
 
 githubWorkflow:
   ci:

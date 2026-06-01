@@ -10,6 +10,7 @@ import (
 // Bool allows 0/1 to also become boolean.
 type Bool bool
 
+// UnmarshalJSON implements the json.Unmarshaler interface.
 func (v *Bool) UnmarshalJSON(b []byte) error {
 	txt := string(b)
 	*v = Bool(txt == "1" || txt == "true")
@@ -35,6 +36,8 @@ type Billing struct {
 
 // BillingPage is the page returned by a pager when traversing over a collection
 // of billing.
+//
+//nolint:revive // historically grown stuttering name billing.BillingPage
 type BillingPage struct {
 	pagination.SinglePageBase
 }
@@ -48,6 +51,7 @@ func ExtractBillings(r pagination.Page) ([]Billing, error) {
 	return s, err
 }
 
+// ExtractBillingsInto is used by ExtractBillings.
 func ExtractBillingsInto(r pagination.Page, v any) error {
 	return r.(BillingPage).ExtractIntoSlicePtr(v, "")
 }

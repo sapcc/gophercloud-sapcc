@@ -30,7 +30,7 @@ func HandleGetProjectSuccessfully(t *testing.T, fakeServer th.FakeServer) {
 	})
 }
 
-// HandleGetProjectSuccessfully creates an HTTP handler at `/identity/project` on the
+// HandleListProjectsSuccessfully creates an HTTP handler at `/identity/project` on the
 // test handler mux that responds with a list of projects.
 func HandleListProjectsSuccessfully(t *testing.T, fakeServer th.FakeServer) {
 	fakeServer.Mux.HandleFunc("/identity/project", func(w http.ResponseWriter, r *http.Request) {
