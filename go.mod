@@ -6,7 +6,7 @@ require (
 	github.com/gophercloud/gophercloud/v2 v2.13.0
 	github.com/gophercloud/utils/v2 v2.0.0-20260625225919-abcba73f9c96
 	github.com/sapcc/go-api-declarations v1.24.0
-	go.xyrillian.de/gg v1.10.1
+	go.xyrillian.de/gg v1.11.1
 )
 
 require (
