@@ -6,8 +6,8 @@ github.com/gophercloud/utils/v2 v2.0.0-20260626221802-4ae35253ac13 h1:Dnid+JYEmk
 github.com/gophercloud/utils/v2 v2.0.0-20260626221802-4ae35253ac13/go.mod h1:zpDKeT3ElgCs1UA+7B8+XlDu3R+jkK/CBC1di5qOeow=
 github.com/sapcc/go-api-declarations v1.24.0 h1:sGBvOMVSM1olJlyvNoQSk7NX5uatXHKkztGDBPnTWMs=
 github.com/sapcc/go-api-declarations v1.24.0/go.mod h1:ZWRTijvgF8o8aHg5stgg7u4DF6jFrd0X97le/uGlZsA=
-go.xyrillian.de/gg v1.11.1 h1:7P3kDFkTmR7jx2riYi0GwX5uhgrsL37QSrN16xH/n8E=
-go.xyrillian.de/gg v1.11.1/go.mod h1:DoO4fQSWIrBRlNlCjVyrYM0kAEBt/Jg2GkMH+cGRZ0k=
+go.xyrillian.de/gg v1.13.3 h1:Ulz3+eZnO2OUl7Bv+SWaA5ufDmjeLwwmICPP4dCurxA=
+go.xyrillian.de/gg v1.13.3/go.mod h1:DoO4fQSWIrBRlNlCjVyrYM0kAEBt/Jg2GkMH+cGRZ0k=
 golang.org/x/sys v0.47.0 h1:o7XGOvZQCADBQQ4Y7VNq2dRWQR7JmOUW8Kxx4ZsNgWs=
 golang.org/x/sys v0.47.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
 golang.org/x/text v0.40.0 h1:Ub2Z6/xjgF1WrYQz2nuITOEegKFtiIy+rieRJ5lHZKs=
