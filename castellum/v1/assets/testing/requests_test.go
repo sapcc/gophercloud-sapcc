@@ -49,18 +49,16 @@ var singleAsset = castellum.Asset{
 	Checked:      Some(castellum.Checked{}),
 	Stale:        false,
 	PendingOperation: Some(castellum.StandaloneOperation{
-		Operation: castellum.Operation{
-			State:   castellum.OperationStateConfirmed,
-			Reason:  castellum.OperationReasonHigh,
-			OldSize: 100,
-			NewSize: 120,
-			Created: castellum.OperationCreation{
-				AtUnix:       1700000000,
-				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 82.0},
-			},
-			Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
-			Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
+		State:   castellum.OperationStateConfirmed,
+		Reason:  castellum.OperationReasonHigh,
+		OldSize: 100,
+		NewSize: 120,
+		Created: castellum.OperationCreation{
+			AtUnix:       1700000000,
+			UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 82.0},
 		},
+		Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1700003600}),
+		Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1700007200}),
 	}),
 }
 
@@ -71,19 +69,17 @@ var singleAssetWithHistory = castellum.Asset{
 	Stale:        false,
 	FinishedOperations: []castellum.StandaloneOperation{
 		{
-			Operation: castellum.Operation{
-				State:   castellum.OperationStateSucceeded,
-				Reason:  castellum.OperationReasonHigh,
-				OldSize: 80,
-				NewSize: 100,
-				Created: castellum.OperationCreation{
-					AtUnix:       1699000000,
-					UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 85.0},
-				},
-				Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1699003600}),
-				Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1699007200}),
-				Finished:  Some(castellum.OperationFinish{AtUnix: 1699010800}),
+			State:   castellum.OperationStateSucceeded,
+			Reason:  castellum.OperationReasonHigh,
+			OldSize: 80,
+			NewSize: 100,
+			Created: castellum.OperationCreation{
+				AtUnix:       1699000000,
+				UsagePercent: castellum.UsageValues{castellum.SingularUsageMetric: 85.0},
 			},
+			Confirmed: Some(castellum.OperationConfirmation{AtUnix: 1699003600}),
+			Greenlit:  Some(castellum.OperationGreenlight{AtUnix: 1699007200}),
+			Finished:  Some(castellum.OperationFinish{AtUnix: 1699010800}),
 		},
 	},
 }

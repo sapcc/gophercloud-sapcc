@@ -24,20 +24,14 @@ func TestGetClusterRates(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	expected := &limesrates.ClusterReport{
-		ClusterInfo: limes.ClusterInfo{
-			ID: "current",
-		},
+		ID: "current",
 		Services: limesrates.ClusterServiceReports{
 			"shared": &limesrates.ClusterServiceReport{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "shared",
-					Area: "shared",
-				},
+				Type: "shared",
+				Area: "shared",
 				Rates: limesrates.ClusterRateReports{
 					"service/shared/objects:create": &limesrates.ClusterRateReport{
-						RateInfo: limesrates.RateInfo{
-							Name: "service/shared/objects:create",
-						},
+						Name:   "service/shared/objects:create",
 						Limit:  5000,
 						Window: limesrates.MustParseWindow("1s"),
 					},
@@ -46,10 +40,8 @@ func TestGetClusterRates(t *testing.T) {
 				MinScrapedAt: p2time(23),
 			},
 			"unshared": &limesrates.ClusterServiceReport{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "unshared",
-					Area: "unshared",
-				},
+				Type:         "unshared",
+				Area:         "unshared",
 				MaxScrapedAt: p2time(34),
 				MinScrapedAt: p2time(12),
 			},
@@ -69,20 +61,14 @@ func TestGetFilteredClusterRates(t *testing.T) {
 	th.AssertNoErr(t, err)
 
 	expected := &limesrates.ClusterReport{
-		ClusterInfo: limes.ClusterInfo{
-			ID: "current",
-		},
+		ID: "current",
 		Services: limesrates.ClusterServiceReports{
 			"shared": &limesrates.ClusterServiceReport{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "shared",
-					Area: "shared",
-				},
+				Type: "shared",
+				Area: "shared",
 				Rates: limesrates.ClusterRateReports{
 					"service/shared/objects:create": &limesrates.ClusterRateReport{
-						RateInfo: limesrates.RateInfo{
-							Name: "service/shared/objects:create",
-						},
+						Name:   "service/shared/objects:create",
 						Limit:  5000,
 						Window: limesrates.MustParseWindow("1s"),
 					},

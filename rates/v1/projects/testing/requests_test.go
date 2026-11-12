@@ -26,24 +26,18 @@ func TestListProjectsRates(t *testing.T) {
 	rateWindow := 2 * limesrates.WindowMinutes
 	expected := []limesrates.ProjectReport{
 		{
-			ProjectInfo: limes.ProjectInfo{
-				UUID:       "uuid-for-berlin",
-				Name:       "berlin",
-				ParentUUID: "uuid-for-germany",
-			},
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
 			Services: limesrates.ProjectServiceReports{
 				"shared": &limesrates.ProjectServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type:        "shared",
-						Area:        "shared",
-						ProductName: "",
-					},
+					Type:        "shared",
+					Area:        "shared",
+					ProductName: "",
 					Rates: limesrates.ProjectRateReports{
 						"some_action": &limesrates.ProjectRateReport{
-							RateInfo: limesrates.RateInfo{
-								Name: "some_action",
-								Unit: limes.UnitBytes,
-							},
+							Name:          "some_action",
+							Unit:          limes.UnitBytes,
 							Limit:         5,
 							Window:        &rateWindow,
 							UsageAsBigint: "1069298",
@@ -52,16 +46,12 @@ func TestListProjectsRates(t *testing.T) {
 					ScrapedAt: p2time(24),
 				},
 				"unshared": &limesrates.ProjectServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type:        "unshared",
-						Area:        "unshared",
-						ProductName: "",
-					},
+					Type:        "unshared",
+					Area:        "unshared",
+					ProductName: "",
 					Rates: limesrates.ProjectRateReports{
 						"service/something/action:update/removeFloatingIp": &limesrates.ProjectRateReport{
-							RateInfo: limesrates.RateInfo{
-								Name: "service/something/action:update/removeFloatingIp",
-							},
+							Name:   "service/something/action:update/removeFloatingIp",
 							Limit:  2,
 							Window: &rateWindow,
 						},
@@ -71,39 +61,29 @@ func TestListProjectsRates(t *testing.T) {
 			},
 		},
 		{
-			ProjectInfo: limes.ProjectInfo{
-				UUID:       "uuid-for-dresden",
-				Name:       "dresden",
-				ParentUUID: "uuid-for-berlin",
-			},
+			UUID:       "uuid-for-dresden",
+			Name:       "dresden",
+			ParentUUID: "uuid-for-berlin",
 			Services: limesrates.ProjectServiceReports{
 				"shared": &limesrates.ProjectServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type:        "shared",
-						Area:        "shared",
-						ProductName: "",
-					},
-					Rates: limesrates.ProjectRateReports{},
+					Type:        "shared",
+					Area:        "shared",
+					ProductName: "",
+					Rates:       limesrates.ProjectRateReports{},
 				},
 				"unshared": &limesrates.ProjectServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type:        "unshared",
-						Area:        "unshared",
-						ProductName: "",
-					},
+					Type:        "unshared",
+					Area:        "unshared",
+					ProductName: "",
 					Rates: limesrates.ProjectRateReports{
 						"service/something:create": &limesrates.ProjectRateReport{
-							RateInfo: limesrates.RateInfo{
-								Name: "service/something:create",
-							},
+							Name:          "service/something:create",
 							Limit:         5,
 							Window:        &rateWindow,
 							UsageAsBigint: "1069298",
 						},
 						"service/something/action:update/addFloatingIp": &limesrates.ProjectRateReport{
-							RateInfo: limesrates.RateInfo{
-								Name: "service/something/action:update/addFloatingIp",
-							},
+							Name:   "service/something/action:update/addFloatingIp",
 							Limit:  2,
 							Window: &rateWindow,
 						},
@@ -129,24 +109,18 @@ func TestListProjectsFilteredRates(t *testing.T) {
 	rateWindow := 2 * limesrates.WindowMinutes
 	expected := []limesrates.ProjectReport{
 		{
-			ProjectInfo: limes.ProjectInfo{
-				UUID:       "uuid-for-berlin",
-				Name:       "berlin",
-				ParentUUID: "uuid-for-germany",
-			},
+			UUID:       "uuid-for-berlin",
+			Name:       "berlin",
+			ParentUUID: "uuid-for-germany",
 			Services: limesrates.ProjectServiceReports{
 				"shared": &limesrates.ProjectServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type:        "shared",
-						Area:        "shared",
-						ProductName: "",
-					},
+					Type:        "shared",
+					Area:        "shared",
+					ProductName: "",
 					Rates: limesrates.ProjectRateReports{
 						"some_action": &limesrates.ProjectRateReport{
-							RateInfo: limesrates.RateInfo{
-								Name: "some_action",
-								Unit: limes.UnitBytes,
-							},
+							Name:          "some_action",
+							Unit:          limes.UnitBytes,
 							Limit:         5,
 							Window:        &rateWindow,
 							UsageAsBigint: "1069298",
@@ -157,19 +131,15 @@ func TestListProjectsFilteredRates(t *testing.T) {
 			},
 		},
 		{
-			ProjectInfo: limes.ProjectInfo{
-				UUID:       "uuid-for-dresden",
-				Name:       "dresden",
-				ParentUUID: "uuid-for-berlin",
-			},
+			UUID:       "uuid-for-dresden",
+			Name:       "dresden",
+			ParentUUID: "uuid-for-berlin",
 			Services: limesrates.ProjectServiceReports{
 				"shared": &limesrates.ProjectServiceReport{
-					ServiceInfo: limes.ServiceInfo{
-						Type:        "shared",
-						Area:        "shared",
-						ProductName: "",
-					},
-					Rates: limesrates.ProjectRateReports{},
+					Type:        "shared",
+					Area:        "shared",
+					ProductName: "",
+					Rates:       limesrates.ProjectRateReports{},
 				},
 			},
 		},
@@ -187,24 +157,18 @@ func TestGetProjectRates(t *testing.T) {
 
 	rateWindow := 2 * limesrates.WindowMinutes
 	expected := &limesrates.ProjectReport{
-		ProjectInfo: limes.ProjectInfo{
-			UUID:       "uuid-for-berlin",
-			Name:       "berlin",
-			ParentUUID: "uuid-for-germany",
-		},
+		UUID:       "uuid-for-berlin",
+		Name:       "berlin",
+		ParentUUID: "uuid-for-germany",
 		Services: limesrates.ProjectServiceReports{
 			"shared": &limesrates.ProjectServiceReport{
-				ServiceInfo: limes.ServiceInfo{
-					Type:        "shared",
-					Area:        "shared",
-					ProductName: "",
-				},
+				Type:        "shared",
+				Area:        "shared",
+				ProductName: "",
 				Rates: limesrates.ProjectRateReports{
 					"some_action": &limesrates.ProjectRateReport{
-						RateInfo: limesrates.RateInfo{
-							Name: "some_action",
-							Unit: limes.UnitBytes,
-						},
+						Name:          "some_action",
+						Unit:          limes.UnitBytes,
 						Limit:         5,
 						Window:        &rateWindow,
 						UsageAsBigint: "1069298",
@@ -229,24 +193,18 @@ func TestGetProjectFilteredRates(t *testing.T) {
 
 	rateWindow := 2 * limesrates.WindowMinutes
 	expected := &limesrates.ProjectReport{
-		ProjectInfo: limes.ProjectInfo{
-			UUID:       "uuid-for-berlin",
-			Name:       "berlin",
-			ParentUUID: "uuid-for-germany",
-		},
+		UUID:       "uuid-for-berlin",
+		Name:       "berlin",
+		ParentUUID: "uuid-for-germany",
 		Services: limesrates.ProjectServiceReports{
 			"shared": &limesrates.ProjectServiceReport{
-				ServiceInfo: limes.ServiceInfo{
-					Type:        "shared",
-					Area:        "shared",
-					ProductName: "",
-				},
+				Type:        "shared",
+				Area:        "shared",
+				ProductName: "",
 				Rates: limesrates.ProjectRateReports{
 					"some_action": &limesrates.ProjectRateReport{
-						RateInfo: limesrates.RateInfo{
-							Name: "some_action",
-							Unit: limes.UnitBytes,
-						},
+						Name:          "some_action",
+						Unit:          limes.UnitBytes,
 						Limit:         5,
 						Window:        &rateWindow,
 						UsageAsBigint: "1069298",

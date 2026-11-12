@@ -27,29 +27,21 @@ func TestGetCluster(t *testing.T) {
 	var capacity uint64 = 10
 	var scrap int64 = 22
 	expected := &limesresources.ClusterReport{
-		ClusterInfo: limes.ClusterInfo{
-			ID: "pakistan",
-		},
+		ID: "pakistan",
 		Services: limesresources.ClusterServiceReports{
 			"shared": &limesresources.ClusterServiceReport{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "shared",
-					Area: "shared",
-				},
+				Type: "shared",
+				Area: "shared",
 				Resources: limesresources.ClusterResourceReports{
 					"stuff": &limesresources.ClusterResourceReport{
-						ResourceInfo: limesresources.ResourceInfo{
-							Name: "stuff",
-							Unit: limes.UnitBytes,
-						},
+						Name:         "stuff",
+						Unit:         limes.UnitBytes,
 						Capacity:     &capacity,
 						DomainsQuota: new(uint64(5)),
 						Usage:        2,
 					},
 					"things": &limesresources.ClusterResourceReport{
-						ResourceInfo: limesresources.ResourceInfo{
-							Name: "things",
-						},
+						Name:         "things",
 						Capacity:     &capacity,
 						DomainsQuota: new(uint64(5)),
 						Usage:        2,
@@ -59,24 +51,18 @@ func TestGetCluster(t *testing.T) {
 				MinScrapedAt: p2time(33),
 			},
 			"unshared": &limesresources.ClusterServiceReport{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "unshared",
-					Area: "contradiction",
-				},
+				Type: "unshared",
+				Area: "contradiction",
 				Resources: limesresources.ClusterResourceReports{
 					"stuff": &limesresources.ClusterResourceReport{
-						ResourceInfo: limesresources.ResourceInfo{
-							Name: "stuff",
-							Unit: limes.UnitBytes,
-						},
+						Name:         "stuff",
+						Unit:         limes.UnitBytes,
 						Capacity:     &capacity,
 						DomainsQuota: new(uint64(5)),
 						Usage:        2,
 					},
 					"things": &limesresources.ClusterResourceReport{
-						ResourceInfo: limesresources.ResourceInfo{
-							Name: "things",
-						},
+						Name:         "things",
 						Capacity:     &capacity,
 						DomainsQuota: new(uint64(5)),
 						Usage:        2,
@@ -107,21 +93,15 @@ func TestGetFilteredCluster(t *testing.T) {
 	var capacity uint64 = 10
 	var scrap int64 = 22
 	expected := &limesresources.ClusterReport{
-		ClusterInfo: limes.ClusterInfo{
-			ID: "pakistan",
-		},
+		ID: "pakistan",
 		Services: limesresources.ClusterServiceReports{
 			"unshared": &limesresources.ClusterServiceReport{
-				ServiceInfo: limes.ServiceInfo{
-					Type: "unshared",
-					Area: "contradiction",
-				},
+				Type: "unshared",
+				Area: "contradiction",
 				Resources: limesresources.ClusterResourceReports{
 					"stuff": &limesresources.ClusterResourceReport{
-						ResourceInfo: limesresources.ResourceInfo{
-							Name: "stuff",
-							Unit: limes.UnitBytes,
-						},
+						Name:          "stuff",
+						Unit:          limes.UnitBytes,
 						Capacity:      &capacity,
 						DomainsQuota:  new(uint64(4)),
 						Usage:         2,
